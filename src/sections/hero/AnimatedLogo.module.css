@@ -1,0 +1,10 @@
+.host {
+  overflow: visible;
+  padding-top: 16px;
+  margin-top: -16px;
+  width: 144px;
+}
+.host :global(svg) {
+  overflow: visible;
+  display: block;
+}
