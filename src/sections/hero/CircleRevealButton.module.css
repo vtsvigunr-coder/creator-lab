@@ -4,7 +4,8 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 40px;
+  /* 36px tall on every button (8 + 8 + 20 line-height), matching the user avatar. */
+  padding: 8px 40px;
   border: none;
   white-space: nowrap;
   flex-shrink: 0;
@@ -21,11 +22,6 @@
   background: transparent;
   color: var(--color-dark-gray);
   border: 1px solid var(--color-dark-gray);
-}
-.compact {
-  /* Header's Get Started is 36px tall (matching the user avatar), not the hero
-     buttons' 44px: 8 + 8 + 20 (line-height) = 36. */
-  padding: 8px 40px;
 }
 .icon {
   width: 20px;

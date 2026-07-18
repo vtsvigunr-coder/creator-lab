@@ -2,10 +2,10 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 import MenuOverlay from './MenuOverlay'
 
-test('renders sitemap links and calls onOpen/onClose', () => {
+test('renders sitemap links and toggles via the single button', () => {
   const onClose = vi.fn()
   const onOpen = vi.fn()
-  render(<MenuOverlay open={false} onClose={onClose} onOpen={onOpen} />)
+  const { rerender } = render(<MenuOverlay open={false} onClose={onClose} onOpen={onOpen} />)
 
   expect(screen.getByText('How It Works')).toBeInTheDocument()
   expect(screen.getByText('For Brands')).toBeInTheDocument()
@@ -13,9 +13,11 @@ test('renders sitemap links and calls onOpen/onClose', () => {
   expect(screen.getByText('Pricing')).toBeInTheDocument()
   expect(screen.getByText('FAQ')).toBeInTheDocument()
 
-  fireEvent.click(screen.getByRole('button', { name: /menu/i }))
+  const toggle = screen.getByRole('button')
+  fireEvent.click(toggle)
   expect(onOpen).toHaveBeenCalledTimes(1)
 
-  fireEvent.click(screen.getByText('Close'))
+  rerender(<MenuOverlay open onClose={onClose} onOpen={onOpen} />)
+  fireEvent.click(screen.getByRole('button'))
   expect(onClose).toHaveBeenCalledTimes(1)
 })

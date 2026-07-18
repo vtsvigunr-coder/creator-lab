@@ -6,13 +6,16 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  gap: 40px;
   padding: 8px 12px;
 }
 .panelOpen {
   background: var(--overlay-scrim);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   padding: 20px;
 }
-.trigger {
+.toggle {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -21,8 +24,29 @@
   border: none;
   white-space: nowrap;
 }
-.triggerWord {
-  display: inline-block;
+.panelOpen .toggle {
+  color: var(--color-white);
+}
+.iconStack,
+.labelStack {
+  display: grid;
+}
+.iconStack > img,
+.labelStack > span {
+  grid-area: 1 / 1;
+}
+.iconLayer {
+  opacity: 1;
+}
+.closeIcon {
+  opacity: 0;
+}
+.labelLayer {
+  opacity: 1;
+  text-align: left;
+}
+.closeLabel {
+  opacity: 0;
 }
 .triggerChar {
   display: inline-block;
@@ -30,26 +54,7 @@
 .openContent {
   display: none;
   flex-direction: column;
-  gap: 40px;
-  width: 100%;
-}
-.closeRow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--color-white);
-  background: none;
-  border: none;
-  width: 100%;
-}
-.body {
-  display: flex;
-  flex-direction: column;
   gap: 24px;
-  /* Fixed to the open panel's final content width (320 - 20*2 padding), not 100%: since
-     the panel's own width is what's being animated, a 100%-wide body would reflow/wrap
-     its text every frame as the panel grows, reading as blurry, flickering text. */
   width: 280px;
   opacity: 0;
 }
