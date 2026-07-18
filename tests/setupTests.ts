@@ -1,5 +1,13 @@
 import '@testing-library/jest-dom'
 
+if (!window.ResizeObserver) {
+  window.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+}
+
 if (!SVGElement.prototype.getBBox) {
   // @ts-expect-error jsdom does not implement SVG layout
   SVGElement.prototype.getBBox = () => ({ x: 0, y: 0, width: 0, height: 0 })
