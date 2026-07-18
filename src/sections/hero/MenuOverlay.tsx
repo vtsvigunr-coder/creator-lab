@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import styles from './MenuOverlay.module.css'
@@ -30,18 +30,27 @@ function AnimatedChars({ text }: { text: string }) {
   )
 }
 
+const OPEN_TOP = -20
+const OPEN_SIZE = { width: 320, height: 420 }
+
 export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null)
-  const bodyRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
-  const closedSize = useRef({ width: 0, height: 0 })
-  const openSize = useRef({ width: 320, height: 420 })
+  const openContentRef = useRef<HTMLDivElement>(null)
+  const bodyRef = useRef<HTMLDivElement>(null)
+  const closedBox = useRef({ width: 0, height: 0, top: 0 })
 
   useLayoutEffect(() => {
     const panel = panelRef.current
     if (!panel) return
-    if (closedSize.current.width === 0) {
-      closedSize.current = { width: panel.offsetWidth, height: panel.offsetHeight }
+    if (closedBox.current.width === 0) {
+      // The closed pill has no explicit `top` in CSS — its vertical position comes from
+      // the flex row's align-items: center (the CSS spec defines the static position of an
+      // absolutely-positioned flex child that way). Capture that resolved position once so
+      // the open/close tween can animate `top` as a plain number instead of relying on a
+      // percentage transform, which would keep re-centering (and overflowing upward) as
+      // height grows to the much taller open panel.
+      closedBox.current = { width: panel.offsetWidth, height: panel.offsetHeight, top: panel.offsetTop }
     }
   }, [])
 
@@ -75,18 +84,25 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
 
   useLayoutEffect(() => {
     const panel = panelRef.current
+    const trigger = triggerRef.current
+    const openContent = openContentRef.current
     const body = bodyRef.current
-    if (!panel || !body) return
+    if (!panel || !trigger || !openContent || !body) return
 
     if (open) {
+      gsap.set(trigger, { display: 'none' })
+      gsap.set(openContent, { display: 'flex' })
+      gsap.set(panel, { top: closedBox.current.top })
+
       gsap
         .timeline()
         .to(panel, {
-          width: openSize.current.width,
-          height: openSize.current.height,
+          width: OPEN_SIZE.width,
+          height: OPEN_SIZE.height,
+          top: OPEN_TOP,
           borderRadius: 24,
           duration: 0.6,
-          ease: 'elastic.out(1, 0.65)',
+          ease: 'back.out(1.4)',
         })
         .to(body, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '-=0.25')
     } else {
@@ -94,63 +110,70 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
         .timeline()
         .to(body, { opacity: 0, duration: 0.15, ease: 'power1.in' })
         .to(panel, {
-          width: closedSize.current.width || 239,
-          height: closedSize.current.height || 36,
+          width: closedBox.current.width || 239,
+          height: closedBox.current.height || 36,
+          top: closedBox.current.top,
           borderRadius: 60,
           duration: 0.4,
           ease: 'power2.inOut',
         })
+        .set(openContent, { display: 'none' })
+        .set(trigger, { display: 'flex' })
     }
   }, [open])
 
+  useEffect(() => {
+    if (!open) return
+    const handlePointerDown = (event: PointerEvent) => {
+      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+        onClose()
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [open, onClose])
+
   return (
-    <div
-      ref={panelRef}
-      className={`${styles.panel} ${open ? styles.panelOpen : ''}`}
-      data-testid="menu-overlay"
-    >
-      {!open && (
-        <button ref={triggerRef} className={styles.trigger} type="button" onClick={onOpen}>
-          <img src={menuIcon} alt="" width={20} height={20} />
-          <span className={styles.triggerWord}>
-            <AnimatedChars text="Menu" />
-          </span>
+    <div ref={panelRef} className={`${styles.panel} ${open ? styles.panelOpen : ''}`} data-testid="menu-overlay">
+      <button ref={triggerRef} className={styles.trigger} type="button" onClick={onOpen}>
+        <img src={menuIcon} alt="" width={20} height={20} />
+        <span className={styles.triggerWord}>
+          <AnimatedChars text="Menu" />
+        </span>
+      </button>
+      <div ref={openContentRef} className={styles.openContent}>
+        <button className={styles.closeRow} type="button" onClick={onClose}>
+          <img src={closeIcon} alt="" width={20} height={20} />
+          Close
         </button>
-      )}
-      {open && (
-        <>
-          <button className={styles.closeRow} type="button" onClick={onClose}>
-            <img src={closeIcon} alt="" width={20} height={20} />
-            Close
-          </button>
-          <div className={styles.body} ref={bodyRef}>
-            <div className={styles.group}>
-              <span className={styles.groupTitle}>Sitemap</span>
-              <div className={styles.links}>
-                {SITEMAP.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
-              </div>
-            </div>
-            <div className={styles.group}>
-              <span className={styles.groupTitle}>Legal</span>
-              <div className={styles.links}>
-                {LEGAL.map((item) => (
-                  <span key={item}>{item}</span>
-                ))}
-              </div>
-            </div>
-            <div className={styles.group}>
-              <span className={styles.groupTitle}>Social</span>
-              <div className={styles.social}>
-                <img src={instagramIcon} alt="Instagram" width={20} height={20} />
-                <img src={linkedinIcon} alt="LinkedIn" width={20} height={20} />
-                <img src={telegramIcon} alt="Telegram" width={20} height={20} />
-              </div>
+        <div className={styles.body} ref={bodyRef}>
+          <div className={styles.group}>
+            <span className={styles.groupTitle}>Sitemap</span>
+            <div className={styles.links}>
+              {SITEMAP.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
             </div>
           </div>
-        </>
-      )}
+          <div className={styles.divider} />
+          <div className={styles.group}>
+            <span className={styles.groupTitle}>Legal</span>
+            <div className={styles.links}>
+              {LEGAL.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
+          </div>
+          <div className={styles.group}>
+            <span className={styles.groupTitle}>Social</span>
+            <div className={styles.social}>
+              <img src={instagramIcon} alt="Instagram" width={20} height={20} />
+              <img src={linkedinIcon} alt="LinkedIn" width={20} height={20} />
+              <img src={telegramIcon} alt="Telegram" width={20} height={20} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

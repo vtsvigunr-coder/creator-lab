@@ -7,9 +7,16 @@ type CircleRevealButtonProps = {
   icon?: string
   variant: 'solid' | 'outline' | 'dark'
   delay?: number
+  compact?: boolean
 }
 
-export default function CircleRevealButton({ label, icon, variant, delay = 0 }: CircleRevealButtonProps) {
+export default function CircleRevealButton({
+  label,
+  icon,
+  variant,
+  delay = 0,
+  compact = false,
+}: CircleRevealButtonProps) {
   const btnRef = useRef<HTMLButtonElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
 
@@ -23,7 +30,8 @@ export default function CircleRevealButton({ label, icon, variant, delay = 0 }: 
     // any sibling relying on this button's box (e.g. the header's user avatar).
     // clip-path also guarantees a true circle regardless of the button's own aspect ratio,
     // unlike a CSS transform: scale(0) starting point.
-    gsap.set(btn, { clipPath: 'circle(22px at 50% 50%)' })
+    const startRadius = compact ? 18 : 22
+    gsap.set(btn, { clipPath: `circle(${startRadius}px at 50% 50%)` })
     gsap.set(labelEl, { opacity: 0, x: -8 })
 
     const tl = gsap.timeline({ delay })
@@ -37,10 +45,14 @@ export default function CircleRevealButton({ label, icon, variant, delay = 0 }: 
     return () => {
       tl.kill()
     }
-  }, [delay])
+  }, [delay, compact])
 
   return (
-    <button ref={btnRef} className={`${styles.btn} ${styles[variant]}`} type="button">
+    <button
+      ref={btnRef}
+      className={`${styles.btn} ${styles[variant]} ${compact ? styles.compact : ''}`}
+      type="button"
+    >
       {icon && <img src={icon} alt="" className={styles.icon} />}
       <span ref={labelRef} className={styles.label}>
         {label}

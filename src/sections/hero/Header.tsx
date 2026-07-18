@@ -28,7 +28,7 @@ export default function Header() {
           <button ref={userBtnRef} className={styles.userBtn} type="button">
             <img src={userIcon} alt="Account" width={20} height={20} />
           </button>
-          <CircleRevealButton label="Get Started" variant="dark" />
+          <CircleRevealButton label="Get Started" variant="dark" compact />
         </div>
       </div>
     </header>
