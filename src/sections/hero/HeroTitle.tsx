@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import styles from './HeroTitle.module.css'
@@ -29,7 +29,7 @@ export default function HeroTitle({ onComplete }: HeroTitleProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const markerRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current
     const marker = markerRef.current
     if (!root || !marker) return
@@ -62,10 +62,11 @@ export default function HeroTitle({ onComplete }: HeroTitleProps) {
           <div>
             <AnimatedChars text={LINE_1} />
           </div>
-          <div className={styles.highlightRow}>
-            <AnimatedChars text={`${LINE_2} in`} />
+          <div>
+            <AnimatedChars text={LINE_2} />
           </div>
           <div className={styles.highlightRow}>
+            <AnimatedChars text="in" />
             <div className={styles.markerBox} ref={markerRef} data-testid="uzbekistan-marker">
               <AnimatedChars text="Uzbekistan" />
             </div>

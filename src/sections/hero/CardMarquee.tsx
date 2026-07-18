@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { buildLoopList } from '../../lib/buildLoopList'
 import styles from './CardMarquee.module.css'
@@ -33,7 +33,7 @@ export default function CardMarquee({ onComplete }: CardMarqueeProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const loopCards = buildLoopList(CARDS)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const track = trackRef.current
     if (!track) return
 

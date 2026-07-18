@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import styles from './CircleRevealButton.module.css'
 
@@ -13,12 +13,18 @@ export default function CircleRevealButton({ label, icon, variant, onReady }: Ci
   const btnRef = useRef<HTMLButtonElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const btn = btnRef.current
     const labelEl = labelRef.current
     if (!btn || !labelEl) return
 
     const targetWidth = btn.scrollWidth
+    // GSAP takes over the independent `scale`/`translate` CSS properties as soon as it
+    // starts ticking, overriding the CSS class's `transform: scale(0)`. Set the starting
+    // state through GSAP itself (synchronous, no tick required) so there's no mismatch.
+    gsap.set(btn, { scale: 0 })
+    gsap.set(labelEl, { opacity: 0, x: -8 })
+
     const tl = gsap.timeline({ paused: true })
 
     tl.to(btn, { scale: 1, duration: 0.35, ease: 'back.out(1.7)' })

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import Logo from '../../assets/images/Logo.svg?react'
 import { gsap } from '../../lib/gsap'
 import { sortLogoPaths } from '../../lib/sortLogoPaths'
@@ -11,7 +11,7 @@ type AnimatedLogoProps = {
 export default function AnimatedLogo({ onComplete }: AnimatedLogoProps) {
   const hostRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const host = hostRef.current
     if (!host) return
 
