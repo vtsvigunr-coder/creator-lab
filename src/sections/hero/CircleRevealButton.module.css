@@ -1,0 +1,40 @@
+.btn {
+  --pill-height: 44px;
+  height: var(--pill-height);
+  width: var(--pill-height);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 20px;
+  border: none;
+  overflow: hidden;
+  transform: scale(0);
+  white-space: nowrap;
+}
+.solid {
+  background: var(--color-violet-400);
+  color: var(--color-white);
+}
+.dark {
+  background: var(--color-dark-gray);
+  color: var(--color-white);
+}
+.outline {
+  background: transparent;
+  color: var(--color-dark-gray);
+  border: 1px solid var(--color-dark-gray);
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.label {
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.48px;
+  opacity: 0;
+  transform: translateX(-8px);
+}
