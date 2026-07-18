@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 36px;
+  /* 46px, not the design's 36px: .description below cancels its own 10px
+     top padding with a matching negative margin (for overflow-visible blur
+     clearance), which otherwise eats 10px off this gap. */
+  gap: 46px;
   overflow: visible;
 }
 .headingBlock {
@@ -28,6 +31,9 @@
   display: inline-block;
   will-change: transform, filter, opacity;
 }
+.inWord {
+  display: inline-block;
+}
 .highlightRow {
   display: flex;
   gap: 12px;
@@ -35,11 +41,22 @@
   justify-content: center;
 }
 .markerBox {
+  position: relative;
+  padding: 2px 24px;
+  display: inline-flex;
+}
+.markerFill {
+  position: absolute;
+  inset: 0;
   background: var(--color-pink-200);
   border-radius: 4px;
-  padding: 2px 24px;
   transform-origin: left center;
   transform: scaleX(0);
+}
+.markerText {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
 }
 .description {
   font-weight: 500;
@@ -53,4 +70,8 @@
   overflow: visible;
   padding: 10px 0;
   margin: -10px 0;
+}
+.wordUnit {
+  display: inline-block;
+  will-change: transform, filter, opacity;
 }

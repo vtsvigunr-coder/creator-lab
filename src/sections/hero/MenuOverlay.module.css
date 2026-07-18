@@ -4,12 +4,14 @@
   transform: translateX(-50%);
   top: -20px;
   border-radius: 8px;
-  background: var(--overlay-scrim);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 40px;
   padding: 8px 12px;
+}
+.panelOpen {
+  background: var(--overlay-scrim);
 }
 .trigger {
   display: flex;
@@ -19,6 +21,12 @@
   background: none;
   border: none;
   white-space: nowrap;
+}
+.triggerWord {
+  display: inline-block;
+}
+.triggerChar {
+  display: inline-block;
 }
 .closeRow {
   display: flex;

@@ -1,11 +1,10 @@
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
+import { splitWords } from '../../lib/splitWords'
 import styles from './HeroTitle.module.css'
 
-type HeroTitleProps = {
-  onComplete?: () => void
-}
+const NBSP = ' '
 
 const LINE_1 = 'The operating system'
 const LINE_2 = 'for creator-led commerce'
@@ -18,42 +17,73 @@ function AnimatedChars({ text }: { text: string }) {
     <>
       {chars.map((c, i) => (
         <span key={i} className={styles.charUnit} data-soft-blur-char>
-          {c.isSpace ? ' ' : c.char}
+          {c.isSpace ? NBSP : c.char}
         </span>
       ))}
     </>
   )
 }
 
-export default function HeroTitle({ onComplete }: HeroTitleProps) {
+function AnimatedDescription({ text }: { text: string }) {
+  const words = useMemo(() => splitWords(text), [text])
+  return (
+    <>
+      {words.map((w, i) =>
+        w.isSpace ? (
+          <span key={i}>{w.word}</span>
+        ) : (
+          <span key={i} className={styles.wordUnit} data-desc-word>
+            {w.word}
+          </span>
+        ),
+      )}
+    </>
+  )
+}
+
+export default function HeroTitle() {
   const rootRef = useRef<HTMLDivElement>(null)
-  const markerRef = useRef<HTMLDivElement>(null)
+  const markerFillRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const root = rootRef.current
-    const marker = markerRef.current
-    if (!root || !marker) return
+    const markerFill = markerFillRef.current
+    if (!root || !markerFill) return
 
     const chars = root.querySelectorAll('[data-soft-blur-char]')
-    const tl = gsap.timeline({ onComplete })
+    const words = root.querySelectorAll('[data-desc-word]')
+    const tl = gsap.timeline()
 
-    tl.from(chars, {
-      opacity: 0,
-      y: 16,
-      filter: 'blur(12px)',
-      duration: 0.9,
-      ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-      stagger: 0.025,
-    }).to(marker, {
-      scaleX: 1,
-      duration: 0.45,
-      ease: 'power2.out',
-    })
+    tl.from(
+      chars,
+      {
+        opacity: 0,
+        y: 16,
+        filter: 'blur(12px)',
+        duration: 0.9,
+        ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        stagger: 0.025,
+      },
+      0,
+    )
+      .to(markerFill, { scaleX: 1, duration: 0.45, ease: 'power2.out' })
+      .from(
+        words,
+        {
+          opacity: 0,
+          y: 10,
+          filter: 'blur(8px)',
+          duration: 0.6,
+          ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
+          stagger: 0.03,
+        },
+        0,
+      )
 
     return () => {
       tl.kill()
     }
-  }, [onComplete])
+  }, [])
 
   return (
     <div className={styles.wrap} data-testid="hero-title" ref={rootRef}>
@@ -66,14 +96,21 @@ export default function HeroTitle({ onComplete }: HeroTitleProps) {
             <AnimatedChars text={LINE_2} />
           </div>
           <div className={styles.highlightRow}>
-            <AnimatedChars text="in" />
-            <div className={styles.markerBox} ref={markerRef} data-testid="uzbekistan-marker">
-              <AnimatedChars text="Uzbekistan" />
+            <span className={styles.inWord}>
+              <AnimatedChars text="in" />
+            </span>
+            <div className={styles.markerBox} data-testid="uzbekistan-marker">
+              <div className={styles.markerFill} ref={markerFillRef} />
+              <span className={styles.markerText}>
+                <AnimatedChars text="Uzbekistan" />
+              </span>
             </div>
           </div>
         </h1>
-        <p className={styles.description}>{DESCRIPTION}</p>
       </div>
+      <p className={styles.description}>
+        <AnimatedDescription text={DESCRIPTION} />
+      </p>
     </div>
   )
 }

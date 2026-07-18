@@ -1,27 +1,33 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import AnimatedLogo from './AnimatedLogo'
 import MenuOverlay from './MenuOverlay'
 import CircleRevealButton from './CircleRevealButton'
+import { gsap } from '../../lib/gsap'
 import userIcon from '../../assets/icons/user.svg'
 import styles from './Header.module.css'
 
-type HeaderProps = {
-  onLogoComplete?: () => void
-  onGetStartedReady?: (play: () => Promise<void>) => void
-}
-
-export default function Header({ onLogoComplete, onGetStartedReady }: HeaderProps) {
+export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const userBtnRef = useRef<HTMLButtonElement>(null)
+
+  useLayoutEffect(() => {
+    const btn = userBtnRef.current
+    if (!btn) return
+    const tl = gsap.from(btn, { opacity: 0, duration: 0.5, ease: 'power1.out' })
+    return () => {
+      tl.kill()
+    }
+  }, [])
 
   return (
     <header className={styles.header}>
-      <AnimatedLogo onComplete={onLogoComplete} />
+      <AnimatedLogo />
       <MenuOverlay open={menuOpen} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)} />
       <div className={styles.right}>
-        <button className={styles.userBtn} type="button">
+        <button ref={userBtnRef} className={styles.userBtn} type="button">
           <img src={userIcon} alt="Account" width={20} height={20} />
         </button>
-        <CircleRevealButton label="Get Started" variant="dark" onReady={onGetStartedReady} />
+        <CircleRevealButton label="Get Started" variant="dark" />
       </div>
     </header>
   )

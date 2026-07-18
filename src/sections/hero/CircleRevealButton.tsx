@@ -6,10 +6,10 @@ type CircleRevealButtonProps = {
   label: string
   icon?: string
   variant: 'solid' | 'outline' | 'dark'
-  onReady?: (play: () => Promise<void>) => void
+  delay?: number
 }
 
-export default function CircleRevealButton({ label, icon, variant, onReady }: CircleRevealButtonProps) {
+export default function CircleRevealButton({ label, icon, variant, delay = 0 }: CircleRevealButtonProps) {
   const btnRef = useRef<HTMLButtonElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
 
@@ -25,18 +25,16 @@ export default function CircleRevealButton({ label, icon, variant, onReady }: Ci
     gsap.set(btn, { scale: 0 })
     gsap.set(labelEl, { opacity: 0, x: -8 })
 
-    const tl = gsap.timeline({ paused: true })
+    const tl = gsap.timeline({ delay })
 
     tl.to(btn, { scale: 1, duration: 0.35, ease: 'back.out(1.7)' })
       .to(btn, { width: targetWidth, duration: 0.4, ease: 'power2.inOut' }, '-=0.05')
       .to(labelEl, { opacity: 1, x: 0, duration: 0.3, ease: 'power1.out' }, '-=0.3')
 
-    onReady?.(() => tl.play().then(() => {}))
-
     return () => {
       tl.kill()
     }
-  }, [onReady])
+  }, [delay])
 
   return (
     <button ref={btnRef} className={`${styles.btn} ${styles[variant]}`} type="button">
