@@ -1,0 +1,15 @@
+:root {
+  --color-dark-gray: #1e1e1e;
+  --color-white: #ffffff;
+  --color-gray: #808080;
+  --color-gray-200: #e8e8e8;
+  --color-gray-300: #d9d9d9;
+  --color-pink-200: #ffa7cf;
+  --color-violet-400: #4c2261;
+  --color-mint-100: #c2f1ce;
+  --color-violet-200: #d0bdfc;
+  --color-blue-200: #b4d7ff;
+  --color-dark-purple: #21143b;
+  --overlay-scrim: rgba(0, 0, 0, 0.36);
+  --font-sans: 'Pretendard Variable', system-ui, sans-serif;
+}
