@@ -1,0 +1,56 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  overflow: visible;
+}
+.headingBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  overflow: visible;
+}
+.heading {
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-dark-gray);
+  overflow: visible;
+  padding: 20px 0;
+  margin: -20px 0;
+}
+.charUnit {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+.highlightRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+}
+.markerBox {
+  background: var(--color-pink-200);
+  border-radius: 4px;
+  padding: 2px 24px;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.description {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+  color: var(--color-gray);
+  text-align: center;
+  width: 441px;
+  max-width: 90vw;
+  overflow: visible;
+  padding: 10px 0;
+  margin: -10px 0;
+}
