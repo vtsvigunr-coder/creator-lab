@@ -1,16 +1,13 @@
 .btn {
-  --pill-height: 44px;
-  height: var(--pill-height);
-  width: var(--pill-height);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 0 40px;
+  padding: 12px 40px;
   border: none;
-  overflow: hidden;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .solid {
   background: var(--color-violet-400);

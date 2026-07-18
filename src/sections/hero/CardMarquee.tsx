@@ -12,17 +12,18 @@ import dyson from '../../assets/images/Dyson.svg'
 import xlash from '../../assets/images/xlash.png'
 import weekday from '../../assets/images/weekday.png'
 
-type Card = { type: 'photo' | 'logo'; src: string; bg?: string }
+type Card = { type: 'photo' | 'logo'; src: string; bg?: string; width: number; height: number }
 
+// Exact per-card sizes from Figma (node 1190-23928) — the row is not a uniform grid.
 const CARDS: Card[] = [
-  { type: 'photo', src: img0 },
-  { type: 'logo', src: dyson, bg: 'var(--color-mint-100)' },
-  { type: 'photo', src: img1 },
-  { type: 'photo', src: img2 },
-  { type: 'logo', src: xlash, bg: 'var(--color-violet-200)' },
-  { type: 'photo', src: img3 },
-  { type: 'logo', src: weekday, bg: 'var(--color-blue-200)' },
-  { type: 'photo', src: img4 },
+  { type: 'photo', src: img0, width: 153.525, height: 102.878 },
+  { type: 'logo', src: dyson, bg: 'var(--color-mint-100)', width: 197, height: 220 },
+  { type: 'photo', src: img1, width: 153, height: 174 },
+  { type: 'photo', src: img2, width: 153, height: 102 },
+  { type: 'logo', src: xlash, bg: 'var(--color-violet-200)', width: 153, height: 162 },
+  { type: 'photo', src: img3, width: 189, height: 220 },
+  { type: 'logo', src: weekday, bg: 'var(--color-blue-200)', width: 153, height: 162 },
+  { type: 'photo', src: img4, width: 189, height: 220 },
 ]
 
 type CardMarqueeProps = {
@@ -72,9 +73,21 @@ export default function CardMarquee({ onComplete }: CardMarqueeProps) {
       <div className={styles.track} ref={trackRef}>
         {loopCards.map((card, i) =>
           card.type === 'photo' ? (
-            <img key={i} src={card.src} className={styles.card} data-card alt="" />
+            <img
+              key={i}
+              src={card.src}
+              className={styles.card}
+              style={{ width: card.width, height: card.height }}
+              data-card
+              alt=""
+            />
           ) : (
-            <div key={i} className={styles.logoCard} style={{ background: card.bg }} data-card>
+            <div
+              key={i}
+              className={styles.logoCard}
+              style={{ background: card.bg, width: card.width, height: card.height }}
+              data-card
+            >
               <img src={card.src} alt="" style={{ width: '60%' }} />
             </div>
           ),

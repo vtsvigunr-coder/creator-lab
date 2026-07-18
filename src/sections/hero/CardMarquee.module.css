@@ -5,19 +5,16 @@
 }
 .track {
   display: flex;
+  align-items: center;
   gap: 16px;
   width: max-content;
 }
 .card {
-  height: 220px;
-  width: 189px;
   border-radius: 8px;
   flex-shrink: 0;
   object-fit: cover;
 }
 .logoCard {
-  height: 220px;
-  width: 189px;
   border-radius: 8px;
   flex-shrink: 0;
   display: flex;

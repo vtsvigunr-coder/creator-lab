@@ -21,13 +21,15 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <AnimatedLogo />
-      <MenuOverlay open={menuOpen} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)} />
-      <div className={styles.right}>
-        <button ref={userBtnRef} className={styles.userBtn} type="button">
-          <img src={userIcon} alt="Account" width={20} height={20} />
-        </button>
-        <CircleRevealButton label="Get Started" variant="dark" />
+      <div className={styles.row}>
+        <AnimatedLogo />
+        <MenuOverlay open={menuOpen} onOpen={() => setMenuOpen(true)} onClose={() => setMenuOpen(false)} />
+        <div className={styles.right}>
+          <button ref={userBtnRef} className={styles.userBtn} type="button">
+            <img src={userIcon} alt="Account" width={20} height={20} />
+          </button>
+          <CircleRevealButton label="Get Started" variant="dark" />
+        </div>
       </div>
     </header>
   )

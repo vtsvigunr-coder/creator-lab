@@ -18,18 +18,21 @@ export default function CircleRevealButton({ label, icon, variant, delay = 0 }: 
     const labelEl = labelRef.current
     if (!btn || !labelEl) return
 
-    const targetWidth = btn.scrollWidth
-    // GSAP animates scale/x via the independent CSS scale/translate properties, so the
-    // starting state must be set through GSAP itself (not a CSS transform: scale(0) rule,
-    // which would combine with GSAP's own scale property instead of being replaced by it).
-    gsap.set(btn, { scale: 0 })
+    // The button stays at its final (padded) layout size the whole time — only a
+    // clip-path circle grows to reveal it. Animating layout `width` instead would shift
+    // any sibling relying on this button's box (e.g. the header's user avatar).
+    // clip-path also guarantees a true circle regardless of the button's own aspect ratio,
+    // unlike a CSS transform: scale(0) starting point.
+    gsap.set(btn, { clipPath: 'circle(22px at 50% 50%)' })
     gsap.set(labelEl, { opacity: 0, x: -8 })
 
     const tl = gsap.timeline({ delay })
 
-    tl.to(btn, { scale: 1, duration: 0.35, ease: 'back.out(1.7)' })
-      .to(btn, { width: targetWidth, duration: 0.4, ease: 'power2.inOut' }, '-=0.05')
-      .to(labelEl, { opacity: 1, x: 0, duration: 0.3, ease: 'power1.out' }, '-=0.3')
+    tl.to(btn, { clipPath: 'circle(150% at 50% 50%)', duration: 0.5, ease: 'back.out(1.4)' }).to(
+      labelEl,
+      { opacity: 1, x: 0, duration: 0.3, ease: 'power1.out' },
+      '-=0.25',
+    )
 
     return () => {
       tl.kill()
