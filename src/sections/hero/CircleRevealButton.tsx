@@ -19,9 +19,9 @@ export default function CircleRevealButton({ label, icon, variant, onReady }: Ci
     if (!btn || !labelEl) return
 
     const targetWidth = btn.scrollWidth
-    // GSAP takes over the independent `scale`/`translate` CSS properties as soon as it
-    // starts ticking, overriding the CSS class's `transform: scale(0)`. Set the starting
-    // state through GSAP itself (synchronous, no tick required) so there's no mismatch.
+    // GSAP animates scale/x via the independent CSS scale/translate properties, so the
+    // starting state must be set through GSAP itself (not a CSS transform: scale(0) rule,
+    // which would combine with GSAP's own scale property instead of being replaced by it).
     gsap.set(btn, { scale: 0 })
     gsap.set(labelEl, { opacity: 0, x: -8 })
 

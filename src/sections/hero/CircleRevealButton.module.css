@@ -10,7 +10,6 @@
   padding: 0 20px;
   border: none;
   overflow: hidden;
-  transform: scale(0);
   white-space: nowrap;
 }
 .solid {
@@ -35,6 +34,4 @@
   font-weight: 600;
   font-size: 16px;
   letter-spacing: -0.48px;
-  opacity: 0;
-  transform: translateX(-8px);
 }

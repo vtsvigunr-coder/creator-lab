@@ -22,14 +22,16 @@ export default function Hero() {
     setPhase('cards')
   }, [])
 
+  // Stable across re-renders (Hero re-renders on every phase change): CircleRevealButton's
+  // setup effect depends on this reference, so a fresh function per render would tear down
+  // and recreate the Get Started timeline every time, orphaning it before it ever plays.
+  const handleGetStartedReady = useCallback((play: () => Promise<void>) => {
+    getStartedPlay.current = play
+  }, [])
+
   return (
     <div className={styles.hero} data-testid="hero">
-      <Header
-        onLogoComplete={handleLogoComplete}
-        onGetStartedReady={(play) => {
-          getStartedPlay.current = play
-        }}
-      />
+      <Header onLogoComplete={handleLogoComplete} onGetStartedReady={handleGetStartedReady} />
       <div className={styles.centerBlock}>
         {phase !== 'idle' && <HeroTitle onComplete={handleTitleComplete} />}
         {(phase === 'buttons' || phase === 'cards') && <HeroButtons onComplete={handleButtonsComplete} />}
