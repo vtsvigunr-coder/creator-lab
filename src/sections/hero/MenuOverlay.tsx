@@ -2,8 +2,6 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import styles from './MenuOverlay.module.css'
-import menuIcon from '../../assets/icons/menu-04.svg'
-import closeIcon from '../../assets/icons/close-icon.svg'
 import instagramIcon from '../../assets/icons/instagram.svg'
 import linkedinIcon from '../../assets/icons/linkedin.svg'
 import telegramIcon from '../../assets/icons/telegram.svg'
@@ -17,7 +15,7 @@ type MenuOverlayProps = {
   onClose: () => void
 }
 
-function AnimatedMenuChars({ text }: { text: string }) {
+function AnimatedChars({ text }: { text: string }) {
   const chars = useMemo(() => splitChars(text), [text])
   return (
     <>
@@ -30,15 +28,31 @@ function AnimatedMenuChars({ text }: { text: string }) {
   )
 }
 
+// Hamburger (3 lines) <-> close (X) coordinates, both in the icon's 20x20 viewBox. The
+// hamburger's outer lines become the X's two diagonals; the middle line collapses to a
+// point at the center and fades, instead of just vanishing.
+const HAMBURGER = {
+  top: { x1: 5.834, y1: 4.167, x2: 14.167, y2: 4.167 },
+  mid: { x1: 3.334, y1: 10, x2: 16.667, y2: 10 },
+  bottom: { x1: 5.834, y1: 15.833, x2: 14.167, y2: 15.833 },
+}
+const CROSS = {
+  top: { x1: 5, y1: 5, x2: 15, y2: 15 },
+  mid: { x1: 10, y1: 10, x2: 10, y2: 10 },
+  bottom: { x1: 15, y1: 5, x2: 5, y2: 15 },
+}
+
 const OPEN_TOP = -20
-const OPEN_WIDTH = 320
+const OPEN_WIDTH = 279
 const BOUNCE = 'back.out(1.5)'
 
 export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   const openContentRef = useRef<HTMLDivElement>(null)
-  const menuIconRef = useRef<HTMLImageElement>(null)
-  const closeIconRef = useRef<HTMLImageElement>(null)
+  const lineTopRef = useRef<SVGLineElement>(null)
+  const lineMidRef = useRef<SVGLineElement>(null)
+  const lineBottomRef = useRef<SVGLineElement>(null)
+  const iconRef = useRef<SVGSVGElement>(null)
   const menuLabelRef = useRef<HTMLSpanElement>(null)
   const closeLabelRef = useRef<HTMLSpanElement>(null)
   const closedBox = useRef({ width: 0, height: 0, top: 0 })
@@ -78,24 +92,26 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
     const trigger = menuLabelRef.current?.closest('button')
     if (!trigger) return
 
-    const icon = menuIconRef.current
-    const chars = trigger.querySelectorAll('[data-trigger-char]')
+    const icon = iconRef.current
+    const chars = menuLabelRef.current?.querySelectorAll('[data-trigger-char]')
     const tl = gsap.timeline()
 
     if (icon) {
       tl.from(icon, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0)
     }
-    tl.from(
-      chars,
-      {
-        y: -14,
-        opacity: 0,
-        duration: 0.4,
-        ease: 'cubic-bezier(0.18, 1, 0.32, 1)',
-        stagger: 0.088,
-      },
-      0,
-    )
+    if (chars) {
+      tl.from(
+        chars,
+        {
+          y: -14,
+          opacity: 0,
+          duration: 0.4,
+          ease: 'cubic-bezier(0.18, 1, 0.32, 1)',
+          stagger: 0.088,
+        },
+        0,
+      )
+    }
 
     return () => {
       tl.kill()
@@ -105,16 +121,20 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
   useLayoutEffect(() => {
     const panel = panelRef.current
     const openContent = openContentRef.current
-    const menuIconEl = menuIconRef.current
-    const closeIconEl = closeIconRef.current
+    const lineTop = lineTopRef.current
+    const lineMid = lineMidRef.current
+    const lineBottom = lineBottomRef.current
     const menuLabel = menuLabelRef.current
     const closeLabel = closeLabelRef.current
-    if (!panel || !openContent || !menuIconEl || !closeIconEl || !menuLabel || !closeLabel) return
+    if (!panel || !openContent || !lineTop || !lineMid || !lineBottom || !menuLabel || !closeLabel) return
 
     // Kill whatever the previous run of this effect left behind first. Without this, two
     // timelines can end up simultaneously fighting over the same panel properties (e.g. if
     // this effect ever fires twice in quick succession) and both stall at progress 0 forever.
     activeTimeline.current?.kill()
+
+    const menuChars = menuLabel.querySelectorAll('[data-trigger-char]')
+    const closeChars = closeLabel.querySelectorAll('[data-trigger-char]')
 
     let tl: ReturnType<typeof gsap.timeline>
 
@@ -145,19 +165,37 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
           },
           0,
         )
-        .to(menuIconEl, { opacity: 0, duration: 0.25, ease: 'power1.out' }, 0)
-        .to(closeIconEl, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.1)
-        .to(menuLabel, { opacity: 0, duration: 0.25, ease: 'power1.out' }, 0)
-        .to(closeLabel, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.1)
+        .to(lineTop, { attr: CROSS.top, duration: 0.4, ease: 'power2.inOut' }, 0)
+        .to(lineBottom, { attr: CROSS.bottom, duration: 0.4, ease: 'power2.inOut' }, 0)
+        .to(lineMid, { attr: CROSS.mid, opacity: 0, duration: 0.25, ease: 'power1.out' }, 0)
+        // The label swap mirrors the initial "Menu" reveal (chars rising into place while
+        // fading in) so opening feels like a continuation of the same motion, just upward:
+        // outgoing "Menu" chars keep rising and fade out, incoming "Close" chars rise up
+        // from below into the same spot.
+        .to(menuChars, { y: -14, opacity: 0, duration: 0.3, ease: 'power1.in', stagger: 0.03 }, 0)
+        .set(closeLabel, { opacity: 1 }, 0.05)
+        .fromTo(
+          closeChars,
+          { y: 14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.4, ease: 'cubic-bezier(0.18, 1, 0.32, 1)', stagger: 0.04 },
+          0.05,
+        )
         .to(openContent, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '-=0.25')
     } else {
       tl = gsap
         .timeline()
         .to(openContent, { opacity: 0, duration: 0.15, ease: 'power1.in' }, 0)
-        .to(closeIconEl, { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0)
-        .to(menuIconEl, { opacity: 1, duration: 0.2, ease: 'power1.out' }, 0.1)
-        .to(closeLabel, { opacity: 0, duration: 0.2, ease: 'power1.out' }, 0)
-        .to(menuLabel, { opacity: 1, duration: 0.2, ease: 'power1.out' }, 0.1)
+        .to(lineTop, { attr: HAMBURGER.top, duration: 0.35, ease: 'power2.inOut' }, 0)
+        .to(lineBottom, { attr: HAMBURGER.bottom, duration: 0.35, ease: 'power2.inOut' }, 0)
+        .to(lineMid, { attr: HAMBURGER.mid, opacity: 1, duration: 0.25, ease: 'power1.out' }, 0.1)
+        .to(closeChars, { y: -14, opacity: 0, duration: 0.25, ease: 'power1.in', stagger: 0.025 }, 0)
+        .set(menuLabel, { opacity: 1 }, 0.05)
+        .fromTo(
+          menuChars,
+          { y: 14, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.35, ease: 'cubic-bezier(0.18, 1, 0.32, 1)', stagger: 0.035 },
+          0.05,
+        )
         .to(
           panel,
           {
@@ -194,23 +232,31 @@ export default function MenuOverlay({ open, onOpen, onClose }: MenuOverlayProps)
   return (
     <div ref={panelRef} className={`${styles.panel} ${open ? styles.panelOpen : ''}`} data-testid="menu-overlay">
       <button className={styles.toggle} type="button" onClick={open ? onClose : onOpen}>
-        <span className={styles.iconStack}>
-          <img ref={menuIconRef} src={menuIcon} alt="" width={20} height={20} className={styles.iconLayer} />
-          <img
-            ref={closeIconRef}
-            src={closeIcon}
-            alt=""
-            width={20}
-            height={20}
-            className={`${styles.iconLayer} ${styles.closeIcon}`}
+        <svg
+          ref={iconRef}
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          className={styles.iconSvg}
+          aria-hidden="true"
+        >
+          <line ref={lineTopRef} {...HAMBURGER.top} stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+          <line ref={lineMidRef} {...HAMBURGER.mid} stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" />
+          <line
+            ref={lineBottomRef}
+            {...HAMBURGER.bottom}
+            stroke="currentColor"
+            strokeWidth="1.25"
+            strokeLinecap="round"
           />
-        </span>
+        </svg>
         <span className={styles.labelStack}>
           <span ref={menuLabelRef} className={styles.labelLayer}>
-            <AnimatedMenuChars text="Menu" />
+            <AnimatedChars text="Menu" />
           </span>
           <span ref={closeLabelRef} className={`${styles.labelLayer} ${styles.closeLabel}`}>
-            Close
+            <AnimatedChars text="Close" />
           </span>
         </span>
       </button>

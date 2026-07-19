@@ -2,12 +2,13 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
   border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 40px;
-  padding: 8px 12px;
+  padding: 0;
 }
 .panelOpen {
   background: var(--overlay-scrim);
@@ -19,27 +20,27 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 239px;
+  padding: 8px 8px 8px 12px;
   color: var(--color-dark-gray);
   background: none;
   border: none;
+  border-radius: 60px;
   white-space: nowrap;
 }
 .panelOpen .toggle {
   color: var(--color-white);
 }
-.iconStack,
+.iconSvg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
 .labelStack {
   display: grid;
 }
-.iconStack > img,
 .labelStack > span {
   grid-area: 1 / 1;
-}
-.iconLayer {
-  opacity: 1;
-}
-.closeIcon {
-  opacity: 0;
 }
 .labelLayer {
   opacity: 1;
@@ -55,7 +56,7 @@
   display: none;
   flex-direction: column;
   gap: 24px;
-  width: 280px;
+  width: 100%;
   opacity: 0;
 }
 .group {

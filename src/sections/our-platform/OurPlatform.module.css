@@ -1,0 +1,186 @@
+/* A short scroll range drives one pinned stage: the heading/CTA/tag/tab-list sit still (entrance
+   plays once) while the background photo, caption, and rail indicator switch between the three
+   tabs. The extra height is kept small and paired with scroll-snap so one normal scroll gesture
+   reliably advances exactly one tab, rather than needing to drag through a long crossfade. */
+.ourPlatform {
+  position: relative;
+  height: calc(100vh + 240px);
+  background: var(--color-dark-gray);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-dark-gray);
+}
+
+/* --- background photo, full colour, crossfading between tabs --- */
+.bgLayers {
+  position: absolute;
+  inset: 0;
+}
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+/* --- the fixed-size composition, scaled as a whole on narrower viewports --- */
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1440px;
+  height: 901px;
+  transform: translate(-50%, -50%) scale(var(--platform-scale, 1));
+  pointer-events: none;
+}
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.content > * {
+  pointer-events: auto;
+}
+
+.tag {
+  position: absolute;
+  left: 44px;
+  top: 288px;
+  transform: rotate(-21.4deg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 2px;
+  background: var(--color-yellow);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.tagLabel {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-transform: uppercase;
+  color: var(--color-dark-purple);
+}
+
+/* --- the vertical rail: a static guide line, a sliding indicator bracket + dot, and the
+   tab labels they point at --- */
+.railLine {
+  position: absolute;
+  left: 120px;
+  top: 326px;
+  width: 1px;
+  height: 303px;
+  background: rgba(255, 255, 255, 0.3);
+}
+.railIndicator {
+  position: absolute;
+  left: 118.5px;
+  width: 3px;
+  height: 82px;
+  border-radius: 2px;
+  background: var(--color-white);
+}
+.railDot {
+  position: absolute;
+  left: 117px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-white);
+}
+.tabList {
+  position: absolute;
+  left: 134px;
+  top: 414px;
+  display: flex;
+  flex-direction: column;
+  gap: 62px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tabItem {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-transform: uppercase;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+/* --- the per-tab caption, stacked and crossfaded --- */
+.captionStack {
+  position: absolute;
+  left: 120px;
+  top: 760px;
+  width: 260px;
+}
+.caption {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-white);
+}
+
+/* --- the fixed heading + CTA --- */
+.heroText {
+  position: absolute;
+  left: calc(50% + 10px);
+  top: 624px;
+  width: 590px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+}
+.heading {
+  margin: -20px 0;
+  padding: 20px 0;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+@media (max-width: 1280px) {
+  .canvas {
+    --platform-scale: 0.82;
+  }
+}
+@media (max-width: 1024px) {
+  .canvas {
+    --platform-scale: 0.66;
+  }
+}
+@media (max-width: 768px) {
+  .canvas {
+    --platform-scale: 0.45;
+  }
+}
+@media (max-width: 480px) {
+  .canvas {
+    --platform-scale: 0.32;
+  }
+}

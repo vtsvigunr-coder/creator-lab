@@ -1,0 +1,19 @@
+/* The natural size is what CSS describes; the entrance animation measures it and then
+   wipes the box open from its left edge, clipping the label as it goes. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 2px;
+  background: var(--color-yellow);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.label {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-transform: uppercase;
+  color: var(--color-dark-purple);
+}

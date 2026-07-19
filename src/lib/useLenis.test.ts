@@ -8,6 +8,7 @@ vi.mock('lenis', () => {
       Object.assign(this as object, {
         raf: vi.fn(),
         on: vi.fn(),
+        scrollTo: vi.fn(),
         destroy: vi.fn(),
       })
     }),

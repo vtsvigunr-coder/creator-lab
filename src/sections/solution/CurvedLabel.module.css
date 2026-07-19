@@ -1,0 +1,18 @@
+.wrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.char {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--color-white);
+  white-space: pre;
+  transform-origin: 50% 50%;
+  will-change: transform, filter, opacity;
+}

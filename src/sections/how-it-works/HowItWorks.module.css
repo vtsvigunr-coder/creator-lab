@@ -1,0 +1,178 @@
+/* Two viewport heights of scroll drive one pinned stage: the heading and CTA sit still while
+   the four step cards are dealt up from below the fold, one after another, until they cover
+   the middle of the screen — the section's second design state. */
+.howItWorks {
+  position: relative;
+  height: 250vh;
+  background: var(--color-dark-purple);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-dark-purple);
+}
+
+/* --- heading + CTA, spread over the full height like the design --- */
+.content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 100px 24px;
+}
+.heading {
+  /* The design's 652px is a hair narrower than the 653px the first line actually needs, so it
+     wrapped. Slack here keeps both lines single-row through font-loading jitter. */
+  width: 700px;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 54px;
+  line-height: 58px;
+  letter-spacing: -1.08px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-white);
+  /* Room for the blur to bleed without clipping. */
+  padding: 20px 0;
+  margin: -20px 0;
+}
+/* The icon is an inline word in the first line, so the row is a flex line and each text run
+   has to be its own flex item — otherwise the 12px gap would land between every character. */
+.headingLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+.headingIcon {
+  display: block;
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+
+/* --- the card strip --- */
+.cards {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1160px;
+  height: 331px;
+  transform: translate(-50%, -50%) scale(var(--cards-scale, 1));
+}
+.card {
+  position: absolute;
+  top: 0;
+  width: 285px;
+  height: 331px;
+  padding: 78px 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 16px;
+  background: var(--color-white);
+  /* Clips the step badge into the tab that pokes out of the bottom edge. */
+  overflow: hidden;
+  box-shadow: 0 4px 40px 4px rgba(0, 0, 0, 0.08);
+  will-change: transform;
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  text-align: center;
+}
+.cardIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 60px;
+  background: var(--color-yellow);
+}
+.cardIcon img {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+.cardTitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.54px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+}
+.cardText {
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+}
+/* Sits mostly below the card's bottom edge; the fixed 331px card height + overflow hidden
+   clip it down to the top sliver that pokes out as a tab. */
+.cardBadge {
+  flex: none;
+  margin-top: 54px;
+  height: 46px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 4px 18px;
+  border-radius: 70px;
+  background: var(--color-dark-purple);
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+/* The strip is a fixed 1160px composition, so it is scaled rather than reflowed. */
+@media (max-width: 1280px) {
+  .cards {
+    --cards-scale: 0.82;
+  }
+}
+@media (max-width: 1024px) {
+  .cards {
+    --cards-scale: 0.66;
+  }
+  .heading {
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: -0.8px;
+  }
+  .headingIcon {
+    width: 28px;
+    height: 28px;
+  }
+}
+@media (max-width: 768px) {
+  .cards {
+    --cards-scale: 0.45;
+  }
+  .heading {
+    font-size: 30px;
+    line-height: 34px;
+    letter-spacing: -0.6px;
+  }
+  .headingIcon {
+    width: 22px;
+    height: 22px;
+  }
+}

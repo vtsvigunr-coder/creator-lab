@@ -1,14 +1,27 @@
+/* The natural (settled) layout is what CSS describes here — the button and its content sit
+   in normal flow so they can be measured. The entrance animation then lifts the button out
+   of flow (see CircleRevealButton.tsx), with the wrapper holding the reserved footprint so
+   the expansion never reflows its neighbours. */
+.wrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
 .btn {
-  border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  border-radius: 999px;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  white-space: nowrap;
+}
+.content {
+  display: flex;
+  align-items: center;
   gap: 10px;
   /* 36px tall on every button (8 + 8 + 20 line-height), matching the user avatar. */
   padding: 8px 40px;
-  border: none;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 .solid {
   background: var(--color-violet-400);
@@ -17,6 +30,15 @@
 .dark {
   background: var(--color-dark-gray);
   color: var(--color-white);
+}
+/* For dark sections: a white pill with dark text. The shared arrow asset hard-codes a white
+   stroke, so it is knocked back to black here rather than shipping a second copy of it. */
+.light {
+  background: var(--color-white);
+  color: var(--color-dark-gray);
+}
+.light .icon {
+  filter: brightness(0);
 }
 .outline {
   background: transparent;

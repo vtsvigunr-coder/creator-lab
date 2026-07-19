@@ -14,7 +14,12 @@ export function useLenis() {
     gsap.ticker.add(tick)
     gsap.ticker.lagSmoothing(0)
 
+    // ScrollTrigger keeps its own scroll memory and restores the previous offset on refresh,
+    // which would undo the reset in main.tsx and drop a reload back mid-page. Clearing it
+    // (and re-asserting manual restoration) is what actually makes a reload start on the hero.
+    ScrollTrigger.clearScrollMemory('manual')
     ScrollTrigger.refresh()
+    lenis.scrollTo(0, { immediate: true })
 
     return () => {
       gsap.ticker.remove(tick)

@@ -1,0 +1,279 @@
+.forBrands {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  padding: 100px 120px;
+  background: var(--color-white);
+}
+
+/* --- head: tag, heading, description, CTA --- */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+.tagAndHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.heading {
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-dark-gray);
+  width: 538px;
+  max-width: 100%;
+  /* Room for the blur to bleed without clipping. */
+  padding: 20px 0;
+  margin: -20px 0;
+}
+.description {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-align: center;
+  color: var(--color-gray);
+  width: 528px;
+  max-width: 100%;
+  padding: 8px 0;
+  margin: -8px 0;
+}
+
+/* --- body: bullet list on the left, masked photo + stat card on the right --- */
+.body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  max-width: 1160px;
+}
+.listCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 36px;
+  flex: none;
+}
+.listHeading {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.54px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+  width: 224px;
+  /* Matches the reveal padding on the list rows below, so the fade never clips. */
+  padding: 8px 0;
+  margin: -8px 0;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  list-style: disc;
+  padding-left: 24px;
+  margin: 0;
+}
+.listItem {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+  padding: 6px 0;
+  margin: -6px 0;
+}
+
+/* --- the masked photo + floating stat card --- */
+.imageBlock {
+  position: relative;
+  flex: none;
+  width: 590px;
+  height: 640px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-yellow-100);
+}
+/* Photo + star mask move as one unit — they slide in from the right together, already
+   assembled, rather than the mask appearing separately from the photo underneath it. */
+.photoGroup {
+  position: absolute;
+  inset: 0;
+}
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The scalloped cutout that reads as torn/cut paper along the left edge of the photo — an
+   exported boolean-subtract shape (photo rect minus a star), so it is one static asset rather
+   than a CSS clip-path. */
+.mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 261.711px;
+  height: 100%;
+  pointer-events: none;
+}
+.statCard {
+  position: absolute;
+  left: 306px;
+  top: 412px;
+  width: 244px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-white);
+  box-shadow: 0 4px 40px 4px rgba(0, 0, 0, 0.08);
+}
+.statRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.statMain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.statIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 8px;
+}
+.statIcon img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+.statText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--color-dark-gray);
+  white-space: nowrap;
+}
+.statLabel {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+}
+.statValue {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.54px;
+  /* Reserves room for the widest formatted value so the count-up never reflows the card. */
+  font-variant-numeric: tabular-nums;
+}
+.statDelta {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 60px;
+  background: var(--color-mint-100);
+  flex: none;
+}
+.statDeltaIcon {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+.statDeltaText {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+  color: var(--color-dark-gray);
+  white-space: nowrap;
+}
+
+@media (max-width: 1280px) {
+  .forBrands {
+    padding: 80px 48px;
+  }
+  .body {
+    gap: 24px;
+  }
+  .imageBlock {
+    width: 460px;
+    height: 500px;
+  }
+  .mask {
+    width: 204px;
+  }
+  .statCard {
+    left: 240px;
+    top: 322px;
+  }
+}
+@media (max-width: 1024px) {
+  .body {
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+  .listCol {
+    align-items: center;
+    text-align: center;
+  }
+  .listHeading {
+    text-align: center;
+  }
+  .list {
+    align-items: flex-start;
+  }
+}
+@media (max-width: 640px) {
+  .forBrands {
+    padding: 64px 24px;
+  }
+  .heading {
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: -0.64px;
+  }
+  .imageBlock {
+    width: 100%;
+    height: 420px;
+  }
+  .mask {
+    width: 172px;
+  }
+  .statCard {
+    left: 50%;
+    top: auto;
+    bottom: 16px;
+    transform: translateX(-50%);
+    width: calc(100% - 48px);
+  }
+}

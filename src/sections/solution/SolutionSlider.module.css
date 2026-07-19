@@ -1,0 +1,149 @@
+/* Design coordinates from the 1200px-wide content column: the two side circles and the
+   caption sit at fixed spots and never move — only what they show changes. */
+.slider {
+  position: relative;
+  width: 1200px;
+  max-width: 100%;
+  height: 660px;
+  margin: 0 auto;
+}
+.centre {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+.stage {
+  position: relative;
+  width: 560px;
+  height: 560px;
+}
+.ring {
+  position: absolute;
+  inset: 0;
+  /* Starts the sweep at 12 o'clock rather than 3. */
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.ringProgress {
+  fill: none;
+  stroke: var(--color-violet-300);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.photo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 535px;
+  height: 535px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.photoLayer {
+  position: absolute;
+  inset: 0;
+}
+.photoLayer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The incoming photo opens out of the centre of the circle. */
+.incoming {
+  clip-path: circle(0% at 50% 50%);
+}
+
+/* Both labels sit on this ring and spin around the circle's centre on a switch. */
+.labelRing {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+
+/* --- side circles --- */
+.side {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 103px;
+}
+.sideLeft {
+  left: 0;
+  top: 0;
+}
+.sideRight {
+  right: 0;
+  top: 517px;
+}
+.sideCircle {
+  position: relative;
+  width: 103px;
+  height: 103px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.sideCircle img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sideLabel {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+  white-space: nowrap;
+}
+
+/* --- caption --- */
+.caption {
+  position: absolute;
+  left: 0;
+  top: 612px;
+  width: 373px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+  /* Room for the blur to bleed without clipping. */
+  padding: 8px 0;
+  margin: -8px 0;
+}
+
+/* --- nav --- */
+.nav {
+  display: flex;
+  gap: 12px;
+}
+.navBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border: none;
+  border-radius: 60px;
+  background: var(--color-gray-150);
+  color: var(--color-dark-gray);
+  transition: background 0.2s ease;
+}
+.navBtn:hover {
+  background: var(--color-gray-200);
+}
+.navBtn img {
+  width: 24px;
+  height: 24px;
+}

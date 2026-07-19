@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Raw Figma export dumps — reference material for building sections, not consumed by the app.
+# The specific assets each section needs are copied into src/assets/ instead.
+/main page/
+/font/

@@ -1,0 +1,14 @@
+/* Keeps a word's characters on one line — without it the browser may break between any two
+   inline-block characters, splitting words mid-glyph. */
+.charGroup {
+  display: inline-block;
+  white-space: nowrap;
+}
+.charUnit {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+.wordUnit {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
