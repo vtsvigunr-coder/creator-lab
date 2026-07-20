@@ -1,10 +1,11 @@
 /* A pinned stage drives the heading/CTA/tag/tab-list staying still (entrance plays once) while
-   the background photo, caption, and rail indicator switch between the three tabs. The extra
-   height is generous (~3 wheel notches per transition) so one scroll gesture doesn't jump
-   straight past a tab; scroll-snap still settles cleanly on whichever tab it lands nearest. */
+   the background photo, caption, and rail indicator switch between the three tabs. Each tab
+   holds through ~3 wheel notches of dead scroll (HOLD_PX in OurPlatform.tsx) before the
+   boundary-crossing scroll triggers an instant cut — not a scrub. Keep this in sync with
+   HOLD_PX * (tab count - 1) in the component. */
 .ourPlatform {
   position: relative;
-  height: calc(100vh + 600px);
+  height: calc(100vh + 700px);
   background: var(--color-dark-gray);
 }
 .stage {

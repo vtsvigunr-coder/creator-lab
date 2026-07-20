@@ -5,6 +5,9 @@ import WipeRevealTag from '../../components/WipeRevealTag'
 import { JOIN_SLIDES } from './slides'
 import styles from './WhyCreatorsJoin.module.css'
 
+// How much extra scroll (~3 wheel notches) each slide holds before the cut to the next.
+const HOLD_PX = 350
+
 const HEADING_LINE_1 = 'Not for everyone.'
 const HEADING_LINE_2 = 'For serious players.'
 const DESCRIPTION =
@@ -76,64 +79,56 @@ export default function WhyCreatorsJoin() {
           0.25,
         )
 
-      // 2. Slide switching — scrubbed against the pinned stage, spread over enough extra scroll
-      //    height that it takes roughly three scroll steps to land on the next slide instead of
-      //    one. Each transition is two back-to-back halves, no crossfade overlap: the current
-      //    slide fades fully out, then the next fades in. The image/icons fade as a block; the
-      //    caption instead plays the same per-character soft-blur stagger as the heading.
-      const switchTl = gsap.timeline({ paused: true })
+      // 2. Slide switching — NOT scrubbed. Each slide holds for a dead zone of extra scroll
+      //    (~3 wheel notches, HOLD_PX), then the scroll that crosses the boundary triggers one
+      //    quick, self-contained cut — image/icons fade out then the next fades in, caption
+      //    plays the same per-character soft-blur stagger as the heading — that plays to
+      //    completion on its own regardless of further scroll input. Scrolling back up past the
+      //    boundary reverses the same cut.
       for (let i = 0; i < mediaLayers.length - 1; i++) {
-        switchTl.to(
-          mediaLayers[i],
-          { opacity: 0, y: -10, filter: 'blur(8px)', duration: 0.5, ease: 'power1.in' },
-          i,
-        )
-        switchTl.fromTo(
+        const tl = gsap.timeline({ paused: true })
+        tl.to(mediaLayers[i], { opacity: 0, y: -10, filter: 'blur(8px)', duration: 0.18, ease: 'power1.in' }, 0)
+        tl.fromTo(
           mediaLayers[i + 1],
           { opacity: 0, y: 10, filter: 'blur(8px)' },
-          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power2.out' },
-          i + 0.5,
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.22, ease: 'power2.out' },
+          0.18,
         )
-
-        switchTl.to(
+        tl.to(
           captionChars[i],
           {
             opacity: 0,
             y: -16,
             filter: 'blur(12px)',
-            duration: 0.4,
+            duration: 0.15,
             ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-            stagger: 0.015,
+            stagger: 0.008,
           },
-          i,
+          0,
         )
-        switchTl.fromTo(
+        tl.fromTo(
           captionChars[i + 1],
           { opacity: 0, y: 16, filter: 'blur(12px)' },
           {
             opacity: 1,
             y: 0,
             filter: 'blur(0px)',
-            duration: 0.4,
+            duration: 0.2,
             ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-            stagger: 0.015,
+            stagger: 0.01,
           },
-          i + 0.5,
+          0.18,
         )
-      }
 
-      ScrollTrigger.create({
-        animation: switchTl,
-        trigger: root,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        snap: {
-          snapTo: 1 / (mediaLayers.length - 1),
-          duration: 0.4,
-          ease: 'power1.inOut',
-        },
-      })
+        const offset = HOLD_PX * (i + 1)
+        ScrollTrigger.create({
+          trigger: root,
+          start: `top+=${offset} top`,
+          end: `top+=${offset + 1} top`,
+          onEnter: () => tl.play(),
+          onLeaveBack: () => tl.reverse(),
+        })
+      }
     }, root)
 
     return () => {

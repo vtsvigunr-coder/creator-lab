@@ -8,6 +8,9 @@ import styles from './OurPlatform.module.css'
 
 const HEADING = 'Track every sale. Reward every creator'
 
+// How much extra scroll (~3 wheel notches) each tab holds before the cut to the next.
+const HOLD_PX = 350
+
 // The rail's vertical rhythm, traced off the Figma frame: tab labels sit 82px apart starting at
 // 414px, the indicator bracket is centred on each row, and the dot sits mid-row.
 const FIRST_ROW_TOP = 414
@@ -85,44 +88,39 @@ export default function OurPlatform() {
           0.3,
         )
 
-      // 2. Tab switching — scrubbed against the pinned stage, not time-based: as the user
-      //    scrolls through the section's extra height, the background photo crossfades, the
-      //    caption's words stagger out/in (same reveal as the Solution slider's caption swap),
-      //    and the rail indicator slides down to the next tab. Two scroll-driven transitions
-      //    cover the three tabs.
-      const switchTl = gsap.timeline({ paused: true })
+      // 2. Tab switching — NOT scrubbed. Each tab holds for a dead zone of extra scroll (~3
+      //    wheel notches, HOLD_PX), then the scroll that crosses the boundary triggers one
+      //    quick, self-contained cut: background photo crossfade, caption words stagger
+      //    out/in, and the rail indicator slides to the next tab — all playing to completion on
+      //    their own regardless of further scroll input. Scrolling back up past the boundary
+      //    reverses the same cut.
       for (let i = 0; i < PLATFORM_TABS.length - 1; i++) {
-        switchTl.to(bgLayers[i], { opacity: 0, duration: 1, ease: 'none' }, i)
-        switchTl.to(bgLayers[i + 1], { opacity: 1, duration: 1, ease: 'none' }, i)
-        switchTl.to(
+        const tl = gsap.timeline({ paused: true })
+        tl.to(bgLayers[i], { opacity: 0, duration: 0.35, ease: 'power1.inOut' }, 0)
+        tl.to(bgLayers[i + 1], { opacity: 1, duration: 0.35, ease: 'power1.inOut' }, 0)
+        tl.to(
           captionWords[i],
-          { opacity: 0, y: -6, filter: 'blur(6px)', duration: 0.4, ease: 'power1.in', stagger: 0.02 },
-          i,
+          { opacity: 0, y: -6, filter: 'blur(6px)', duration: 0.15, ease: 'power1.in', stagger: 0.012 },
+          0,
         )
-        switchTl.fromTo(
+        tl.fromTo(
           captionWords[i + 1],
           { opacity: 0, y: 10, filter: 'blur(8px)' },
-          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power2.out', stagger: 0.03 },
-          i + 0.2,
+          { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.2, ease: 'power2.out', stagger: 0.02 },
+          0.15,
         )
-        if (indicator) switchTl.to(indicator, { top: indicatorTop(i + 1), duration: 1, ease: 'none' }, i)
-        if (dot) switchTl.to(dot, { top: dotTop(i + 1), duration: 1, ease: 'none' }, i)
-      }
+        if (indicator) tl.to(indicator, { top: indicatorTop(i + 1), duration: 0.35, ease: 'power1.inOut' }, 0)
+        if (dot) tl.to(dot, { top: dotTop(i + 1), duration: 0.35, ease: 'power1.inOut' }, 0)
 
-      ScrollTrigger.create({
-        animation: switchTl,
-        trigger: root,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: true,
-        // Once the user stops scrolling, settle on the nearest whole tab instead of resting
-        // mid-crossfade — one scroll gesture reads as one switch, image and caption together.
-        snap: {
-          snapTo: 1 / (PLATFORM_TABS.length - 1),
-          duration: 0.4,
-          ease: 'power1.inOut',
-        },
-      })
+        const offset = HOLD_PX * (i + 1)
+        ScrollTrigger.create({
+          trigger: root,
+          start: `top+=${offset} top`,
+          end: `top+=${offset + 1} top`,
+          onEnter: () => tl.play(),
+          onLeaveBack: () => tl.reverse(),
+        })
+      }
     }, root)
 
     return () => {
