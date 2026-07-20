@@ -1,0 +1,122 @@
+.whyCreatorsJoin {
+  position: relative;
+  /* Two transitions across 3 slides, scrubbed — same extra-height technique as OurPlatform. */
+  height: calc(100vh + 240px);
+  background: var(--color-white);
+}
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1440px;
+  height: 932px;
+  transform: translate(-50%, -50%) scale(var(--join-scale, 1));
+}
+
+/* --- static head block, positions matching the Figma frame's absolute y's:
+   tag at y74, heading at y126 (gap 24 after the 28px-tall tag), description at y262
+   (gap 36 after the 100px-tall heading) --- */
+.head {
+  position: absolute;
+  left: 0;
+  top: 74px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+.headGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.heading {
+  margin: -20px 0;
+  padding: 20px 0;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-dark-gray);
+}
+.description {
+  margin: -8px 0;
+  padding: 8px 0;
+  width: 357px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-align: center;
+  color: var(--color-gray);
+}
+
+/* --- slide layers, absolutely stacked and stage-positioned like OurPlatform's canvas --- */
+.slides {
+  position: absolute;
+  inset: 0;
+}
+.layer {
+  position: absolute;
+  inset: 0;
+}
+.image {
+  position: absolute;
+  left: 452px;
+  top: 376px;
+  width: 535px;
+  height: 456px;
+  object-fit: contain;
+}
+.caption {
+  position: absolute;
+  margin: 0;
+  width: 285px;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: -0.96px;
+  color: var(--color-dark-gray);
+}
+.captionLeft {
+  left: 120px;
+}
+.captionRight {
+  left: 1035px;
+}
+.icon {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+}
+
+@media (max-width: 1280px) {
+  .canvas {
+    --join-scale: 0.82;
+  }
+}
+@media (max-width: 1024px) {
+  .canvas {
+    --join-scale: 0.66;
+  }
+}
+@media (max-width: 768px) {
+  .canvas {
+    --join-scale: 0.45;
+  }
+}
+@media (max-width: 480px) {
+  .canvas {
+    --join-scale: 0.32;
+  }
+}

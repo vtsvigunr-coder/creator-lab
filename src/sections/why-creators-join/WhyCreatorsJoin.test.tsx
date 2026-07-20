@@ -1,0 +1,32 @@
+import { render, screen } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+import WhyCreatorsJoin from './WhyCreatorsJoin'
+import { JOIN_SLIDES } from './slides'
+
+describe('WhyCreatorsJoin', () => {
+  it('renders the heading, description, and all three slide captions', () => {
+    render(<WhyCreatorsJoin />)
+
+    const root = screen.getByTestId('why-creators-join')
+    expect(root).toHaveTextContent('Not for everyone.For serious players.')
+    expect(root).toHaveTextContent('Creator Lab is built for brands that want real sales')
+
+    for (const slide of JOIN_SLIDES) {
+      expect(screen.getByText(slide.caption)).toBeInTheDocument()
+    }
+  })
+
+  it('renders exactly one layer per slide, each with its image and two icons', () => {
+    render(<WhyCreatorsJoin />)
+
+    const layers = Array.from(
+      screen.getByTestId('why-creators-join').querySelectorAll('[data-join-layer]'),
+    )
+    expect(layers).toHaveLength(JOIN_SLIDES.length)
+
+    layers.forEach((layer, i) => {
+      expect(layer).toHaveAttribute('data-join-id', JOIN_SLIDES[i].id)
+      expect(layer.querySelectorAll('[data-join-icon]')).toHaveLength(2)
+    })
+  })
+})
