@@ -2,8 +2,10 @@
   position: relative;
   /* Two transitions across 3 slides. Each slide holds through ~3 wheel notches of dead scroll
      (HOLD_PX in WhyCreatorsJoin.tsx) before the boundary-crossing scroll triggers an instant cut
-     — not a scrub. Keep this in sync with HOLD_PX * (slide count - 1) in the component. */
-  height: calc(100vh + 700px);
+     — not a scrub. 700px = HOLD_PX * (slide count - 1); the extra 150px is a tail buffer after
+     the last cut — this is the last section on the page, so without it the final boundary would
+     sit exactly at the document's max scroll offset and could never actually be crossed. */
+  height: calc(100vh + 850px);
   background: var(--color-white);
 }
 .stage {

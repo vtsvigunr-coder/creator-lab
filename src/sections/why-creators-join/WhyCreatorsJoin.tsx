@@ -5,7 +5,11 @@ import WipeRevealTag from '../../components/WipeRevealTag'
 import { JOIN_SLIDES } from './slides'
 import styles from './WhyCreatorsJoin.module.css'
 
-// How much extra scroll (~3 wheel notches) each slide holds before the cut to the next.
+// How much extra scroll (~3 wheel notches) each slide holds before the cut to the next. The
+// section's CSS height adds a further 150px tail after the last boundary — this being the last
+// section on the page, without it the final boundary would sit exactly at the document's max
+// scroll offset, which the browser can never actually scroll past, so the last cut would never
+// fire. Keep HOLD_PX changes in sync with WhyCreatorsJoin.module.css.
 const HOLD_PX = 350
 
 const HEADING_LINE_1 = 'Not for everyone.'
