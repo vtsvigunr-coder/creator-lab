@@ -1,10 +1,10 @@
-/* A short scroll range drives one pinned stage: the heading/CTA/tag/tab-list sit still (entrance
-   plays once) while the background photo, caption, and rail indicator switch between the three
-   tabs. The extra height is kept small and paired with scroll-snap so one normal scroll gesture
-   reliably advances exactly one tab, rather than needing to drag through a long crossfade. */
+/* A pinned stage drives the heading/CTA/tag/tab-list staying still (entrance plays once) while
+   the background photo, caption, and rail indicator switch between the three tabs. The extra
+   height is generous (~3 wheel notches per transition) so one scroll gesture doesn't jump
+   straight past a tab; scroll-snap still settles cleanly on whichever tab it lands nearest. */
 .ourPlatform {
   position: relative;
-  height: calc(100vh + 240px);
+  height: calc(100vh + 600px);
   background: var(--color-dark-gray);
 }
 .stage {

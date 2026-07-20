@@ -12,11 +12,11 @@ describe('WhyCreatorsJoin', () => {
     expect(root).toHaveTextContent('Creator Lab is built for brands that want real sales')
 
     for (const slide of JOIN_SLIDES) {
-      expect(screen.getByText(slide.caption)).toBeInTheDocument()
+      expect(root).toHaveTextContent(slide.caption)
     }
   })
 
-  it('renders exactly one layer per slide, each with its image and two icons', () => {
+  it('renders exactly one media layer per slide, each with its image and two icons', () => {
     render(<WhyCreatorsJoin />)
 
     const layers = Array.from(
@@ -27,6 +27,20 @@ describe('WhyCreatorsJoin', () => {
     layers.forEach((layer, i) => {
       expect(layer).toHaveAttribute('data-join-id', JOIN_SLIDES[i].id)
       expect(layer.querySelectorAll('[data-join-icon]')).toHaveLength(2)
+    })
+  })
+
+  it('renders one caption per slide, each split into soft-blur-char units', () => {
+    render(<WhyCreatorsJoin />)
+
+    const captions = Array.from(
+      screen.getByTestId('why-creators-join').querySelectorAll('[data-join-caption]'),
+    )
+    expect(captions).toHaveLength(JOIN_SLIDES.length)
+
+    captions.forEach((caption, i) => {
+      expect(caption).toHaveAttribute('data-join-id', JOIN_SLIDES[i].id)
+      expect(caption.querySelectorAll('[data-soft-blur-char]').length).toBeGreaterThan(0)
     })
   })
 })

@@ -1,7 +1,8 @@
 .whyCreatorsJoin {
   position: relative;
-  /* Two transitions across 3 slides, scrubbed — same extra-height technique as OurPlatform. */
-  height: calc(100vh + 240px);
+  /* Two transitions across 3 slides, scrubbed. Extra height is generous (~3 wheel notches per
+     transition) so one scroll gesture doesn't blow straight through a slide. */
+  height: calc(100vh + 600px);
   background: var(--color-white);
 }
 .stage {
