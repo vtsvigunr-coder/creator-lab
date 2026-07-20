@@ -8,6 +8,7 @@ import ForCreators from './sections/for-creators/ForCreators'
 import OurPlatform from './sections/our-platform/OurPlatform'
 import WhyNow from './sections/why-now/WhyNow'
 import WhyCreatorsJoin from './sections/why-creators-join/WhyCreatorsJoin'
+import Faq from './sections/faq/Faq'
 import styles from './App.module.css'
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
       <OurPlatform />
       <WhyNow />
       <WhyCreatorsJoin />
+      <Faq />
     </div>
   )
 }

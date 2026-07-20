@@ -1,0 +1,169 @@
+.faq {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 100px 120px;
+  background: var(--color-white);
+}
+
+/* --- left: photo + frame glyph, copy, button --- */
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 36px;
+  width: 318px;
+  flex: none;
+}
+.imageBox {
+  position: relative;
+  width: 248px;
+  height: 248px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.frameIcon {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 212px;
+  height: 212px;
+  pointer-events: none;
+}
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  width: 100%;
+}
+.copy {
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+  padding: 8px 0;
+  margin: -8px 0;
+}
+
+/* --- right: heading + accordion --- */
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 36px;
+  width: 590px;
+  max-width: 100%;
+  flex: none;
+}
+.heading {
+  margin: 0;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+  padding: 20px 0;
+  margin: -20px 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.item {
+  border-top: 1px solid var(--color-gray-200);
+  padding: 24px 16px;
+}
+.item:last-child {
+  border-bottom: 1px solid var(--color-gray-200);
+}
+.itemHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.question {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  letter-spacing: -0.54px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+}
+.toggleIcon {
+  width: 24px;
+  height: 24px;
+  flex: none;
+}
+
+/* CSS-grid collapse trick: animating 0fr -> 1fr needs no measured height and stays smooth
+   in both directions. */
+.answerWrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.answerWrap.open {
+  grid-template-rows: 1fr;
+}
+.answerInner {
+  overflow: hidden;
+}
+.answer {
+  margin: 0;
+  padding-top: 12px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+}
+
+@media (max-width: 1024px) {
+  .faq {
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+  .left {
+    align-items: center;
+    text-align: center;
+  }
+  .textBlock {
+    align-items: center;
+  }
+}
+@media (max-width: 640px) {
+  .faq {
+    padding: 64px 24px;
+  }
+  .heading {
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: -0.64px;
+  }
+}
