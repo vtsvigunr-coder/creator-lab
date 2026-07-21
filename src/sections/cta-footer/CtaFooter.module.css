@@ -1,48 +1,87 @@
+/* Two viewports of scroll drive one pinned stage: the extra viewport is the distance the
+   whole footer panel travels as it rises up out of the bottom of the screen. */
 .ctaFooter {
   position: relative;
+  height: 220vh;
+  /* Height of the arched top edge. The panel is this much taller than the stage and starts
+     that much higher, so by the time it comes to rest the arch has cleared the top of the
+     viewport and the photo reads as full-bleed. CtaFooter.tsx is the source of truth for
+     this value — ARCH there overwrites it as an inline style on mount — so this is only a
+     pre-JS/no-JS fallback, not a value that needs to be kept in sync by hand. */
+  --arch: 120px;
+}
+.stage {
+  position: sticky;
+  top: 0;
   height: 100vh;
   min-height: 760px;
   overflow: hidden;
-  background: var(--color-dark-gray);
+  background: var(--color-white);
 }
 
-.bgImage {
+/* --- the rising panel --- */
+/* Everything visible lives in here and moves as one rigid block. Its arched top edge is a
+   fixed clip-path shape, set from JS once the width is known; only the translation changes
+   as the section scrolls. */
+.rise {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--arch));
+  bottom: 0;
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
 }
-/* Same sizing rules as .bgImage, on purpose — identical inset/object-fit is what keeps the
-   cutout locked to the exact same crop and scale as the photo underneath it, at any
-   viewport size, with no per-breakpoint recalibration. Stacked above .center (z-index 2 vs
-   1) so the rising text passes behind these people, not in front of them. */
-.fgImage {
+/* Inset back down to exactly the stage box, so the children below can be positioned against
+   the viewport as if the arch overhang did not exist. */
+.content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--arch);
+  bottom: 0;
+}
+
+/* --- the photograph, held still while the panel rides up over it --- */
+/* Both layers take the panel's translation back off again (see CtaFooter.tsx), which is
+   what pins them to the viewport. The cut-out copy sits above the copy so the heading
+   travels up behind the two figures; the footer bar and legal row still sit above it. */
+.photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  will-change: transform;
+}
+.foreground {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  will-change: transform;
+}
+.photoImage {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  pointer-events: none;
-  z-index: 2;
 }
 
 /* --- CTA copy + buttons --- */
-/* Heading, description, and buttons rise together as one plain block (see CtaFooter.tsx) —
-   no mask, no fade, no per-character stagger. `translate(-50%, -50%)` is the base centring;
-   the entrance adds a further `y` on top of it via GSAP, so the two compose instead of
-   fighting over the same transform. */
+/* No entrance animation of their own: they simply ride up with the panel. */
 .center {
   position: absolute;
   left: 50%;
-  top: calc(50% - 75px);
+  /* Sits high enough in the frame that the cut-out figures, which are pinned over this
+     layer, clear the button row entirely — they only ever pass behind the copy while it is
+     still travelling up. */
+  top: calc(50% - 140px);
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
   z-index: 1;
-  will-change: transform;
 }
 .textBlock {
   width: 688px;
@@ -72,10 +111,6 @@
   letter-spacing: -0.48px;
   color: var(--color-white);
 }
-/* Forces exactly two lines regardless of natural wrap width. */
-.descriptionLine {
-  display: block;
-}
 .buttons {
   display: flex;
   gap: 16px;
@@ -84,8 +119,6 @@
 }
 
 /* --- footer bar --- */
-/* Above .fgImage (z-index 2) so the nav pill and social links stay clickable over the
-   photo, rather than sitting under the people cutout. */
 .footerBar {
   position: absolute;
   left: 120px;
@@ -210,7 +243,33 @@
 @media (max-width: 900px) {
   .ctaFooter {
     height: auto;
+  }
+  .stage {
+    position: static;
+    height: auto;
     min-height: 100vh;
+  }
+  /* No pinned stage to rise into on small screens, so the panel is simply parked open and
+     the photo layers stop compensating. `!important` because both are driven by inline
+     styles from the scrub. */
+  .rise {
+    top: 0;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .content {
+    top: 0;
+  }
+  .photo {
+    transform: none !important;
+  }
+  /* Nothing travels past the figures here, so the cut-out layer has no job left — and the
+     narrower column pushes the buttons down into it. Drop it and keep the copy legible. */
+  .foreground {
+    display: none;
+  }
+  .buttons {
+    flex-wrap: wrap;
   }
   .center {
     top: 44%;

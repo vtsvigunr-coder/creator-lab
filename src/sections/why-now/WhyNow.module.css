@@ -1,0 +1,275 @@
+.whyNow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+  padding: 100px 120px;
+  background: var(--color-white);
+}
+
+/* --- heading + subtitle --- */
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+}
+.textInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.heading {
+  margin: 0;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-dark-gray);
+  padding: 20px 0;
+  margin: -20px 0;
+}
+.headingLine {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.headingImg {
+  display: block;
+  width: 93px;
+  height: 48px;
+  flex: none;
+  border-radius: 7px;
+  object-fit: cover;
+  object-position: center 25%;
+}
+.description {
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-align: center;
+  color: var(--color-gray);
+  width: 307px;
+  max-width: 100%;
+  padding: 8px 0;
+  margin: -8px 0;
+}
+
+/* --- bento panel --- */
+.panel {
+  position: relative;
+  width: 1200px;
+  max-width: 100%;
+  height: 573px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-dark-purple);
+}
+
+.hero {
+  position: absolute;
+  inset: 0;
+}
+.heroPhoto {
+  position: absolute;
+  left: 29px;
+  top: 12px;
+  width: 485px;
+  height: 727px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.heroFade {
+  position: absolute;
+  left: 13px;
+  top: 335px;
+  width: 545px;
+  height: 238px;
+  background: linear-gradient(to bottom, rgba(33, 20, 59, 0) 0%, var(--color-dark-purple) 100%);
+}
+.heroLabel {
+  position: absolute;
+  left: 40px;
+  top: 40px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+.heroHeading {
+  position: absolute;
+  left: 40px;
+  top: 433px;
+  width: 516px;
+  margin: 0;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+/* --- card grid --- */
+.grid {
+  position: absolute;
+  left: 610px;
+  top: 40px;
+  width: 550px;
+  height: 493px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.card {
+  position: relative;
+  width: calc(50% - 10px);
+  height: 236.5px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  will-change: transform;
+}
+
+.cardLabel {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  margin: 0;
+  width: 85%;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+.cardPhoneImg {
+  position: absolute;
+  left: 50%;
+  top: -13px;
+  transform: translateX(-50%);
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+.stickerKing {
+  position: absolute;
+  left: -10px;
+  top: 34px;
+  width: 100px;
+  height: auto;
+}
+.stickerMessage {
+  position: absolute;
+  right: 18px;
+  bottom: 88px;
+  width: 42px;
+  height: auto;
+}
+
+.cardNotebookImg {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%) rotate(-4deg);
+  width: 130px;
+  height: auto;
+  object-fit: contain;
+}
+
+.cardCommerceImg {
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  transform: translateX(-50%);
+  width: 150px;
+  height: auto;
+  object-fit: contain;
+}
+
+.cardCollage {
+  position: absolute;
+  inset: 0;
+}
+.collagePhotoA {
+  position: absolute;
+  left: 26px;
+  top: 32px;
+  width: 100px;
+  height: auto;
+}
+.collagePhotoB {
+  position: absolute;
+  left: 112px;
+  top: 30px;
+  width: 98px;
+  height: auto;
+}
+.pillCreator {
+  position: absolute;
+  left: 16px;
+  top: 38px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+  color: #e0489a;
+  transform: rotate(-9deg);
+}
+.pillBrand {
+  position: absolute;
+  right: 18px;
+  top: 20px;
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.36px;
+  color: #3a7bf0;
+  transform: rotate(31deg);
+}
+.unlinkBadge {
+  position: absolute;
+  left: 50%;
+  top: 58px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-yellow);
+}
+.unlinkIcon {
+  display: block;
+  width: 10px;
+  height: 10px;
+}

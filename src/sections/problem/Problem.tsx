@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
+import { clampApexRadius, peakedEdgeClipPath } from '../../lib/peakedEdgeClipPath'
 import problemImage from '../../assets/images/problem.webp'
 import styles from './Problem.module.css'
 
@@ -43,11 +44,11 @@ function curtainClip(p: number, w: number, h: number) {
   // the bottom edge and nothing shows: the curtain enters from off-screen, point first.
   const sideY = (h + amp) * (1 - p)
   const half = w / 2
-  const r = Math.min(APEX_RADIUS, half)
+  const r = clampApexRadius(w, APEX_RADIUS)
   // Where the straight slopes stop and the apex curve takes over.
   const shoulderY = sideY - amp * (1 - r / half)
   const peakY = sideY - amp
-  return `path('M 0 ${sideY} L ${half - r} ${shoulderY} Q ${half} ${peakY} ${half + r} ${shoulderY} L ${w} ${sideY} L ${w} ${h} L 0 ${h} Z')`
+  return peakedEdgeClipPath(w, h, sideY, peakY, shoulderY, r)
 }
 
 export default function Problem() {

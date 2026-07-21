@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import { gsap, ScrollTrigger } from '../../lib/gsap'
+import { CHAR_STAGGER, CHAR_START, SOFT_BLUR } from '../../lib/softBlurReveal'
 import { AnimatedChars } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
 import CircleRevealButton from '../hero/CircleRevealButton'
@@ -11,17 +12,6 @@ import styles from './HowItWorks.module.css'
 const HEADING_BEFORE_ICON = 'Simple on'
 const HEADING_AFTER_ICON = 'the outside.'
 const HEADING_LINE_2 = 'Powerful underneath.'
-
-// Same soft-blur reveal as the other sections, so the timings are shared verbatim.
-const CHAR_STAGGER = 0.025
-const CHAR_START = 0.25
-const SOFT_BLUR = {
-  opacity: 0,
-  y: 16,
-  filter: 'blur(12px)',
-  duration: 0.9,
-  ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-}
 
 // How much of the scrubbed range one card spends rising, and how far apart the four are
 // dealt. 3 * 0.55 + 1 = 2.65 units of timeline, so the last card lands right at the end.

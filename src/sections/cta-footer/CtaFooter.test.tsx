@@ -8,24 +8,33 @@ describe('CtaFooter', () => {
 
     const root = screen.getByTestId('cta-footer')
     expect(root).toHaveTextContent('Join the nextlayer of commercein Uzbekistan')
-    expect(root).toHaveTextContent('Whether you are a brand looking for scalable distribution')
+    expect(root).toHaveTextContent(
+      'Whether you are a brand looking for scalable distribution or a creator looking for structured monetization, Creator Lab is where the system works.',
+    )
     expect(screen.getByText('Apply as a Brand')).toBeInTheDocument()
     expect(screen.getByText('Apply as a Creator')).toBeInTheDocument()
   })
 
-  it('renders the description as exactly two forced lines', () => {
-    render(<CtaFooter />)
-
-    const root = screen.getByTestId('cta-footer')
-    const lines = root.querySelectorAll('[class*="descriptionLine"]')
-    expect(lines).toHaveLength(2)
-  })
-
-  it('starts the CTA block offset below its resting position, to rise into place on scroll', () => {
+  it('starts the footer panel below the viewport, arched edge already shaped', () => {
     render(<CtaFooter />)
 
     const rise = screen.getByTestId('cta-rise')
-    expect(getComputedStyle(rise).transform).not.toBe('none')
+    // A fixed arch, not a morphing curtain: the shape is set once and only the panel moves.
+    // Values below are the arch for the 1200x800 rect the test environment's
+    // getBoundingClientRect polyfill hands out (see tests/setupTests.ts) — a real shape, not
+    // just the presence of a `path(...)` call.
+    expect(rise.style.clipPath).toContain("M 0 120 L 440 32 Q 600 0 760 32 L 1200 120")
+    expect(rise.style.transform).toContain('translate3d')
+  })
+
+  it('holds the photo still by giving it the inverse of the panel travel', () => {
+    render(<CtaFooter />)
+
+    const rise = screen.getByTestId('cta-rise')
+    const photo = screen.getByTestId('cta-photo')
+    const travel = (s: string) => Number(s.match(/translate3d\(0(?:px)?, (-?[\d.]+)px/)?.[1])
+
+    expect(travel(photo.style.transform)).toBe(-travel(rise.style.transform))
   })
 
   it('renders the legal links below the footer bar', () => {
