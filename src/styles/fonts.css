@@ -1,13 +1,13 @@
 @font-face {
   font-family: 'Pretendard Variable';
-  src: url('../assets/fonts/Pretendard-Variable.ttf') format('truetype-variations');
+  src: url('../assets/fonts/Pretendard-Variable.woff2') format('woff2-variations');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Gabarito';
-  src: url('../assets/fonts/Gabarito-Bold.ttf') format('truetype');
+  src: url('../assets/fonts/Gabarito-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
