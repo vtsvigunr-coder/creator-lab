@@ -45,6 +45,17 @@
   color: var(--color-dark-gray);
   border: 1px solid var(--color-dark-gray);
 }
+/* For photo/dark backdrops: a transparent pill with a white border. The shared icon assets
+   used here hard-code a dark stroke, so it is flipped to white the same way `.light` flips
+   a white one to black. */
+.outlineLight {
+  background: transparent;
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
+}
+.outlineLight .icon {
+  filter: brightness(0) invert(1);
+}
 .icon {
   width: 20px;
   height: 20px;

@@ -9,6 +9,7 @@ import OurPlatform from './sections/our-platform/OurPlatform'
 import WhyNow from './sections/why-now/WhyNow'
 import WhyCreatorsJoin from './sections/why-creators-join/WhyCreatorsJoin'
 import Faq from './sections/faq/Faq'
+import CtaFooter from './sections/cta-footer/CtaFooter'
 import styles from './App.module.css'
 
 export default function App() {
@@ -26,6 +27,7 @@ export default function App() {
       <WhyNow />
       <WhyCreatorsJoin />
       <Faq />
+      <CtaFooter />
     </div>
   )
 }

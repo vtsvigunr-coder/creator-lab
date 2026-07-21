@@ -7,7 +7,7 @@ type CircleRevealButtonProps = {
   icon?: string
   /** Where the icon sits relative to the label. It is centred in the circle either way. */
   iconPosition?: 'start' | 'end'
-  variant: 'solid' | 'outline' | 'dark' | 'light'
+  variant: 'solid' | 'outline' | 'dark' | 'light' | 'outlineLight'
   delay?: number
   /** Hold the entrance until the button scrolls into view, instead of playing on mount. */
   startOnScroll?: boolean
