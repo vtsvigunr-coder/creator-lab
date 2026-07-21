@@ -6,34 +6,12 @@ import ctaBg from '../../assets/images/cta-section.webp'
 import ctaForeground from '../../assets/images/cta-section-without-background.webp'
 import basketIcon from '../../assets/icons/shopping-basket-favorite-03.svg'
 import videoIcon from '../../assets/icons/computer-video.svg'
-import instagramIcon from '../../assets/icons/instagram.svg'
-import linkedinIcon from '../../assets/icons/linkedin.svg'
-import xIcon from '../../assets/icons/x.svg'
-import telegramIcon from '../../assets/icons/telegram.svg'
+import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
 import styles from './CtaFooter.module.css'
 
 const HEADING_LINES = ['Join the next', 'layer of commerce', 'in Uzbekistan']
 const DESCRIPTION =
   'Whether you are a brand looking for scalable distribution or a creator looking for structured monetization, Creator Lab is where the system works.'
-
-// Labels match the hero menu's sitemap. Pricing has no section yet, so its link is
-// rendered but inert rather than pointing at nothing.
-const NAV_LINKS: { label: string; targetTestId?: string }[] = [
-  { label: 'How It Works', targetTestId: 'how-it-works' },
-  { label: 'For Brands', targetTestId: 'for-brands' },
-  { label: 'For Creators', targetTestId: 'for-creators' },
-  { label: 'Pricing' },
-  { label: 'FAQ', targetTestId: 'faq' },
-]
-
-const LEGAL_LINKS = ['Privacy Policy', 'Terms of Service', 'Cookie Policy']
-
-const SOCIAL_ICONS = [
-  { label: 'Instagram', icon: instagramIcon },
-  { label: 'LinkedIn', icon: linkedinIcon },
-  { label: 'X', icon: xIcon },
-  { label: 'Telegram', icon: telegramIcon },
-]
 
 // How tall the arched top edge of the rising panel is, in px. Kept in sync with the
 // `--arch` custom property in the stylesheet, which reserves the same amount of extra
@@ -135,11 +113,6 @@ export default function CtaFooter() {
       ctx.revert()
     }
   }, [])
-
-  const scrollToSection = (testId?: string) => {
-    if (!testId) return
-    document.querySelector(`[data-testid="${testId}"]`)?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
     <section className={styles.ctaFooter} data-testid="cta-footer" ref={rootRef}>

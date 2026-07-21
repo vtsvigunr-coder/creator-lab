@@ -87,9 +87,9 @@ export default function ForBrands() {
         )
 
       // 2. Body — the bullet list fades up first, then the photo plate fades in empty, and
-      //    the photo — already carrying its star mask, the two move as one piece — slides in
-      //    from the right on top of it. The stat card lands last, its numbers counting up to
-      //    their real values.
+      //    the stat card lands on it while it's still bare. Only once the card has landed
+      //    does the photo — already carrying its star mask, the two move as one piece — slide
+      //    in from the right and settle in behind it, its own edge sweeping across as it goes.
       const bodyTl = gsap.timeline({
         scrollTrigger: { trigger: body, start: 'top 80%', once: true },
       })
@@ -103,7 +103,7 @@ export default function ForBrands() {
           stagger: 0.08,
         })
         .from(imageBlock, { opacity: 0, duration: 0.5, ease: 'power1.out' }, 0.15)
-        .from(photoGroup, { xPercent: 100, duration: 0.7, ease: 'power2.out' }, '-=0.1')
+        .addLabel('cardStart', '-=0.1')
         .from(
           statCard,
           {
@@ -113,8 +113,9 @@ export default function ForBrands() {
             duration: 0.9,
             ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
           },
-          '-=0.25',
+          'cardStart',
         )
+        .from(photoGroup, { xPercent: 100, duration: 0.7, ease: 'power2.out' }, 'cardStart+=0.7')
 
       // 3. Stat values (and their delta pills) count up from zero as the card lands, so they
       //    read as live metrics rather than static copy.
@@ -132,7 +133,7 @@ export default function ForBrands() {
               el.textContent = formatStat(stat, proxy.value)
             },
           },
-          '<',
+          'cardStart',
         )
       })
       const deltaEls = Array.from(statCard.querySelectorAll<HTMLElement>('[data-stat-delta]'))
@@ -149,7 +150,7 @@ export default function ForBrands() {
               el.textContent = formatDelta(proxy.value)
             },
           },
-          '<',
+          'cardStart',
         )
       })
     }, root)

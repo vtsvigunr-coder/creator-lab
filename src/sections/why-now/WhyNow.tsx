@@ -6,12 +6,8 @@ import titleImg from '../../assets/images/why-now-title-img.webp'
 import bento1 from '../../assets/images/why-now-bento-1.webp'
 import bento2 from '../../assets/images/why-now-bento-2.webp'
 import bento3 from '../../assets/images/why-now-bento-3.webp'
-import bento4a from '../../assets/images/why-now-bento-4-1.svg'
-import bento4b from '../../assets/images/why-now-bento-4-2.svg'
+import bento4 from '../../assets/images/why-now-bento-4.webp'
 import bento5 from '../../assets/images/why-now-bento-5.webp'
-import unlinkIcon from '../../assets/icons/unlink-03.svg'
-import contentIsKing from '../../assets/icons/content-is-king.svg'
-import messageMultiple from '../../assets/icons/message-multiple-02.svg'
 import styles from './WhyNow.module.css'
 
 const HEADING_BEFORE_IMG = 'Built for'
@@ -133,21 +129,11 @@ export default function WhyNow() {
         <div className={styles.grid}>
           <article className={styles.card} data-bento-card>
             <img className={styles.cardPhoneImg} src={bento2} alt="" />
-            <img className={styles.stickerKing} src={contentIsKing} alt="" />
-            <img className={styles.stickerMessage} src={messageMultiple} alt="" />
             <p className={styles.cardLabel}>DM-based selling habits</p>
           </article>
 
           <article className={styles.card} data-bento-card>
-            <div className={styles.cardCollage}>
-              <img className={styles.collagePhotoA} src={bento4a} alt="" />
-              <img className={styles.collagePhotoB} src={bento4b} alt="" />
-              <span className={styles.pillCreator}>Creator</span>
-              <span className={styles.pillBrand}>Brand</span>
-              <span className={styles.unlinkBadge}>
-                <img src={unlinkIcon} alt="" className={styles.unlinkIcon} />
-              </span>
-            </div>
+            <img className={styles.cardCollageImg} src={bento4} alt="" />
             <p className={styles.cardLabel}>Fragmented creator-brand relationships</p>
           </article>
 

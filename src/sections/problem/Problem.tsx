@@ -109,18 +109,31 @@ export default function Problem() {
 
       // 2. The outro plays the moment the curtain has filled the screen — and rewinds if the
       //    curtain is pulled back down.
+      const outroChars = outro.querySelectorAll('[data-soft-blur-char]')
+      const outroStagger = 0.025
+      const outroCharDuration = 0.9
+
+      // The glass plate should start wiping open once "fragmented."'s own characters have
+      // finished revealing, not the whole heading — same gesture as the hero's Uzbekistan
+      // marker, derived from that word's own last character landing.
+      const fragmentedChars = glassFill.parentElement!.querySelectorAll('[data-soft-blur-char]')
+      const glassStart =
+        Array.from(outroChars).indexOf(fragmentedChars[fragmentedChars.length - 1]) *
+          outroStagger +
+        outroCharDuration
+
       const outroTl = gsap.timeline({ paused: true })
       outroTl
         .to(outro, { opacity: 1, duration: 0.01 })
         .from(
-          outro.querySelectorAll('[data-soft-blur-char]'),
+          outroChars,
           {
             opacity: 0,
             y: 16,
             filter: 'blur(12px)',
-            duration: 0.9,
+            duration: outroCharDuration,
             ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-            stagger: 0.025,
+            stagger: outroStagger,
           },
           0,
         )
@@ -136,11 +149,11 @@ export default function Problem() {
           },
           0,
         )
-        // Only once the copy has fully landed does the glass plate wipe open left-to-right
-        // behind "fragmented." — same gesture as the hero's Uzbekistan marker, but a pane
-        // rather than a solid fill.
-        .to(glassFill, { scaleX: 1, duration: 0.45, ease: 'power2.out' })
-        .to(footnote, { opacity: 1, duration: 0.5, ease: 'power1.out' }, '<')
+        .addLabel('copyDone')
+        // Same gesture as the hero's Uzbekistan marker, but a pane rather than a solid fill.
+        .to(glassFill, { scaleX: 1, duration: 0.45, ease: 'power2.out' }, glassStart)
+        // Only once the copy has fully landed does the footnote appear, same as before.
+        .to(footnote, { opacity: 1, duration: 0.5, ease: 'power1.out' }, 'copyDone')
 
       // 3. The curtain itself is scrubbed: it tracks the scroll position directly, so it
       //    reads as a blind being pulled up by hand rather than a canned animation.

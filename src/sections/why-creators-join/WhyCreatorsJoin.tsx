@@ -5,12 +5,14 @@ import WipeRevealTag from '../../components/WipeRevealTag'
 import { JOIN_SLIDES } from './slides'
 import styles from './WhyCreatorsJoin.module.css'
 
-// How much extra scroll (~3 wheel notches) each slide holds before the cut to the next. The
-// section's CSS height adds a further 150px tail after the last boundary — this being the last
-// section on the page, without it the final boundary would sit exactly at the document's max
-// scroll offset, which the browser can never actually scroll past, so the last cut would never
-// fire. Keep HOLD_PX changes in sync with WhyCreatorsJoin.module.css.
-const HOLD_PX = 350
+// How much extra scroll each slide holds before the cut to the next — ~3 mouse-wheel notches
+// (each notch is ~110-120px), sized up from that baseline so a single trackpad swipe (which
+// covers far more distance per gesture than one wheel notch) doesn't blow through the hold zone
+// and cut early. The section's CSS height adds a further 150px tail after the last boundary —
+// this being the last section on the page, without it the final boundary would sit exactly at
+// the document's max scroll offset, which the browser can never actually scroll past, so the
+// last cut would never fire. Keep HOLD_PX changes in sync with WhyCreatorsJoin.module.css.
+const HOLD_PX = 600
 
 const HEADING_LINE_1 = 'Not for everyone.'
 const HEADING_LINE_2 = 'For serious players.'

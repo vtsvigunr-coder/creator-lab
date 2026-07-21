@@ -15,6 +15,10 @@
   border: none;
   padding: 0;
   white-space: nowrap;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
 }
 .content {
   display: flex;
@@ -23,43 +27,74 @@
   /* 36px tall on every button (8 + 8 + 20 line-height), matching the user avatar. */
   padding: 8px 40px;
 }
+/* Every variant carries a border, transparent where the design shows none, so that a hover
+   which introduces one cannot change the button's size. */
+
+/* Filled violet -> outlined violet on a transparent field. */
 .solid {
   background: var(--color-violet-400);
   color: var(--color-white);
+  border: 1px solid transparent;
 }
+.solid:hover {
+  background: transparent;
+  border-color: var(--color-violet-400);
+  color: var(--color-violet-400);
+}
+/* Filled black -> outlined violet. */
 .dark {
   background: var(--color-dark-gray);
   color: var(--color-white);
+  border: 1px solid transparent;
 }
-/* For dark sections: a white pill with dark text. The shared arrow asset hard-codes a white
-   stroke, so it is knocked back to black here rather than shipping a second copy of it. */
+.dark:hover {
+  background: transparent;
+  border-color: var(--color-violet-400);
+  color: var(--color-violet-400);
+}
+/* For dark sections: a white pill with dark text -> outlined white on a transparent field. */
 .light {
   background: var(--color-white);
   color: var(--color-dark-gray);
+  border: 1px solid transparent;
 }
-.light .icon {
-  filter: brightness(0);
+.light:hover {
+  background: transparent;
+  border-color: var(--color-white);
+  color: var(--color-white);
 }
+/* Outlined black -> filled violet. */
 .outline {
   background: transparent;
   color: var(--color-dark-gray);
   border: 1px solid var(--color-dark-gray);
 }
-/* For photo/dark backdrops: a transparent pill with a white border. The shared icon assets
-   used here hard-code a dark stroke, so it is flipped to white the same way `.light` flips
-   a white one to black. */
+.outline:hover {
+  background: var(--color-violet-400);
+  border-color: var(--color-violet-400);
+  color: var(--color-white);
+}
+/* For photo/dark backdrops: outlined white -> filled violet. */
 .outlineLight {
   background: transparent;
   color: var(--color-white);
   border: 1px solid var(--color-white);
 }
-.outlineLight .icon {
-  filter: brightness(0) invert(1);
+.outlineLight:hover {
+  background: var(--color-violet-400);
+  border-color: var(--color-violet-400);
+  color: var(--color-white);
 }
+/* The icon is painted, not drawn: the asset is used as a mask over `currentColor`, so it
+   always matches the label exactly — including the violet hover states, which no filter
+   applied to the original white/black strokes could have reproduced. */
 .icon {
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  background-color: currentColor;
+  mask: var(--icon) center / contain no-repeat;
+  -webkit-mask: var(--icon) center / contain no-repeat;
 }
 .label {
   font-weight: 600;

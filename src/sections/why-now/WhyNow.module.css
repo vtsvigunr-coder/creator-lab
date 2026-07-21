@@ -133,6 +133,10 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+/* The plate is exactly the design's fill — rgba(255,255,255,0.2) and nothing layered over it.
+   An earlier diagonal sheen and a saturate() boost on the backdrop both lifted the body colour
+   above that value, so they are gone; only the rim, a faint top edge and the drop shadow are
+   left, and those touch the border, not the fill. */
 .card {
   position: relative;
   width: calc(50% - 10px);
@@ -140,6 +144,12 @@
   overflow: hidden;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 8px 32px rgba(0, 0, 0, 0.18);
   will-change: transform;
 }
 
@@ -149,7 +159,10 @@
   bottom: 24px;
   transform: translateX(-50%);
   margin: 0;
-  width: 85%;
+  /* Fixed, not a percentage: the design breaks each of these captions onto two lines at this
+     exact measure, and a percentage would re-wrap them as the card flexes. */
+  width: 213px;
+  max-width: 85%;
   font-weight: 700;
   font-size: 16px;
   line-height: 20px;
@@ -159,36 +172,29 @@
   color: var(--color-white);
 }
 
+/* One flattened composition per card — the phone, the mint "Content is King" badge and the
+   star are all baked into the export, so the plate only has to place and crop it. The hand
+   runs off the bottom edge; the caption is painted after it and so sits on top. */
 .cardPhoneImg {
   position: absolute;
-  left: 50%;
-  top: -13px;
-  transform: translateX(-50%);
-  width: 150px;
+  left: -5px;
+  top: 0;
+  width: 218px;
   height: auto;
   object-fit: contain;
-}
-.stickerKing {
-  position: absolute;
-  left: -10px;
-  top: 34px;
-  width: 100px;
-  height: auto;
-}
-.stickerMessage {
-  position: absolute;
-  right: 18px;
-  bottom: 88px;
-  width: 42px;
-  height: auto;
+  /* The export bakes in its own bottom fade, painted in the flat plate colour it was composed
+     against. That block does not match this glass — it shows as a lighter rectangle over the
+     sheen — so it is masked away and the sleeve is dissolved into the real plate instead. */
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 95%);
 }
 
 .cardNotebookImg {
   position: absolute;
   left: 50%;
-  top: 12px;
-  transform: translateX(-50%) rotate(-4deg);
-  width: 130px;
+  top: 8px;
+  transform: translateX(-50%) rotate(4deg);
+  width: 180px;
   height: auto;
   object-fit: contain;
 }
@@ -203,73 +209,14 @@
   object-fit: contain;
 }
 
-.cardCollage {
+/* Both photos, the "Creator"/"Brand" tags and the yellow unlink badge are baked into this one
+   export, so it places as a single picture rather than a stack of positioned pieces. */
+.cardCollageImg {
   position: absolute;
-  inset: 0;
-}
-.collagePhotoA {
-  position: absolute;
-  left: 26px;
-  top: 32px;
-  width: 100px;
-  height: auto;
-}
-.collagePhotoB {
-  position: absolute;
-  left: 112px;
+  left: 52%;
   top: 30px;
-  width: 98px;
-  height: auto;
-}
-.pillCreator {
-  position: absolute;
-  left: 16px;
-  top: 38px;
-  padding: 3px 9px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: -0.36px;
-  color: #e0489a;
-  transform: rotate(-9deg);
-}
-.pillBrand {
-  position: absolute;
-  right: 18px;
-  top: 20px;
-  padding: 3px 9px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  font-weight: 500;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: -0.36px;
-  color: #3a7bf0;
-  transform: rotate(31deg);
-}
-.unlinkBadge {
-  position: absolute;
-  left: 50%;
-  top: 58px;
   transform: translateX(-50%);
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-yellow);
-}
-.unlinkIcon {
-  display: block;
-  width: 10px;
-  height: 10px;
+  width: 214px;
+  height: auto;
+  object-fit: contain;
 }

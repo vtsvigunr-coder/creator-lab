@@ -49,7 +49,7 @@ describe('CtaFooter', () => {
     render(<CtaFooter />)
 
     expect(screen.getByText('© 2026 Creator Lab. All rights reserved.')).toBeInTheDocument()
-    for (const label of ['How It Works', 'For Brands', 'For Creators', 'Pricing', 'FAQ']) {
+    for (const label of ['How It Works', 'For Brands', 'For Creators', 'FAQ']) {
       expect(screen.getByRole('button', { name: label })).toBeInTheDocument()
     }
     for (const label of ['Instagram', 'LinkedIn', 'X', 'Telegram']) {
@@ -69,10 +69,5 @@ describe('CtaFooter', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'FAQ' }))
     expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' })
-  })
-
-  it('does nothing when the Pricing link (no section yet) is clicked', () => {
-    render(<CtaFooter />)
-    expect(() => fireEvent.click(screen.getByRole('button', { name: 'Pricing' }))).not.toThrow()
   })
 })

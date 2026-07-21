@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef, type CSSProperties } from 'react'
 import { gsap } from '../../lib/gsap'
 import styles from './CircleRevealButton.module.css'
 
@@ -36,7 +36,7 @@ export default function CircleRevealButton({
   const btnRef = useRef<HTMLButtonElement>(null)
   const contentRef = useRef<HTMLSpanElement>(null)
   const labelRef = useRef<HTMLSpanElement>(null)
-  const iconRef = useRef<HTMLImageElement>(null)
+  const iconRef = useRef<HTMLSpanElement>(null)
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current
@@ -111,16 +111,19 @@ export default function CircleRevealButton({
 
   return (
     <span ref={wrapRef} className={styles.wrap}>
+      {/* The icon URL is quoted: Vite inlines small SVGs as data URIs whose attributes use
+          single quotes, and an unquoted url() token may not contain them — the whole custom
+          property would be dropped as invalid and the mask would fall back to a filled box. */}
       <button ref={btnRef} className={`${styles.btn} ${styles[variant]}`} type="button">
         <span ref={contentRef} className={styles.content}>
           {icon && iconPosition === 'start' && (
-            <img ref={iconRef} src={icon} alt="" className={styles.icon} />
+            <span ref={iconRef} className={styles.icon} style={{ '--icon': `url("${icon}")` } as CSSProperties} />
           )}
           <span ref={labelRef} className={styles.label}>
             {label}
           </span>
           {icon && iconPosition === 'end' && (
-            <img ref={iconRef} src={icon} alt="" className={styles.icon} />
+            <span ref={iconRef} className={styles.icon} style={{ '--icon': `url("${icon}")` } as CSSProperties} />
           )}
         </span>
       </button>

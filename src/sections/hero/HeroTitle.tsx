@@ -52,6 +52,16 @@ export default function HeroTitle() {
 
     const chars = root.querySelectorAll('[data-soft-blur-char]')
     const words = root.querySelectorAll('[data-desc-word]')
+    const stagger = 0.025
+    const charDuration = 0.9
+
+    // The marker fill should start growing once "Uzbekistan"'s own characters have finished
+    // revealing, not the whole heading — so its start time is derived from that word's own
+    // last character landing, rather than chained after every other line in the heading.
+    const markerChars = markerFill.parentElement!.querySelectorAll('[data-soft-blur-char]')
+    const markerStart =
+      Array.from(chars).indexOf(markerChars[markerChars.length - 1]) * stagger + charDuration
+
     const tl = gsap.timeline()
 
     tl.from(
@@ -60,13 +70,13 @@ export default function HeroTitle() {
         opacity: 0,
         y: 16,
         filter: 'blur(12px)',
-        duration: 0.9,
+        duration: charDuration,
         ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        stagger: 0.025,
+        stagger,
       },
       0,
     )
-      .to(markerFill, { scaleX: 1, duration: 0.45, ease: 'power2.out' })
+      .to(markerFill, { scaleX: 1, duration: 0.45, ease: 'power2.out' }, markerStart)
       .from(
         words,
         {

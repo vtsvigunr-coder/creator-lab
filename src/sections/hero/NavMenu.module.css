@@ -1,0 +1,180 @@
+/* The panel is laid out in its OPEN geometry at all times — 279px wide, 20px of padding, and
+   pulled 20px up so that the padding lands outside the header row. That way the toggle pill
+   sits at exactly the same place on screen whether the menu is open or shut, and opening only
+   has to grow the panel's height downwards and fade its backdrop in. Nothing has to be
+   re-measured or re-positioned mid-flight, which is what the previous version got wrong. */
+.panel {
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 279px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  border-radius: 8px;
+  /* Height is owned by the open/close timeline; this is the closed value (pill + padding). */
+  height: 76px;
+  overflow: hidden;
+  /* The panel's box is wider than the pill even when shut, so it must not swallow clicks
+     meant for the page underneath. Its children opt back in. */
+  pointer-events: none;
+}
+.panel > * {
+  pointer-events: auto;
+}
+
+/* Backdrop kept on its own layer so it can fade independently of the pill sitting on it. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(0, 0, 0, 0.36);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- the toggle pill --- */
+.toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 239px;
+  padding: 8px 8px 8px 12px;
+  border: none;
+  border-radius: 60px;
+  background: none;
+  color: var(--color-dark-gray);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  white-space: nowrap;
+  transition: color 0.25s ease;
+}
+.panelOpen .toggle {
+  color: var(--color-white);
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+/* Both labels occupy the same cell, so the cell is as wide as the longer of the two and the
+   icon never shifts during the swap. Centred inside it so the shorter label ("Menu") reads as
+   centred in the pill too, rather than hanging off the left of a box sized for "Close". */
+.labelStack {
+  display: grid;
+  text-align: center;
+}
+.labelStack > span {
+  grid-area: 1 / 1;
+}
+.labelClose {
+  opacity: 0;
+}
+.char {
+  display: inline-block;
+}
+
+/* --- the disclosed content --- */
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+/* The rule under the sitemap belongs to that group, not to the gap, so the 24px above and
+   below it stay symmetrical. */
+.groupRuled {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--color-gray-300);
+}
+.groupTitle {
+  color: var(--color-gray-200);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.link {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  text-align: left;
+  color: var(--color-white);
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.92;
+  transition: opacity 0.15s ease;
+}
+.link:hover {
+  opacity: 1;
+}
+/* The sitemap reads a step larger than the legal column, per the design. */
+.linkLarge {
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+}
+.linkSmall {
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+}
+.social {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.socialLink {
+  display: block;
+  opacity: 0.92;
+  transition: opacity 0.15s ease;
+}
+.socialLink:hover {
+  opacity: 1;
+}
+.socialIcon {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    left: auto;
+    right: 0;
+    transform: none;
+  }
+}

@@ -8,8 +8,11 @@ import styles from './OurPlatform.module.css'
 
 const HEADING = 'Track every sale. Reward every creator'
 
-// How much extra scroll (~3 wheel notches) each tab holds before the cut to the next.
-const HOLD_PX = 350
+// How much extra scroll each tab holds before the cut to the next — ~3 mouse-wheel notches
+// (each notch is ~110-120px), sized up from that baseline so a single trackpad swipe (which
+// covers far more distance per gesture than one wheel notch) doesn't blow through the hold
+// zone and cut early.
+const HOLD_PX = 600
 
 // The rail's vertical rhythm, traced off the Figma frame: tab labels sit 82px apart starting at
 // 414px, the indicator bracket is centred on each row, and the dot sits mid-row.
