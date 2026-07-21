@@ -13,6 +13,29 @@ describe('CtaFooter', () => {
     expect(screen.getByText('Apply as a Creator')).toBeInTheDocument()
   })
 
+  it('renders the description as exactly two forced lines', () => {
+    render(<CtaFooter />)
+
+    const root = screen.getByTestId('cta-footer')
+    const lines = root.querySelectorAll('[class*="descriptionLine"]')
+    expect(lines).toHaveLength(2)
+  })
+
+  it('starts the CTA block offset below its resting position, to rise into place on scroll', () => {
+    render(<CtaFooter />)
+
+    const rise = screen.getByTestId('cta-rise')
+    expect(getComputedStyle(rise).transform).not.toBe('none')
+  })
+
+  it('renders the legal links below the footer bar', () => {
+    render(<CtaFooter />)
+
+    for (const label of ['Privacy Policy', 'Terms of Service', 'Cookie Policy']) {
+      expect(screen.getByText(label)).toBeInTheDocument()
+    }
+  })
+
   it('renders the footer bar with copyright, every nav link, and the social icons', () => {
     render(<CtaFooter />)
 

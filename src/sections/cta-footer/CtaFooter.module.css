@@ -28,6 +28,10 @@
 }
 
 /* --- CTA copy + buttons --- */
+/* Heading, description, and buttons rise together as one plain block (see CtaFooter.tsx) —
+   no mask, no fade, no per-character stagger. `translate(-50%, -50%)` is the base centring;
+   the entrance adds a further `y` on top of it via GSAP, so the two compose instead of
+   fighting over the same transform. */
 .center {
   position: absolute;
   left: 50%;
@@ -38,19 +42,16 @@
   align-items: center;
   gap: 32px;
   z-index: 1;
-}
-.textMask {
-  width: 688px;
-  max-width: 90vw;
-  will-change: clip-path;
+  will-change: transform;
 }
 .textBlock {
+  width: 688px;
+  max-width: 90vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 36px;
   text-align: center;
-  will-change: transform;
 }
 .heading {
   margin: 0;
@@ -71,6 +72,10 @@
   letter-spacing: -0.48px;
   color: var(--color-white);
 }
+/* Forces exactly two lines regardless of natural wrap width. */
+.descriptionLine {
+  display: block;
+}
 .buttons {
   display: flex;
   gap: 16px;
@@ -85,7 +90,7 @@
   position: absolute;
   left: 120px;
   right: 120px;
-  bottom: 60px;
+  bottom: 92px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -161,6 +166,47 @@
   display: block;
 }
 
+/* --- legal row, below the main footer bar --- */
+.legalRow {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  z-index: 3;
+}
+.legalItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.legalDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-white);
+  flex: none;
+}
+.legalLink {
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-white);
+  text-decoration: underline;
+  white-space: nowrap;
+  opacity: 0.9;
+  transition: opacity 0.15s ease;
+}
+.legalLink:hover {
+  opacity: 1;
+}
+
 @media (max-width: 900px) {
   .ctaFooter {
     height: auto;
@@ -177,7 +223,7 @@
   .footerBar {
     left: 24px;
     right: 24px;
-    bottom: 24px;
+    bottom: 56px;
     flex-direction: column;
     gap: 16px;
   }
@@ -188,5 +234,11 @@
   .navList {
     flex-wrap: wrap;
     justify-content: center;
+  }
+  .legalRow {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: calc(100% - 48px);
+    bottom: 16px;
   }
 }

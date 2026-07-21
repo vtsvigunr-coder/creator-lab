@@ -12,8 +12,10 @@ import telegramIcon from '../../assets/icons/telegram.svg'
 import styles from './CtaFooter.module.css'
 
 const HEADING_LINES = ['Join the next', 'layer of commerce', 'in Uzbekistan']
-const DESCRIPTION =
-  'Whether you are a brand looking for scalable distribution or a creator looking for structured monetization, Creator Lab is where the system works for you.'
+const DESCRIPTION_LINES = [
+  'Whether you are a brand looking for scalable distribution or a creator',
+  'looking for structured monetization, Creator Lab is where the system works.',
+]
 
 // Labels match the hero menu's sitemap. Pricing has no section yet, so its link is
 // rendered but inert rather than pointing at nothing.
@@ -25,6 +27,8 @@ const NAV_LINKS: { label: string; targetTestId?: string }[] = [
   { label: 'FAQ', targetTestId: 'faq' },
 ]
 
+const LEGAL_LINKS = ['Privacy Policy', 'Terms of Service', 'Cookie Policy']
+
 const SOCIAL_ICONS = [
   { label: 'Instagram', icon: instagramIcon },
   { label: 'LinkedIn', icon: linkedinIcon },
@@ -32,57 +36,28 @@ const SOCIAL_ICONS = [
   { label: 'Telegram', icon: telegramIcon },
 ]
 
-// Peak height of the centre pull, as a fraction of the mask's own height — same shape as the
-// Problem section's photo curtain, just applied to a text block instead and played once
-// rather than scrubbed across a pin (see curtainClip there for the full breakdown).
-const PEAK = 0.18
-const APEX_RADIUS = 160
-// How far below its resting position the text starts, in px. The photo itself never moves,
-// but the text physically rises this distance — far enough that it starts out behind the
-// people in the foreground cutout — while the curtain's own peaked edge wipes across it at
-// the same time.
-const RISE_PX = 260
-
-function curtainClip(p: number, w: number, h: number) {
-  const amp = PEAK * h * (1 - p * p)
-  const sideY = (h + amp) * (1 - p)
-  const half = w / 2
-  const r = Math.min(APEX_RADIUS, half)
-  const shoulderY = sideY - amp * (1 - r / half)
-  const peakY = sideY - amp
-  return `path('M 0 ${sideY} L ${half - r} ${shoulderY} Q ${half} ${peakY} ${half + r} ${shoulderY} L ${w} ${sideY} L ${w} ${h} L 0 ${h} Z')`
-}
+// How far below its resting position the whole CTA block starts, in px. The photo itself
+// never moves — heading, description, and buttons rise together as one plain block with no
+// mask, fade, or per-character reveal, the same way the reference footer's heading and CTA
+// button rise as one solid unit rather than being wiped in.
+const RISE_PX = 220
 
 export default function CtaFooter() {
   const rootRef = useRef<HTMLElement>(null)
-  const maskRef = useRef<HTMLDivElement>(null)
-  const textBlockRef = useRef<HTMLDivElement>(null)
+  const riseRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
     const root = rootRef.current
-    const mask = maskRef.current
-    const textBlock = textBlockRef.current
-    if (!root || !mask || !textBlock) return
+    const rise = riseRef.current
+    if (!root || !rise) return
 
     const ctx = gsap.context(() => {
-      // The text itself never fades and never staggers character-by-character — the only
-      // things that animate are the curtain's own peaked edge wiping across it, and the
-      // block physically rising into place underneath that edge (mirroring how the Problem
-      // section's photo is dragged up inside its curtain, just applied to text here).
-      const draw = (p: number) => {
-        const { width, height } = mask.getBoundingClientRect()
-        mask.style.clipPath = curtainClip(p, width, height)
-        textBlock.style.transform = `translateY(${(1 - p) * RISE_PX}px)`
-      }
-      draw(0)
-
-      const proxy = { p: 0 }
-      gsap.to(proxy, {
-        p: 1,
-        duration: 1.3,
+      gsap.set(rise, { y: RISE_PX })
+      gsap.to(rise, {
+        y: 0,
+        duration: 1.1,
         ease: 'power2.out',
         scrollTrigger: { trigger: root, start: 'top 70%', once: true },
-        onUpdate: () => draw(proxy.p),
       })
     }, root)
 
@@ -101,33 +76,30 @@ export default function CtaFooter() {
       {/* The photo never moves — it's the one fixed layer everything else is composed over. */}
       <img className={styles.bgImage} src={ctaBg} alt="" />
 
-      <div className={styles.center}>
-        <div className={styles.textMask} ref={maskRef} data-testid="cta-text-mask">
-          <div className={styles.textBlock} ref={textBlockRef}>
-            <h2 className={styles.heading}>
-              {HEADING_LINES.map((line) => (
-                <div key={line}>{line}</div>
-              ))}
-            </h2>
-            <p className={styles.description}>{DESCRIPTION}</p>
-          </div>
+      <div className={styles.center} ref={riseRef} data-testid="cta-rise">
+        <div className={styles.textBlock}>
+          <h2 className={styles.heading}>
+            {HEADING_LINES.map((line) => (
+              <div key={line}>{line}</div>
+            ))}
+          </h2>
+          <p className={styles.description}>
+            {DESCRIPTION_LINES.map((line) => (
+              <span key={line} className={styles.descriptionLine}>
+                {line}
+              </span>
+            ))}
+          </p>
         </div>
 
         <div className={styles.buttons}>
-          <CircleRevealButton label="Apply as a Brand" icon={basketIcon} variant="light" startOnScroll />
-          <CircleRevealButton
-            label="Apply as a Creator"
-            icon={videoIcon}
-            variant="outlineLight"
-            startOnScroll
-          />
+          <CircleRevealButton label="Apply as a Brand" icon={basketIcon} variant="light" />
+          <CircleRevealButton label="Apply as a Creator" icon={videoIcon} variant="outlineLight" />
         </div>
       </div>
 
-      {/* The people, cut out with no background, laid exactly over the photo beneath them —
-          since the curtain above reveals the text from the bottom up, the text's rising edge
-          passes underneath this layer before it, which is what makes it read as emerging
-          from behind them rather than just appearing in front. */}
+      {/* The people, cut out with no background, laid exactly over the photo beneath them, so
+          the rising block above passes behind them rather than in front. */}
       <img className={styles.fgImage} src={ctaFg} alt="" />
 
       <div className={styles.footerBar}>
@@ -156,6 +128,17 @@ export default function CtaFooter() {
           ))}
         </div>
       </div>
+
+      <ul className={styles.legalRow}>
+        {LEGAL_LINKS.map((label, i) => (
+          <li key={label} className={styles.legalItem}>
+            {i > 0 && <span className={styles.legalDot} aria-hidden="true" />}
+            <a className={styles.legalLink} href="#">
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }
