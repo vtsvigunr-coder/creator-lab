@@ -100,8 +100,8 @@
   inset: 0;
   border-radius: inherit;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4.8px);
   -webkit-backdrop-filter: blur(4.8px);
+  backdrop-filter: blur(4.8px);
   mask-image: linear-gradient(to top, black 0%, black 20%, transparent 55%);
   -webkit-mask-image: linear-gradient(to top, black 0%, black 20%, transparent 55%);
 }
