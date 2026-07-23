@@ -21,7 +21,25 @@ export function useLenis() {
     ScrollTrigger.refresh()
     lenis.scrollTo(0, { immediate: true })
 
+    // This first refresh runs against whatever has painted so far — on a cold cache, that's
+    // still the fallback font and any images that haven't finished downloading. The variable
+    // font swapping in (or an image without reserved aspect ratio loading in) reflows the
+    // page afterwards, but every trigger's start/end stays pinned to the stale pixel offsets
+    // from that first measurement. The footer's scrub is the most visible casualty — its
+    // "rise fully" endpoint silently drifts below the page's real bottom, so it stalls
+    // part-way no matter how far the user scrolls. Refreshing again once fonts and images
+    // have actually settled is what keeps every scroll-driven section honest.
+    let live = true
+    // jsdom (the test environment) doesn't implement the Font Loading API.
+    document.fonts?.ready.then(() => {
+      if (live) ScrollTrigger.refresh()
+    })
+    const onLoad = () => ScrollTrigger.refresh()
+    window.addEventListener('load', onLoad)
+
     return () => {
+      live = false
+      window.removeEventListener('load', onLoad)
       gsap.ticker.remove(tick)
       lenis.destroy()
     }
