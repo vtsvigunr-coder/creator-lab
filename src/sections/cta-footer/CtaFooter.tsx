@@ -117,27 +117,21 @@ export default function CtaFooter() {
           const trigger = createRiseTrigger()
           return () => trigger.kill()
         },
+        // No scroll-jack on mobile at all — every attempt at tuning how much of the panel is
+        // hidden at rest either left a stretch of blank `.stage` background before the photo
+        // rose into it, or shrank the rise to the point it barely read as motion. Simplest fix:
+        // don't animate it. The panel sits at its finished position (`applyProgress(1)`) from
+        // the start, same as any other in-flow section — no pin, no translate, no scroll
+        // listener to keep in sync with the address bar.
         [MOBILE_MEDIA_QUERY]: () => {
-          const trigger = createRiseTrigger()
-
-          // Mobile browser chrome (address bar) hides/shows as the page scrolls, which changes
-          // `window.innerHeight` mid-gesture — the value `end` above is built from. A *global*
-          // ScrollTrigger.refresh() would keep that honest too, but it re-measures every trigger
-          // on the page and was visibly janky when tried. Refreshing just this one instance is
-          // cheap enough to do on every resize without that cost, and rAF-coalescing collapses
-          // the burst of resize events the address-bar animation fires into one recalculation.
-          let raf = 0
+          measure()
+          applyProgress(1)
           const onResize = () => {
-            cancelAnimationFrame(raf)
-            raf = requestAnimationFrame(() => trigger.refresh())
+            measure()
+            applyProgress(1)
           }
           window.addEventListener('resize', onResize)
-
-          return () => {
-            window.removeEventListener('resize', onResize)
-            cancelAnimationFrame(raf)
-            trigger.kill()
-          }
+          return () => window.removeEventListener('resize', onResize)
         },
       })
     }, root)

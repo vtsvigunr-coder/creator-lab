@@ -251,15 +251,18 @@
    scrub at this width too) — only the type scale and the footer bar's column reflow are
    mobile-specific. Nothing here disables or forks the animation. */
 @media (max-width: 900px) {
-  /* Desktop holds a full extra 120vh of scroll (220vh total) before the rise finishes — on
-     mobile that read as a long stretch of blank white between the FAQ section ending and the
-     footer photo becoming visible. Halving the extra distance to 60vh gets the panel into view
-     twice as fast without changing the rise mechanics themselves (CtaFooter.tsx's `end` is
-     already derived from this element's own height, so nothing there needs to change). */
+  /* Desktop pins the stage and holds an extra 120vh of scroll so the panel has room to rise
+     into place. On mobile that read as a stretch of blank white before the footer photo caught
+     up, no matter how much the hold or the panel's rest position were tuned — so there's no
+     rise here at all: CtaFooter.tsx skips the ScrollTrigger on this breakpoint and renders the
+     panel already at its finished position. Nothing to pin or hold extra scroll for, so the
+     section is just its one viewport tall, sitting in normal flow right after FAQ. */
   .ctaFooter {
-    height: 160vh;
+    height: auto;
   }
   .stage {
+    position: relative;
+    top: auto;
     min-height: 100vh;
   }
   /* At this aspect ratio object-fit: cover crops in tight on both sides; the design's mobile
