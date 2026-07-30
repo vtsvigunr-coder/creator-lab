@@ -247,64 +247,113 @@
   opacity: 1;
 }
 
+/* Same rise-and-pin mechanics as desktop (CtaFooter.tsx runs the identical ScrollTrigger
+   scrub at this width too) — only the type scale and the footer bar's column reflow are
+   mobile-specific. Nothing here disables or forks the animation. */
 @media (max-width: 900px) {
-  .ctaFooter {
-    height: auto;
-  }
   .stage {
-    position: static;
-    height: auto;
     min-height: 100vh;
   }
-  /* No pinned stage to rise into on small screens, so the panel is simply parked open and
-     the photo layers stop compensating. `!important` because both are driven by inline
-     styles from the scrub. */
-  .rise {
-    top: 0;
-    transform: none !important;
-    clip-path: none !important;
+  /* At this aspect ratio object-fit: cover crops in tight on both sides; the design's mobile
+     photo (node 2312:20344) keeps the two figures shifted toward the left of frame rather
+     than centered, so the crop is nudged the same way. Both layers share this class, so the
+     cut-out foreground stays pixel-aligned with the sky background behind it. */
+  .photoImage {
+    object-position: 47% center;
   }
-  .content {
-    top: 0;
-  }
-  .photo {
-    transform: none !important;
-  }
-  /* Nothing travels past the figures here, so the cut-out layer has no job left — and the
-     narrower column pushes the buttons down into it. Drop it and keep the copy legible. */
-  .foreground {
-    display: none;
-  }
-  .buttons {
-    flex-wrap: wrap;
-  }
+  /* Figma's mobile footer (node 2312:20343) pins the CTA block to a fixed offset below the
+     arch rather than centering it — the 140px desktop hand-tune that clears the cut-out
+     figures doesn't apply here, so this drops the centering entirely in favor of a top
+     anchor matching the design's own 64px. */
   .center {
-    top: 44%;
+    top: 64px;
+    transform: translateX(-50%);
   }
-  .heading {
-    font-size: 32px;
-    line-height: 36px;
-    letter-spacing: -0.64px;
-  }
-  .footerBar {
-    left: 24px;
-    right: 24px;
-    bottom: 56px;
-    flex-direction: column;
+  .textBlock {
+    width: 100%;
+    max-width: 361px;
     gap: 16px;
   }
+  .heading {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+  }
+  .description {
+    width: 100%;
+    max-width: 337px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .buttons {
+    width: 100%;
+    max-width: 361px;
+    gap: 8px;
+  }
+  /* Bottom offset stacks with .legalRow below it: 32px (legalRow's own offset) + 20px
+     (legalRow height) + 24px (the design's footer-links gap) = 76px. */
+  .footerBar {
+    left: 16px;
+    right: 16px;
+    bottom: 76px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 'nav nav' 'copy social';
+    row-gap: 12px;
+  }
+  .copyright {
+    grid-area: copy;
+  }
   .navGlass {
-    position: static;
+    grid-area: nav;
+    /* `relative`, not `static` — .navGlassFill below is `position:absolute; inset:0`, so this
+       still has to be the positioned ancestor that pins the fill to the pill's own box rather
+       than escalating up to the viewport. Desktop's `left/top: 50%` are relative offsets once
+       positioning is `relative` rather than `absolute`, so they need resetting too, not just
+       the transform that paired with them. */
+    position: relative;
+    left: 0;
+    top: 0;
     transform: none;
+    width: 100%;
   }
   .navList {
-    flex-wrap: wrap;
-    justify-content: center;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0;
   }
+  .social {
+    grid-area: social;
+    justify-self: end;
+  }
+  /* Present here too (unlike the "Final CTA" node this was first built against, node
+     2312:20343 confirms the legal row IS part of the mobile footer) — just shrunk to the
+     design's own mobile type/dot scale and single-row width instead of wrapped. */
   .legalRow {
-    flex-wrap: wrap;
+    left: 16px;
+    right: 16px;
+    bottom: 32px;
+    transform: none;
+    width: auto;
     justify-content: center;
-    width: calc(100% - 48px);
-    bottom: 16px;
+    gap: 16px;
+  }
+  .legalItem {
+    gap: 16px;
+  }
+  .legalDot {
+    width: 4px;
+    height: 4px;
+  }
+  .legalLink {
+    /* Design spec is Pretendard Medium here, not the Gabarito `--font-display` the desktop
+       rule inherits (that's Gabarito to match the nav links/copyright next to it). */
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.36px;
   }
 }

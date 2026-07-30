@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
-import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './NavMenu.module.css'
 
 // Hamburger (3 lines) <-> close (X), both in the icon's 20x20 viewBox. The hamburger's outer
@@ -18,8 +19,6 @@ const CROSS = {
   bottom: { x1: 15, y1: 5, x2: 5, y2: 15 },
 }
 
-// Closed height = 20px padding + 36px pill + 20px padding. Kept in sync with NavMenu.module.css.
-const CLOSED_HEIGHT = 76
 // Traced off the reference implementation: the panel unrolls over ~0.42s on a firm ease-out,
 // covering two thirds of the distance in the first third of the time.
 const PANEL_DURATION = 0.42
@@ -39,8 +38,10 @@ function Chars({ text }: { text: string }) {
 }
 
 export default function NavMenu() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
+  const clipRef = useRef<HTMLDivElement>(null)
   const scrimRef = useRef<HTMLSpanElement>(null)
   const toggleRef = useRef<HTMLButtonElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -56,10 +57,15 @@ export default function NavMenu() {
   // height is readable at any time — no need to un-hide anything to measure.
   useLayoutEffect(() => {
     const measure = () => {
-      const toggle = toggleRef.current
+      const clip = clipRef.current
       const content = contentRef.current
-      if (!toggle || !content) return
-      openHeight.current = 20 + toggle.offsetHeight + 40 + content.offsetHeight + 20
+      if (!clip || !content) return
+      // Top and bottom padding aren't symmetric (the top gets an extra 20px — see
+      // NavMenu.module.css), so both are read rather than doubling one.
+      const style = getComputedStyle(clip)
+      const paddingTop = parseFloat(style.paddingTop) || 20
+      const paddingBottom = parseFloat(style.paddingBottom) || 20
+      openHeight.current = paddingTop + paddingBottom + content.offsetHeight
     }
     measure()
     window.addEventListener('resize', measure)
@@ -83,7 +89,7 @@ export default function NavMenu() {
   }, [])
 
   useLayoutEffect(() => {
-    const panel = panelRef.current
+    const clip = clipRef.current
     const scrim = scrimRef.current
     const content = contentRef.current
     const menuLabel = menuLabelRef.current
@@ -91,7 +97,7 @@ export default function NavMenu() {
     const lineTop = lineTopRef.current
     const lineMid = lineMidRef.current
     const lineBottom = lineBottomRef.current
-    if (!panel || !scrim || !content || !menuLabel || !closeLabel) return
+    if (!clip || !scrim || !content || !menuLabel || !closeLabel) return
     if (!lineTop || !lineMid || !lineBottom) return
 
     // Never let two timelines own the same properties at once — that is what used to leave the
@@ -104,7 +110,7 @@ export default function NavMenu() {
     const tl = gsap.timeline()
 
     if (open) {
-      tl.to(panel, { height: openHeight.current, duration: PANEL_DURATION, ease: PANEL_EASE }, 0)
+      tl.to(clip, { height: openHeight.current, duration: PANEL_DURATION, ease: PANEL_EASE }, 0)
         .to(scrim, { opacity: 1, duration: 0.25, ease: 'power1.out' }, 0)
         .to(lineTop, { attr: CROSS.top, duration: 0.4, ease: 'power2.inOut' }, 0)
         .to(lineBottom, { attr: CROSS.bottom, duration: 0.4, ease: 'power2.inOut' }, 0)
@@ -128,7 +134,7 @@ export default function NavMenu() {
         )
     } else {
       tl.to(rows, { opacity: 0, y: 6, duration: 0.15, ease: 'power1.in' }, 0)
-        .to(panel, { height: CLOSED_HEIGHT, duration: 0.34, ease: 'power3.inOut' }, 0.05)
+        .to(clip, { height: 0, duration: 0.34, ease: 'power3.inOut' }, 0.05)
         .to(scrim, { opacity: 0, duration: 0.28, ease: 'power1.in' }, 0.05)
         .to(lineTop, { attr: HAMBURGER.top, duration: 0.35, ease: 'power2.inOut' }, 0)
         .to(lineBottom, { attr: HAMBURGER.bottom, duration: 0.35, ease: 'power2.inOut' }, 0)
@@ -154,7 +160,10 @@ export default function NavMenu() {
   useEffect(() => {
     if (!open) return
     const onPointerDown = (event: PointerEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node)) setOpen(false)
+      const target = event.target as Node
+      if (panelRef.current?.contains(target)) return
+      if (toggleRef.current?.contains(target)) return
+      setOpen(false)
     }
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -176,14 +185,7 @@ export default function NavMenu() {
   }
 
   return (
-    <div
-      ref={panelRef}
-      className={`${styles.panel} ${open ? styles.panelOpen : ''}`}
-      data-testid="nav-menu"
-      data-open={open}
-    >
-      <span ref={scrimRef} className={styles.scrim} aria-hidden="true" />
-
+    <div className={`${styles.root} ${open ? styles.open : ''}`}>
       <button
         ref={toggleRef}
         className={styles.toggle}
@@ -205,28 +207,37 @@ export default function NavMenu() {
         </svg>
         <span className={styles.labelStack}>
           <span ref={menuLabelRef}>
-            <Chars text="Menu" />
+            <Chars text={t.nav.menuLabel} />
           </span>
           <span ref={closeLabelRef} className={styles.labelClose}>
-            <Chars text="Close" />
+            <Chars text={t.nav.closeLabel} />
           </span>
         </span>
       </button>
 
-      <div id="nav-menu-content" ref={contentRef} className={styles.content} aria-hidden={!open}>
+      {/* Not nested inside the toggle: the disclosure card is its own floating element that
+          unrolls below the toggle rather than growing around it, so the toggle always reads
+          as a separate, fixed control. .panel is just a positioning frame (auto-height, no
+          clip) so .scrim — an own child, not scoped inside the height-animated .clip — can
+          extend past its top edge to reach up behind the toggle on desktop without being cut
+          off by an overflow:hidden it doesn't own. */}
+      <div ref={panelRef} className={styles.panel} data-testid="nav-menu" data-open={open}>
+        <span ref={scrimRef} className={styles.scrim} aria-hidden="true" />
+        <div ref={clipRef} className={styles.clip}>
+        <div id="nav-menu-content" ref={contentRef} className={styles.content} aria-hidden={!open}>
         <div className={styles.block}>
           <div className={`${styles.group} ${styles.groupRuled}`} data-row>
-            <span className={styles.groupTitle}>Sitemap</span>
+            <span className={styles.groupTitle}>{t.nav.sitemapTitle}</span>
             <ul className={styles.links}>
               {NAV_LINKS.map((link) => (
-                <li key={link.label}>
+                <li key={link.key}>
                   <button
                     className={`${styles.link} ${styles.linkLarge}`}
                     type="button"
                     tabIndex={open ? 0 : -1}
                     onClick={() => go(link.targetTestId)}
                   >
-                    {link.label}
+                    {t.nav.sitemap[link.key]}
                   </button>
                 </li>
               ))}
@@ -234,9 +245,9 @@ export default function NavMenu() {
           </div>
 
           <div className={styles.group} data-row>
-            <span className={styles.groupTitle}>Legal</span>
+            <span className={styles.groupTitle}>{t.nav.legalTitle}</span>
             <ul className={styles.links}>
-              {LEGAL_LINKS.map((label) => (
+              {t.nav.legal.map((label) => (
                 <li key={label}>
                   <button
                     className={`${styles.link} ${styles.linkSmall}`}
@@ -253,7 +264,7 @@ export default function NavMenu() {
         </div>
 
         <div className={styles.group} data-row>
-          <span className={styles.groupTitle}>Social</span>
+          <span className={styles.groupTitle}>{t.nav.socialTitle}</span>
           <div className={styles.social}>
             {SOCIAL_ICONS.map((social) => (
               <a
@@ -267,6 +278,23 @@ export default function NavMenu() {
               </a>
             ))}
           </div>
+        </div>
+
+        {/* Desktop shows this as its own header button; on mobile there's no room for it next
+            to the logo, so it rides inside the menu instead. Always in the DOM (rather than
+            conditionally mounted) so the height math above already accounts for it — it just
+            occupies zero space on desktop via `display: none`. */}
+        <div className={styles.getStartedRow} data-row>
+          <button
+            className={styles.getStarted}
+            type="button"
+            tabIndex={open ? 0 : -1}
+            onClick={() => setOpen(false)}
+          >
+            {t.nav.getStarted}
+          </button>
+        </div>
+        </div>
         </div>
       </div>
     </div>

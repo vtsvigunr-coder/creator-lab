@@ -3,6 +3,7 @@ import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { AnimatedWords } from '../../components/AnimatedText'
 import CurvedLabel from './CurvedLabel'
 import { SLIDES } from './slides'
+import { useTranslation } from '../../i18n/LanguageContext'
 import arrowLeft from '../../assets/icons/arrow-left-01-sharp.svg'
 import arrowRight from '../../assets/icons/arrow-right-01-sharp.svg'
 import styles from './SolutionSlider.module.css'
@@ -22,6 +23,7 @@ const LABEL_TURN = 180
 const LABEL_SPIN = 0.9
 
 export default function SolutionSlider() {
+  const { t } = useTranslation()
   // One piece of state, because the two halves must move together: the outgoing slide stays
   // mounted underneath while the new one opens over it. (Setting them separately meant
   // updating one from inside the other's updater, which React does not run reliably.)
@@ -50,9 +52,11 @@ export default function SolutionSlider() {
     }))
   }, [])
 
+  const leftIndex = (index + SLIDES.length - 1) % SLIDES.length
+  const rightIndex = (index + 1) % SLIDES.length
   const slide = SLIDES[index]
-  const left = SLIDES[(index + SLIDES.length - 1) % SLIDES.length]
-  const right = SLIDES[(index + 1) % SLIDES.length]
+  const left = SLIDES[leftIndex]
+  const right = SLIDES[rightIndex]
 
   // The switch itself: the new photo opens from the centre, the curved label rebuilds letter
   // by letter, and the caption and side circles cross over with it.
@@ -181,10 +185,11 @@ export default function SolutionSlider() {
           )}
           <img src={left.image} alt="" ref={(el) => void (sideRefs.current[0] = el)} />
         </div>
-        <span className={styles.sideLabel}>{left.label}</span>
+        <span className={styles.sideLabel}>{t.solution.slides[leftIndex].label}</span>
       </div>
 
       <div className={styles.centre}>
+        <div className={styles.stageWrap}>
         <div className={styles.stage}>
           <svg className={styles.ring} viewBox={`0 0 ${STAGE} ${STAGE}`} width={STAGE} height={STAGE}>
             <circle
@@ -204,17 +209,18 @@ export default function SolutionSlider() {
               </div>
             )}
             <div className={`${styles.photoLayer} ${styles.incoming}`} ref={incomingRef}>
-              <img src={slide.image} alt={slide.label} />
+              <img src={slide.image} alt={t.solution.slides[index].label} />
             </div>
           </div>
           {previous !== null && (
             <div className={styles.labelRing} ref={outgoingLabelRef}>
-              <CurvedLabel text={SLIDES[previous].label} radius={LABEL_RADIUS} size={STAGE} />
+              <CurvedLabel text={t.solution.slides[previous].label} radius={LABEL_RADIUS} size={STAGE} />
             </div>
           )}
           <div className={styles.labelRing} ref={labelRef}>
-            <CurvedLabel key={slide.id} text={slide.label} radius={LABEL_RADIUS} size={STAGE} />
+            <CurvedLabel key={slide.id} text={t.solution.slides[index].label} radius={LABEL_RADIUS} size={STAGE} />
           </div>
+        </div>
         </div>
 
         <div className={styles.nav}>
@@ -233,7 +239,7 @@ export default function SolutionSlider() {
       </div>
 
       <div className={`${styles.side} ${styles.sideRight}`}>
-        <span className={styles.sideLabel}>{right.label}</span>
+        <span className={styles.sideLabel}>{t.solution.slides[rightIndex].label}</span>
         <div className={styles.sideCircle}>
           {previous !== null && <img src={SLIDES[(previous + 1) % SLIDES.length].image} alt="" />}
           <img src={right.image} alt="" ref={(el) => void (sideRefs.current[1] = el)} />
@@ -241,7 +247,7 @@ export default function SolutionSlider() {
       </div>
 
       <p className={styles.caption} ref={captionRef} key={slide.id}>
-        <AnimatedWords text={slide.caption} />
+        <AnimatedWords text={t.solution.slides[index].caption} />
       </p>
     </div>
   )

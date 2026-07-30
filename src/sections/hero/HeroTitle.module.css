@@ -31,6 +31,14 @@
   display: inline-block;
   will-change: transform, filter, opacity;
 }
+/* Each character is its own inline-block span (so it can be animated individually), which
+   otherwise leaves the browser free to break a line between any two of them — including
+   mid-word — once the heading wraps at narrow widths. Grouping a word's chars inside one
+   atomic inline-block keeps them together, so a trailing letter like the "e" in "commerce"
+   can no longer orphan onto its own line. */
+.wordGroup {
+  display: inline-block;
+}
 .inWord {
   display: inline-block;
 }
@@ -74,4 +82,30 @@
 .wordUnit {
   display: inline-block;
   will-change: transform, filter, opacity;
+}
+
+@media (max-width: 640px) {
+  .headingBlock {
+    gap: 4px;
+  }
+  /* max-width, not width: every ancestor up to .hero centres its children with
+     align-items: center rather than stretching them, so none of them hand this a definite
+     box to size against — a percentage width would just resolve as auto. 100vw sidesteps
+     that chain entirely, so the multi-word heading is guaranteed to actually wrap instead of
+     running past the viewport edge at this font size. */
+  .heading {
+    font-size: 24px;
+    line-height: 28px;
+    /* Tightened a hair past the desktop ratio: at -0.96px "for creator-led commerce" runs
+       2px past this width and drops "commerce" onto a line of its own. */
+    letter-spacing: -1.1px;
+    max-width: calc(100vw - 32px);
+  }
+  .markerBox {
+    padding: 0 12px;
+  }
+  .description {
+    width: 299px;
+    max-width: calc(100vw - 32px);
+  }
 }

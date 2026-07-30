@@ -176,3 +176,75 @@
     height: 22px;
   }
 }
+
+/* Below this there's no room left to pin a two-viewport scrub, so the stage stops sticking
+   and the section becomes one plain column: heading and CTA first, then the cards, each
+   full width and revealed on its own as it scrolls into view (see HowItWorks.tsx) instead of
+   being dealt from a pinned strip. */
+@media (max-width: 640px) {
+  .howItWorks {
+    height: auto;
+  }
+  .stage {
+    position: static;
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    padding: 64px 16px;
+  }
+  .content {
+    position: static;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 24px;
+    padding: 0;
+    inset: auto;
+  }
+  .heading {
+    /* `width: 700px` above doesn't shrink here: `.content` is a flex column with no defined
+       width of its own, so the `max-width: 100%` on `.heading` resolves against an auto
+       container width instead of the viewport — same trap HeroTitle.module.css works around.
+       100vw sidesteps it directly. */
+    width: 100%;
+    max-width: calc(100vw - 32px);
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.56px;
+  }
+  .cards {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 20px;
+    transform: none;
+  }
+  .card {
+    /* `left` is an inline style carrying the desktop strip's offset (see HowItWorks.tsx) —
+       harmless while `.card` was absolute, but relative would honour it as a shift, so it
+       needs `!important` to actually be neutralised. */
+    position: relative;
+    left: auto !important;
+    width: 100%;
+    height: auto;
+    padding: 24px 24px 48px;
+    overflow: visible;
+  }
+  /* Matches the design's alternating depth — every other card sits flush, the ones between
+     it get the lift. */
+  .card:nth-child(odd) {
+    box-shadow: none;
+  }
+  .cardBadge {
+    position: absolute;
+    left: 50%;
+    bottom: -23px;
+    transform: translateX(-50%);
+    margin-top: 0;
+  }
+}

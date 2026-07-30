@@ -1,29 +1,30 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderWithProviders } from '../../../tests/renderWithProviders'
 import Faq from './Faq'
-import { FAQ_ITEMS } from './faqItems'
+import { en } from '../../i18n/translations/en'
 
 describe('Faq', () => {
   it('renders the heading and every question', () => {
-    render(<Faq />)
+    renderWithProviders(<Faq />)
 
     expect(screen.getByTestId('faq')).toHaveTextContent('Frequently Asked Questions')
-    for (const item of FAQ_ITEMS) {
+    for (const item of en.faq.items) {
       expect(screen.getByText(item.question)).toBeInTheDocument()
     }
   })
 
   it('opens the first question by default, not the second', () => {
-    render(<Faq />)
+    renderWithProviders(<Faq />)
 
     const buttons = screen.getAllByRole('button', { name: /.+\?/ })
     expect(buttons[0]).toHaveAttribute('aria-expanded', 'true')
     expect(buttons[1]).toHaveAttribute('aria-expanded', 'false')
-    expect(screen.getByText(FAQ_ITEMS[0].answer)).toBeInTheDocument()
+    expect(screen.getByText(en.faq.items[0].answer)).toBeInTheDocument()
   })
 
   it('toggles a question open and closed on click', () => {
-    render(<Faq />)
+    renderWithProviders(<Faq />)
 
     const buttons = screen.getAllByRole('button', { name: /.+\?/ })
     const first = buttons[0]
@@ -36,6 +37,6 @@ describe('Faq', () => {
     expect(third).toHaveAttribute('aria-expanded', 'false')
     fireEvent.click(third)
     expect(third).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByText(FAQ_ITEMS[2].answer)).toBeInTheDocument()
+    expect(screen.getByText(en.faq.items[2].answer)).toBeInTheDocument()
   })
 })

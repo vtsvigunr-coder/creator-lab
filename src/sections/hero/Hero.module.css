@@ -12,3 +12,12 @@
   gap: 32px;
   margin-top: 114px;
 }
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 0 16px 64px;
+  }
+  .centerBlock {
+    margin-top: 130px;
+  }
+}

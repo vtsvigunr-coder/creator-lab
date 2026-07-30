@@ -220,3 +220,131 @@
   height: auto;
   object-fit: contain;
 }
+
+/* Mobile: text goes left-aligned and the panel drops its fixed desktop canvas for a
+   flow layout — hero block stacked over a 2x2 card grid, both full-width inside the
+   panel's own padding. Card-internal image positions are kept as the same percentages
+   of card size as desktop (card aspect-ratio is unchanged), so they scale with the card
+   instead of needing separate px per breakpoint. */
+@media (max-width: 640px) {
+  .whyNow {
+    padding: 64px 16px;
+    gap: 64px;
+  }
+  .text {
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .textInner {
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .heading {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+    text-align: left;
+    padding: 14px 0;
+    margin: -14px 0;
+  }
+  .headingLine {
+    justify-content: flex-start;
+  }
+  .headingImg {
+    width: 65px;
+    height: 34px;
+  }
+  .description {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    text-align: left;
+    width: 283px;
+    padding: 9px 0;
+    margin: -9px 0;
+  }
+
+  .panel {
+    width: 100%;
+    height: auto;
+    padding: 16px;
+    gap: 16px;
+  }
+  .hero {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 347px;
+    overflow: hidden;
+  }
+  /* object-position pinned to the top: the desktop crop's default center framing pulls the
+     model's head up into the same rows as heroLabel above it, since this photo box overlaps
+     the label rather than sitting below it. Anchoring to the top keeps the sky visible behind
+     the label and only brings the head into frame lower down, matching the Figma mobile crop. */
+  .heroPhoto {
+    left: 10px;
+    top: 5px;
+    width: 318.587px;
+    height: 368.51px;
+    object-position: center top;
+  }
+  .heroFade {
+    left: -0.5px;
+    top: 190px;
+    width: 100%;
+    height: 157px;
+  }
+  .heroLabel {
+    left: 24px;
+    top: 24px;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .heroHeading {
+    left: 22.5px;
+    top: 268px;
+    width: calc(100% - 45px);
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+  }
+
+  .grid {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px 8px;
+    width: 100%;
+    height: auto;
+  }
+  .card {
+    width: auto;
+    height: auto;
+    aspect-ratio: 265 / 236.5;
+    border-radius: 4.785px;
+  }
+  .cardLabel {
+    bottom: 14px;
+    width: 80%;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.36px;
+  }
+  .cardPhoneImg {
+    left: -1.89%;
+    width: 82.2%;
+  }
+  .cardNotebookImg {
+    top: 3.38%;
+    width: 67.9%;
+  }
+  .cardCommerceImg {
+    top: 5.07%;
+    width: 56.6%;
+  }
+  .cardCollageImg {
+    top: 12.7%;
+    width: 80.8%;
+  }
+}

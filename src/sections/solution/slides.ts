@@ -4,32 +4,13 @@ import platform from '../../assets/images/solution-platform.webp'
 
 export type Slide = {
   id: string
-  label: string
   image: string
-  caption: string
 }
 
-/** Order matters: the two side circles are simply the previous and next entries. */
+/** Order matters: the two side circles are simply the previous and next entries. Labels and
+ * captions are translated and live in `t.solution.slides`, indexed by this same order. */
 export const SLIDES: Slide[] = [
-  {
-    id: 'brands',
-    label: 'For brands',
-    image: brands,
-    caption:
-      'List products, activate creators, track performance, and centralize creator-driven sales.',
-  },
-  {
-    id: 'creators',
-    label: 'For creators',
-    image: creators,
-    caption:
-      'Monetize influence through trusted products, performance visibility, and structured payouts',
-  },
-  {
-    id: 'platform',
-    label: 'For the platform',
-    image: platform,
-    caption:
-      'Track attribution, manage billing, handle payout logic, and create a cleaner economic system for both sides',
-  },
+  { id: 'brands', image: brands },
+  { id: 'creators', image: creators },
+  { id: 'platform', image: platform },
 ]

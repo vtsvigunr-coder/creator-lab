@@ -4,15 +4,12 @@ import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
 import CircleRevealButton from '../hero/CircleRevealButton'
 import SolutionSlider from './SolutionSlider'
+import { useTranslation } from '../../i18n/LanguageContext'
 import arrowIcon from '../../assets/icons/arrow-right-02-sharp.svg'
 import styles from './Solution.module.css'
 
-const HEADING_LINE_1 = 'One platform for brands,'
-const HEADING_LINE_2 = 'creators, and commerce'
-const DESCRIPTION =
-  'Creator Lab brings together the three parts of modern creator-led sales into one system'
-
 export default function Solution() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
 
@@ -70,23 +67,23 @@ export default function Solution() {
       <div className={styles.head} ref={headRef}>
         <div className={styles.copy}>
           <div className={styles.tagAndHeading}>
-            <WipeRevealTag label="What Creator Lab does" />
+            <WipeRevealTag label={t.solution.tag} />
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={HEADING_LINE_1} />
+                <AnimatedChars text={t.solution.headingLine1} />
               </div>
               <div>
-                <AnimatedChars text={HEADING_LINE_2} />
+                <AnimatedChars text={t.solution.headingLine2} />
               </div>
             </h2>
           </div>
           <p className={styles.description}>
-            <AnimatedWords text={DESCRIPTION} />
+            <AnimatedWords text={t.solution.description} />
           </p>
         </div>
         {/* Same circle-to-pill reveal as the hero buttons, held until the section scrolls in. */}
         <CircleRevealButton
-          label="See How It Works"
+          label={t.solution.cta}
           icon={arrowIcon}
           iconPosition="end"
           variant="solid"

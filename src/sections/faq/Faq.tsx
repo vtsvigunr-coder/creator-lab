@@ -7,14 +7,11 @@ import messageIcon from '../../assets/icons/message-multiple-01.svg'
 import plusIcon from '../../assets/icons/plus-sign.svg'
 import minusIcon from '../../assets/icons/minus-sign.svg'
 import { FAQ_ITEMS } from './faqItems'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './Faq.module.css'
 
-const HEADING = 'Frequently Asked Questions'
-const COPY_LINE_1 = 'Still have questions?'
-const COPY_LINE_2 =
-  "If you are considering Creator Lab as a brand, creator, or partner, we'd be happy to speak"
-
 export default function Faq() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
@@ -127,12 +124,12 @@ export default function Faq() {
 
         <div className={styles.textBlock}>
           <p className={styles.copy}>
-            <AnimatedWords text={COPY_LINE_1} />
+            <AnimatedWords text={t.faq.copyLine1} />
             <br />
-            <AnimatedWords text={COPY_LINE_2} />
+            <AnimatedWords text={t.faq.copyLine2} />
           </p>
           <CircleRevealButton
-            label="Chat with Us"
+            label={t.faq.cta}
             icon={messageIcon}
             iconPosition="start"
             variant="solid"
@@ -143,11 +140,11 @@ export default function Faq() {
 
       <div className={styles.right} ref={rightRef}>
         <h2 className={styles.heading}>
-          <AnimatedChars text={HEADING} />
+          <AnimatedChars text={t.faq.heading} />
         </h2>
 
         <div className={styles.list}>
-          {FAQ_ITEMS.map((item) => {
+          {FAQ_ITEMS.map((item, i) => {
             const isOpen = item.id === openId
             return (
               <div className={styles.item} key={item.id} data-line-reveal>
@@ -157,7 +154,7 @@ export default function Faq() {
                   aria-expanded={isOpen}
                   onClick={() => setOpenId(isOpen ? null : item.id)}
                 >
-                  <span className={styles.question}>{item.question}</span>
+                  <span className={styles.question}>{t.faq.items[i].question}</span>
                   <img
                     className={styles.toggleIcon}
                     src={isOpen ? minusIcon : plusIcon}
@@ -169,7 +166,7 @@ export default function Faq() {
                   data-testid="faq-answer-wrap"
                 >
                   <div className={styles.answerInner}>
-                    <p className={styles.answer}>{item.answer}</p>
+                    <p className={styles.answer}>{t.faq.items[i].answer}</p>
                   </div>
                 </div>
               </div>

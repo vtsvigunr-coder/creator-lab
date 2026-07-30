@@ -2,10 +2,9 @@
   position: relative;
   /* Two transitions across 3 slides. Each slide holds through a dead zone of scroll (HOLD_PX in
      WhyCreatorsJoin.tsx) before the boundary-crossing scroll triggers an instant cut — not a
-     scrub. 1200px = HOLD_PX * (slide count - 1); the extra 150px is a tail buffer after the last
-     cut — this is the last section on the page, so without it the final boundary would sit
-     exactly at the document's max scroll offset and could never actually be crossed. */
-  height: calc(100vh + 1350px);
+     scrub. 1200px = HOLD_PX * (slide count - 1); the extra 600px is a tail hold after the last
+     slide settles, so the section doesn't release straight into FAQ. */
+  height: calc(100vh + 1800px);
   background: var(--color-white);
 }
 .stage {
@@ -119,8 +118,102 @@
     --join-scale: 0.45;
   }
 }
-@media (max-width: 480px) {
+
+/* --- mobile: same sticky "hold, then cut" stage as desktop, laid out as a single stacked
+   column instead of the 1440-wide canvas. Positions are traced off the Figma "Trust block"
+   frame (393-wide, image box 361x341) — see WhyCreatorsJoin.tsx for the matching JS branch. --- */
+.mobileCanvas {
+  display: none;
+}
+@media (max-width: 640px) {
   .canvas {
-    --join-scale: 0.32;
+    display: none;
+  }
+  .mobileCanvas {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+    height: 100%;
+    padding: 64px 16px;
+  }
+  .mobileHead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+  }
+  .mobileHeadGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+  }
+  .mobileHeading {
+    margin: -20px 0;
+    padding: 20px 0;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+    text-transform: uppercase;
+    color: var(--color-dark-gray);
+  }
+  .mobileDescription {
+    margin: -8px 0;
+    padding: 8px 0;
+    width: 305px;
+    max-width: 100%;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    color: var(--color-gray);
+  }
+
+  .mobileSlides {
+    position: relative;
+    width: 100%;
+    max-width: 361px;
+    height: 405px;
+  }
+  .mobileLayer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .mobileTitle {
+    margin: 0;
+    width: 199px;
+    max-width: 100%;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.48px;
+    text-align: center;
+    color: var(--color-dark-gray);
+  }
+  .mobileImageBox {
+    position: relative;
+    width: 100%;
+    height: 341px;
+  }
+  .mobileImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .mobileIcon {
+    position: absolute;
+    width: 32px;
+    height: 32px;
   }
 }

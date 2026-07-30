@@ -11,6 +11,7 @@ import styles from './EarningsGraph.module.css'
 export default function EarningsGraph() {
   return (
     <div className={styles.wrap} data-graph>
+      <div className={styles.inner}>
       <svg
         className={styles.svg}
         viewBox="0 0 185 122"
@@ -58,6 +59,7 @@ export default function EarningsGraph() {
         </g>
       </svg>
       <img src={lineEarnIcon} alt="" className={styles.scanLine} data-graph-scan />
+      </div>
     </div>
   )
 }

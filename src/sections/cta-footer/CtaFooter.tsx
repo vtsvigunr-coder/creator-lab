@@ -6,12 +6,9 @@ import ctaBg from '../../assets/images/cta-section.webp'
 import ctaForeground from '../../assets/images/cta-section-without-background.webp'
 import basketIcon from '../../assets/icons/shopping-basket-favorite-03.svg'
 import videoIcon from '../../assets/icons/computer-video.svg'
-import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './CtaFooter.module.css'
-
-const HEADING_LINES = ['Join the next', 'layer of commerce', 'in Uzbekistan']
-const DESCRIPTION =
-  'Whether you are a brand looking for scalable distribution or a creator looking for structured monetization, Creator Lab is where the system works.'
 
 // How tall the arched top edge of the rising panel is, in px. Kept in sync with the
 // `--arch` custom property in the stylesheet, which reserves the same amount of extra
@@ -34,11 +31,14 @@ function archClip(w: number, h: number) {
   return peakedEdgeClipPath(w, h, ARCH, 0, shoulderY, r)
 }
 
-// Below this width the stage stops pinning (see the `max-width: 900px` block in the
-// stylesheet) and the panel is simply parked open, so the scrub has nothing to drive.
+// Same rise-and-pin mechanics run on both sides of this line — only the CSS (see the
+// `max-width: 900px` block in the stylesheet) resizes the type and reflows the footer bar
+// for a narrow column. Nothing about the ScrollTrigger itself differs.
 const DESKTOP_MEDIA_QUERY = '(min-width: 901px)'
+const MOBILE_MEDIA_QUERY = '(max-width: 900px)'
 
 export default function CtaFooter() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const riseRef = useRef<HTMLDivElement>(null)
   const photoRef = useRef<HTMLDivElement>(null)
@@ -87,23 +87,38 @@ export default function CtaFooter() {
       measure()
       applyProgress(0)
 
-      // Below 900px the stage stops pinning and the panel is just parked open (see the
-      // stylesheet), so there's nothing for a scrub to drive — matchMedia keeps the
-      // ScrollTrigger from existing at all on mobile, rather than running it and relying on
-      // CSS `!important` to hide the result.
+      // Identical scrub on both breakpoints — reused as a function only so it isn't typed out
+      // twice, not because either side behaves differently.
+      //
+      // `end` is a function using `window.innerHeight` explicitly rather than the `'bottom
+      // bottom'` keyword: GSAP's own keyword math measures the viewport height via a hidden
+      // `100vh` probe div, which on some mobile viewports (address-bar resize, or a scaled
+      // preview frame) disagrees with `window.innerHeight` — the value that actually governs
+      // how far the browser lets the page scroll. When those two disagree, `'bottom bottom'`
+      // computes an end target past the real bottom of the page and the rise stalls short no
+      // matter how far the user scrolls. Deriving `end` from `window.innerHeight` directly
+      // keeps it consistent with the browser's own scroll ceiling on every device. Re-run as a
+      // function on every refresh, same as the keyword form would be.
+      const createRiseTrigger = () =>
+        ScrollTrigger.create({
+          trigger: root,
+          start: 'top top',
+          end: () => root.offsetTop + root.offsetHeight - window.innerHeight,
+          scrub: true,
+          onRefresh: (self) => {
+            measure()
+            applyProgress(gsap.utils.clamp(0, 1, self.progress))
+          },
+          onUpdate: (self) => applyProgress(gsap.utils.clamp(0, 1, self.progress)),
+        })
+
       ScrollTrigger.matchMedia({
         [DESKTOP_MEDIA_QUERY]: () => {
-          const trigger = ScrollTrigger.create({
-            trigger: root,
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: true,
-            onRefresh: (self) => {
-              measure()
-              applyProgress(gsap.utils.clamp(0, 1, self.progress))
-            },
-            onUpdate: (self) => applyProgress(gsap.utils.clamp(0, 1, self.progress)),
-          })
+          const trigger = createRiseTrigger()
+          return () => trigger.kill()
+        },
+        [MOBILE_MEDIA_QUERY]: () => {
+          const trigger = createRiseTrigger()
           return () => trigger.kill()
         },
       })
@@ -128,19 +143,20 @@ export default function CtaFooter() {
             <div className={styles.center}>
               <div className={styles.textBlock}>
                 <h2 className={styles.heading}>
-                  {HEADING_LINES.map((line) => (
+                  {t.ctaFooter.headingLines.map((line) => (
                     <div key={line}>{line}</div>
                   ))}
                 </h2>
-                <p className={styles.description}>{DESCRIPTION}</p>
+                <p className={styles.description}>{t.ctaFooter.description}</p>
               </div>
 
               <div className={styles.buttons}>
-                <CircleRevealButton label="Apply as a Brand" icon={basketIcon} variant="light" />
+                <CircleRevealButton label={t.ctaFooter.applyAsBrand} icon={basketIcon} variant="light" fluid />
                 <CircleRevealButton
-                  label="Apply as a Creator"
+                  label={t.ctaFooter.applyAsCreator}
                   icon={videoIcon}
                   variant="outlineLight"
+                  fluid
                 />
               </div>
             </div>
@@ -153,19 +169,19 @@ export default function CtaFooter() {
             </div>
 
             <div className={styles.footerBar}>
-              <p className={styles.copyright}>© 2026 Creator Lab. All rights reserved.</p>
+              <p className={styles.copyright}>{t.ctaFooter.copyright}</p>
 
               <nav className={styles.navGlass} aria-label="Footer">
                 <span className={styles.navGlassFill} />
                 <ul className={styles.navList}>
                   {NAV_LINKS.map((link) => (
-                    <li key={link.label}>
+                    <li key={link.key}>
                       <button
                         type="button"
                         className={styles.navLink}
                         onClick={() => scrollToSection(link.targetTestId)}
                       >
-                        {link.label}
+                        {t.nav.sitemap[link.key]}
                       </button>
                     </li>
                   ))}
@@ -185,7 +201,7 @@ export default function CtaFooter() {
             </div>
 
             <ul className={styles.legalRow}>
-              {LEGAL_LINKS.map((label, i) => (
+              {t.nav.legal.map((label, i) => (
                 <li key={label} className={styles.legalItem}>
                   {i > 0 && <span className={styles.legalDot} aria-hidden="true" />}
                   <a className={styles.legalLink} href="#">

@@ -1,11 +1,12 @@
 /* A pinned stage drives the heading/CTA/tag/tab-list staying still (entrance plays once) while
    the background photo, caption, and rail indicator switch between the three tabs. Each tab
    holds through a dead zone of scroll (HOLD_PX in OurPlatform.tsx) before the boundary-crossing
-   scroll triggers an instant cut — not a scrub. Keep this in sync with
-   HOLD_PX * (tab count - 1) in the component. */
+   scroll triggers an instant cut — not a scrub. 1200px = HOLD_PX * (tab count - 1); the extra
+   600px is a tail hold after the last tab settles, so the section doesn't release straight into
+   the next one — keep it in sync with HOLD_PX in the component. */
 .ourPlatform {
   position: relative;
-  height: calc(100vh + 1200px);
+  height: calc(100vh + 1800px);
   background: var(--color-dark-gray);
 }
 .stage {
@@ -183,5 +184,168 @@
 @media (max-width: 480px) {
   .canvas {
     --platform-scale: 0.32;
+  }
+}
+
+/* --- mobile: the pinned scroll-scrub canvas above is replaced entirely by a single flowing
+   column — heading/CTA, then one card (image + chip + copy) switched by tapping the nav arrows
+   or swiping it, with a "1/3" counter tracking position. See OurPlatform.tsx for the JS. --- */
+.mobileView {
+  display: none;
+}
+@media (max-width: 640px) {
+  .ourPlatform {
+    height: auto;
+    background: var(--color-white);
+  }
+  .stage {
+    display: none;
+  }
+  .mobileView {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+    padding: 64px 16px;
+  }
+  .mobileHead {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+  }
+  .mobileHeading {
+    width: 321px;
+    max-width: 100%;
+    padding: 20px 0;
+    margin: -20px 0;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+    text-transform: uppercase;
+    color: var(--color-dark-gray);
+  }
+  .mobileCardGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 24px;
+    width: 100%;
+  }
+  .mobileCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 8px;
+    background: var(--color-gray-150);
+    touch-action: pan-y;
+  }
+  .mobileImageBox {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .mobileImage {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .mobileOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4));
+    pointer-events: none;
+  }
+  .mobileChip {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    padding: 4px 12px;
+    border-radius: 2px;
+    background: var(--color-yellow);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    text-transform: uppercase;
+    color: var(--color-dark-purple);
+    white-space: nowrap;
+  }
+  .mobileTextStack {
+    position: relative;
+    width: 100%;
+    height: 64px;
+  }
+  .mobileTextPane {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .mobileCardTitle {
+    margin: 0;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.48px;
+    text-transform: uppercase;
+    color: var(--color-dark-gray);
+  }
+  .mobileCardDesc {
+    margin: 0;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    color: var(--color-dark-gray);
+  }
+  .mobileFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 40px;
+  }
+  .mobileCounter {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    color: var(--color-gray);
+  }
+  .mobileNav {
+    display: flex;
+    gap: 9px;
+  }
+  .mobileNavBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px;
+    border: none;
+    border-radius: 60px;
+    background: var(--color-gray-150);
+    cursor: pointer;
+  }
+  .mobileNavBtn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .mobileNavBtn img {
+    display: block;
+    width: 18px;
+    height: 18px;
   }
 }

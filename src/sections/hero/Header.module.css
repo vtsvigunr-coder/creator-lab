@@ -26,3 +26,20 @@
   justify-content: center;
   flex-shrink: 0;
 }
+.desktopOnly {
+  display: contents;
+}
+
+@media (max-width: 640px) {
+  .header {
+    /* The right 48px (36px toggle + 12px gap) is reserved for the nav's mobile burger, which
+       anchors itself flush with this edge — see NavMenu.module.css. */
+    padding: 24px 48px 0 0;
+  }
+  .right {
+    gap: 12px;
+  }
+  .desktopOnly {
+    display: none;
+  }
+}

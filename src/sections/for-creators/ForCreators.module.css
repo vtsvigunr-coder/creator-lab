@@ -334,35 +334,132 @@
 }
 @media (max-width: 640px) {
   .forCreators {
-    padding: 64px 24px;
+    padding: 64px 16px;
+    gap: 64px;
+  }
+  .head {
+    width: 100%;
+    align-items: flex-start;
+  }
+  .copy {
+    width: 100%;
+    align-items: flex-start;
+  }
+  .tagAndHeading {
+    align-items: flex-start;
   }
   .heading {
-    font-size: 32px;
-    line-height: 36px;
-    letter-spacing: -0.64px;
+    width: 100%;
+    text-align: left;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+  }
+  .description {
+    width: 309px;
+    max-width: 100%;
+    text-align: left;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .body {
+    gap: 49px;
+  }
+  .textCol {
+    order: -1;
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .listHeading {
+    text-align: left;
+  }
+  .listItem {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
   }
   .imageBlock {
     width: 100%;
-    height: 420px;
+    height: 391px;
   }
   .blurPanel {
-    display: none;
+    width: 201px;
+    height: 367px;
+    top: 12px;
   }
   .groundLine {
-    display: none;
+    top: 367px;
+    width: 51px;
   }
   .trackedCard {
-    left: 12px;
-    top: auto;
-    bottom: 12px;
-    transform: scale(0.85);
-    transform-origin: bottom left;
+    left: 16px;
+    top: 129px;
+    bottom: auto;
+    transform: none;
+    padding: 12px;
+    gap: 8px;
   }
   .earningsCard {
-    left: auto;
-    right: 12px;
-    top: 12px;
-    transform: scale(0.85);
-    transform-origin: top right;
+    left: 182px;
+    top: 201px;
+    right: auto;
+    transform: none;
+    padding: 12px;
+    gap: 8px;
+  }
+  .cardLabel {
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: -0.3px;
+  }
+  .linkRow {
+    gap: 4px;
+  }
+  .linkPill {
+    width: auto;
+    height: auto;
+    padding: 2px 16px 2px 2px;
+    gap: 4px;
+  }
+  .linkIconChip {
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+  }
+  .linkIcon {
+    width: 8px;
+    height: 8px;
+  }
+  .linkText {
+    font-size: 8px;
+    line-height: 12px;
+    letter-spacing: -0.24px;
+  }
+  .copyBtn {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+  .copyIcon {
+    width: 9px;
+    height: 9px;
+  }
+  .earningsRow {
+    width: 139px;
+  }
+  .earningsValue {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.36px;
+  }
+  .deltaPill {
+    padding: 2px 4px;
+  }
+  .deltaText {
+    font-size: 10px;
+    line-height: 12px;
+    letter-spacing: -0.3px;
   }
 }

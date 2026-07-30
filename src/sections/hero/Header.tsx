@@ -3,10 +3,12 @@ import AnimatedLogo from './AnimatedLogo'
 import NavMenu from './NavMenu'
 import CircleRevealButton from './CircleRevealButton'
 import { gsap } from '../../lib/gsap'
+import { useTranslation } from '../../i18n/LanguageContext'
 import userIcon from '../../assets/icons/user.svg'
 import styles from './Header.module.css'
 
 export default function Header() {
+  const { t } = useTranslation()
   const userBtnRef = useRef<HTMLButtonElement>(null)
 
   useLayoutEffect(() => {
@@ -25,9 +27,14 @@ export default function Header() {
         <NavMenu />
         <div className={styles.right}>
           <button ref={userBtnRef} className={styles.userBtn} type="button">
-            <img src={userIcon} alt="Account" width={20} height={20} />
+            <img src={userIcon} alt={t.header.accountAlt} width={20} height={20} />
           </button>
-          <CircleRevealButton label="Get Started" variant="dark" />
+          {/* Hidden at mobile widths — it moves inside the burger menu instead (see
+              NavMenu's Get Started row). `display: contents` on the wrapper keeps it out of
+              the flex layout on desktop, so .right's own gap isn't affected by it existing. */}
+          <div className={styles.desktopOnly}>
+            <CircleRevealButton label={t.header.getStarted} variant="dark" />
+          </div>
         </div>
       </div>
     </header>

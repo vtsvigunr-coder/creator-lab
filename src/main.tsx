@@ -3,6 +3,7 @@ import './styles/reset.css'
 import './styles/fonts.css'
 import './styles/tokens.css'
 import App from './App.tsx'
+import { LanguageProvider } from './i18n/LanguageContext'
 
 // A reload always lands on the hero. The page is one long scroll-driven sequence, so being
 // dropped back in mid-animation leaves half the entrances already spent. This runs at module
@@ -10,4 +11,8 @@ import App from './App.tsx'
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 window.scrollTo(0, 0)
 
-createRoot(document.getElementById('root')!).render(<App />)
+createRoot(document.getElementById('root')!).render(
+  <LanguageProvider>
+    <App />
+  </LanguageProvider>,
+)

@@ -2,24 +2,49 @@ import { useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import { splitWords } from '../../lib/splitWords'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './HeroTitle.module.css'
 
 const NBSP = ' '
 
-const LINE_1 = 'The operating system'
-const LINE_2 = 'for creator-led commerce'
-const DESCRIPTION =
-  'Creator Lab helps brands sell through creators, and helps creators earn through trackable products, links, payouts, and performance'
-
 function AnimatedChars({ text }: { text: string }) {
   const chars = useMemo(() => splitChars(text), [text])
+  // Runs of non-space chars are grouped into one atomic inline-block per word, so a line break
+  // can only land between words rather than in the middle of one — see the comment on
+  // .wordGroup for why that matters here.
+  const groups = useMemo(() => {
+    const result: (typeof chars)[] = []
+    let word: typeof chars = []
+    for (const c of chars) {
+      if (c.isSpace) {
+        if (word.length) result.push(word)
+        result.push([c])
+        word = []
+      } else {
+        word.push(c)
+      }
+    }
+    if (word.length) result.push(word)
+    return result
+  }, [chars])
+
   return (
     <>
-      {chars.map((c, i) => (
-        <span key={i} className={styles.charUnit} data-soft-blur-char>
-          {c.isSpace ? NBSP : c.char}
-        </span>
-      ))}
+      {groups.map((group, gi) =>
+        group[0].isSpace ? (
+          <span key={gi} className={styles.charUnit} data-soft-blur-char>
+            {NBSP}
+          </span>
+        ) : (
+          <span key={gi} className={styles.wordGroup}>
+            {group.map((c, i) => (
+              <span key={i} className={styles.charUnit} data-soft-blur-char>
+                {c.char}
+              </span>
+            ))}
+          </span>
+        ),
+      )}
     </>
   )
 }
@@ -42,6 +67,7 @@ function AnimatedDescription({ text }: { text: string }) {
 }
 
 export default function HeroTitle() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLDivElement>(null)
   const markerFillRef = useRef<HTMLDivElement>(null)
 
@@ -100,26 +126,26 @@ export default function HeroTitle() {
       <div className={styles.headingBlock}>
         <h1 className={styles.heading}>
           <div>
-            <AnimatedChars text={LINE_1} />
+            <AnimatedChars text={t.hero.titleLine1} />
           </div>
           <div>
-            <AnimatedChars text={LINE_2} />
+            <AnimatedChars text={t.hero.titleLine2} />
           </div>
           <div className={styles.highlightRow}>
             <span className={styles.inWord}>
-              <AnimatedChars text="in" />
+              <AnimatedChars text={t.hero.inWord} />
             </span>
             <div className={styles.markerBox} data-testid="uzbekistan-marker">
               <div className={styles.markerFill} ref={markerFillRef} />
               <span className={styles.markerText}>
-                <AnimatedChars text="Uzbekistan" />
+                <AnimatedChars text={t.hero.markerWord} />
               </span>
             </div>
           </div>
         </h1>
       </div>
       <p className={styles.description}>
-        <AnimatedDescription text={DESCRIPTION} />
+        <AnimatedDescription text={t.hero.description} />
       </p>
     </div>
   )

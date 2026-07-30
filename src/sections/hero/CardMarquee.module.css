@@ -3,6 +3,22 @@
   width: 100%;
   margin-top: 80px;
 }
+
+@media (max-width: 640px) {
+  /* Hero gains its own 16px side padding at this width (see Hero.module.css) so the heading
+     and buttons stay inset — but the marquee is meant to bleed edge-to-edge on every
+     breakpoint, so it cancels that padding back out here rather than inheriting it.
+     `width: auto` cannot do that cancelling on its own here: .hero centres its flex children
+     (align-items: center) rather than stretching them, so an auto width on a flex item in
+     that context resolves by shrink-to-fit — sized by the marquee's own max-content track,
+     not by the available row width — regardless of any margin set alongside it. 100vw is an
+     explicit size, immune to that. */
+  .viewport {
+    width: 100vw;
+    margin-left: -16px;
+    margin-right: -16px;
+  }
+}
 .track {
   display: flex;
   align-items: center;

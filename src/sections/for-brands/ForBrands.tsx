@@ -8,20 +8,8 @@ import arrowUpIcon from '../../assets/icons/arrow-up-02-sharp.svg'
 import photo from '../../assets/images/for-brands.webp'
 import maskShape from '../../assets/icons/for-brands-mask.svg'
 import { STATS, type Stat } from './stats'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './ForBrands.module.css'
-
-const HEADING_LINE_1 = 'Turn creators into'
-const HEADING_LINE_2 = 'a real sales channel'
-const DESCRIPTION =
-  'Creator Lab gives brands a better way to sell through creators without relying on scattered messages, spreadsheet chaos, or blind influencer deals'
-
-const CAN_LIST = [
-  'List products in one system',
-  'Activate relevant creators',
-  'Track clicks, visits, and sales',
-  'Understand which creators actually drive results',
-  'Centralize creator-led demand into one operational flow',
-]
 
 function formatStat(stat: Stat, value: number) {
   const rounded = Math.round(value).toLocaleString('en-US')
@@ -33,6 +21,7 @@ function formatDelta(value: number) {
 }
 
 export default function ForBrands() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -165,22 +154,22 @@ export default function ForBrands() {
       <div className={styles.head} ref={headRef}>
         <div className={styles.copy}>
           <div className={styles.tagAndHeading}>
-            <WipeRevealTag label="Why brands join" />
+            <WipeRevealTag label={t.forBrands.tag} />
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={HEADING_LINE_1} />
+                <AnimatedChars text={t.forBrands.headingLine1} />
               </div>
               <div>
-                <AnimatedChars text={HEADING_LINE_2} />
+                <AnimatedChars text={t.forBrands.headingLine2} />
               </div>
             </h2>
           </div>
           <p className={styles.description}>
-            <AnimatedWords text={DESCRIPTION} />
+            <AnimatedWords text={t.forBrands.description} />
           </p>
         </div>
         <CircleRevealButton
-          label="For Brands"
+          label={t.forBrands.cta}
           icon={arrowIcon}
           iconPosition="end"
           variant="solid"
@@ -191,10 +180,10 @@ export default function ForBrands() {
       <div className={styles.body} ref={bodyRef}>
         <div className={styles.listCol}>
           <p className={styles.listHeading} data-line-reveal>
-            With Creator Lab, brands can:
+            {t.forBrands.listHeading}
           </p>
           <ul className={styles.list}>
-            {CAN_LIST.map((item) => (
+            {t.forBrands.canList.map((item) => (
               <li key={item} className={styles.listItem} data-line-reveal>
                 {item}
               </li>
@@ -209,14 +198,14 @@ export default function ForBrands() {
           </div>
 
           <div className={styles.statCard} ref={statCardRef}>
-            {STATS.map((stat) => (
-              <div className={styles.statRow} key={stat.label}>
+            {STATS.map((stat, i) => (
+              <div className={styles.statRow} key={t.forBrands.stats[i].label}>
                 <div className={styles.statMain}>
                   <span className={styles.statIcon} style={{ background: stat.iconBg }}>
                     <img src={stat.icon} alt="" />
                   </span>
                   <span className={styles.statText}>
-                    <span className={styles.statLabel}>{stat.label}</span>
+                    <span className={styles.statLabel}>{t.forBrands.stats[i].label}</span>
                     <span className={styles.statValue} data-stat-value>
                       {formatStat(stat, 0)}
                     </span>

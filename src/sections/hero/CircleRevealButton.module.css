@@ -52,6 +52,17 @@
   border-color: var(--color-violet-400);
   color: var(--color-violet-400);
 }
+/* Filled dark purple -> outlined violet. */
+.darkPurple {
+  background: var(--color-dark-purple);
+  color: var(--color-white);
+  border: 1px solid transparent;
+}
+.darkPurple:hover {
+  background: transparent;
+  border-color: var(--color-violet-400);
+  color: var(--color-violet-400);
+}
 /* For dark sections: a white pill with dark text -> outlined white on a transparent field. */
 .light {
   background: var(--color-white);
@@ -100,4 +111,49 @@
   font-weight: 600;
   font-size: 16px;
   letter-spacing: -0.48px;
+}
+
+@media (max-width: 640px) {
+  /* Opt-in only (see the `fluid` prop) — every other button on the page keeps sizing to its
+     own label at every width. Side by side per design, splitting the row 50/50 via flex: 1.
+     The design's own 24px/8px padding/gap is too generous for that split: with the real
+     Pretendard Variable font actually loaded (verified in-browser, not just Figma's own
+     screenshot, which silently substitutes a narrower fallback for this font) "Apply as a
+     Creator" alone needs ~188px of content width against the ~163px an even split at typical
+     mobile widths (~375-393px) leaves it. Trimming the horizontal padding and icon/label gap
+     below closes that gap so both labels fit on one line at the design's own font size — see
+     HeroButtons.module.css's flex-wrap for the narrower-viewport fallback. The JS above
+     measures `btn.offsetWidth` in normal flow before pinning anything down, so it picks up
+     whatever width the flex split resolves to; nothing in CircleRevealButton.tsx needs to know
+     this happened. */
+  /* flex-basis: auto (not 0%) so the browser's line-fitting math uses each button's actual
+     min-content width (nowrap label + icon + padding) rather than pretending it can shrink to
+     nothing — that's what lets .row's flex-wrap (HeroButtons.module.css) actually trigger
+     instead of clipping when a viewport is too narrow for both labels even at this trimmed
+     padding. */
+  .fluid {
+    flex: 1 1 auto;
+  }
+  .fluid .btn {
+    width: 100%;
+  }
+  .fluid .content {
+    padding: 12px 12px;
+    gap: 6px;
+  }
+  .fluid .label {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+}
+
+/* Matches HeroButtons.module.css's own sub-breakpoint, where .row drops to a column below
+   360px because even trimmed padding can't fit both labels side by side there — .fluid needs
+   to go back to filling that column's full width instead of splitting it. */
+@media (max-width: 359px) {
+  .fluid {
+    flex: 0 1 auto;
+    width: 100%;
+  }
 }

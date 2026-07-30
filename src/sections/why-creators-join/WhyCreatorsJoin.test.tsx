@@ -1,23 +1,25 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderWithProviders } from '../../../tests/renderWithProviders'
 import WhyCreatorsJoin from './WhyCreatorsJoin'
 import { JOIN_SLIDES } from './slides'
+import { en } from '../../i18n/translations/en'
 
 describe('WhyCreatorsJoin', () => {
   it('renders the heading, description, and all three slide captions', () => {
-    render(<WhyCreatorsJoin />)
+    renderWithProviders(<WhyCreatorsJoin />)
 
     const root = screen.getByTestId('why-creators-join')
     expect(root).toHaveTextContent('Not for everyone.For serious players.')
     expect(root).toHaveTextContent('Creator Lab is built for brands that want real sales')
 
-    for (const slide of JOIN_SLIDES) {
+    for (const slide of en.whyCreatorsJoin.slides) {
       expect(root).toHaveTextContent(slide.caption)
     }
   })
 
   it('renders exactly one media layer per slide, each with its image and two icons', () => {
-    render(<WhyCreatorsJoin />)
+    renderWithProviders(<WhyCreatorsJoin />)
 
     const layers = Array.from(
       screen.getByTestId('why-creators-join').querySelectorAll('[data-join-layer]'),
@@ -31,7 +33,7 @@ describe('WhyCreatorsJoin', () => {
   })
 
   it('renders one caption per slide, each split into soft-blur-char units', () => {
-    render(<WhyCreatorsJoin />)
+    renderWithProviders(<WhyCreatorsJoin />)
 
     const captions = Array.from(
       screen.getByTestId('why-creators-join').querySelectorAll('[data-join-caption]'),

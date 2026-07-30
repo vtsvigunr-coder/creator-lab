@@ -7,18 +7,22 @@ import CircleRevealButton from '../hero/CircleRevealButton'
 import arrowIcon from '../../assets/icons/arrow-right-02-sharp.svg'
 import headingIcon from '../../assets/icons/how-it-works-icon.svg'
 import { STEPS } from './steps'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './HowItWorks.module.css'
-
-const HEADING_BEFORE_ICON = 'Simple on'
-const HEADING_AFTER_ICON = 'the outside.'
-const HEADING_LINE_2 = 'Powerful underneath.'
 
 // How much of the scrubbed range one card spends rising, and how far apart the four are
 // dealt. 3 * 0.55 + 1 = 2.65 units of timeline, so the last card lands right at the end.
 const CARD_RISE = 1
 const CARD_OFFSET = 0.55
 
+// Below this the stage stops pinning (see the `max-width: 640px` block in the stylesheet)
+// and the cards sit in normal flow, so there's no scrub range left to deal them against —
+// matchMedia switches to a plain per-card reveal instead.
+const DESKTOP_MEDIA_QUERY = '(min-width: 641px)'
+const MOBILE_MEDIA_QUERY = '(max-width: 640px)'
+
 export default function HowItWorks() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
@@ -61,30 +65,55 @@ export default function HowItWorks() {
         )
       }
 
-      // 2. The cards are scrubbed against the pinned range so they are dealt up one by one as
-      //    the user scrolls, and go back down if they scroll up. Each starts well below the
-      //    fold, flat and slightly small, and swings into its resting tilt on the way up —
-      //    the extra rotation and scale are what give the rise some weight.
-      //    The timeline is built in full before its trigger is attached: handing
-      //    ScrollTrigger an empty timeline makes it defer initialisation by a tick, which
-      //    leaves it half-registered while other sections are still mounting.
+      // 2. On desktop the cards are scrubbed against the pinned range so they are dealt up one
+      //    by one as the user scrolls, and go back down if they scroll up. Each starts well
+      //    below the fold, flat and slightly small, and swings into its resting tilt on the
+      //    way up — the extra rotation and scale are what give the rise some weight.
+      //    On mobile there's no pinned stage to scrub against — the cards sit in normal flow —
+      //    so each one instead rises into place on its own the first time it crosses into
+      //    view, the same "once" reveal the rest of the page uses.
       const cards = Array.from(cardsEl.querySelectorAll<HTMLElement>('[data-step-card]'))
-      const cardsTl = gsap.timeline({ paused: true })
-      cards.forEach((card, i) => {
-        const rotation = STEPS[i].rotation
-        cardsTl.fromTo(
-          card,
-          { yPercent: 280, rotation: rotation - 16, scale: 0.9 },
-          { yPercent: 0, rotation, scale: 1, duration: CARD_RISE, ease: 'power2.out' },
-          i * CARD_OFFSET,
-        )
-      })
-      ScrollTrigger.create({
-        animation: cardsTl,
-        trigger: root,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.6,
+      ScrollTrigger.matchMedia({
+        [DESKTOP_MEDIA_QUERY]: () => {
+          // The timeline is built in full before its trigger is attached: handing
+          // ScrollTrigger an empty timeline makes it defer initialisation by a tick, which
+          // leaves it half-registered while other sections are still mounting.
+          const cardsTl = gsap.timeline({ paused: true })
+          cards.forEach((card, i) => {
+            const rotation = STEPS[i].rotation
+            cardsTl.fromTo(
+              card,
+              { yPercent: 280, rotation: rotation - 16, scale: 0.9 },
+              { yPercent: 0, rotation, scale: 1, duration: CARD_RISE, ease: 'power2.out' },
+              i * CARD_OFFSET,
+            )
+          })
+          const trigger = ScrollTrigger.create({
+            animation: cardsTl,
+            trigger: root,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+          })
+          return () => trigger.kill()
+        },
+        [MOBILE_MEDIA_QUERY]: () => {
+          const triggers = cards.map(
+            (card) =>
+              gsap.fromTo(
+                card,
+                { opacity: 0, y: 56 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.7,
+                  ease: 'power2.out',
+                  scrollTrigger: { trigger: card, start: 'top 88%', once: true },
+                },
+              ).scrollTrigger,
+          )
+          return () => triggers.forEach((t) => t?.kill())
+        },
       })
     }, root)
 
@@ -97,11 +126,11 @@ export default function HowItWorks() {
     <section className={styles.howItWorks} data-testid="how-it-works" ref={rootRef}>
       <div className={styles.stage}>
         <div className={styles.content} ref={headRef}>
-          <WipeRevealTag label="How it works" />
+          <WipeRevealTag label={t.howItWorks.tag} />
           <h2 className={styles.heading}>
             <div className={styles.headingLine}>
               <span>
-                <AnimatedChars text={HEADING_BEFORE_ICON} />
+                <AnimatedChars text={t.howItWorks.headingBeforeIcon} />
               </span>
               <img
                 className={styles.headingIcon}
@@ -111,15 +140,15 @@ export default function HowItWorks() {
                 data-heading-icon
               />
               <span>
-                <AnimatedChars text={HEADING_AFTER_ICON} />
+                <AnimatedChars text={t.howItWorks.headingAfterIcon} />
               </span>
             </div>
             <div>
-              <AnimatedChars text={HEADING_LINE_2} />
+              <AnimatedChars text={t.howItWorks.headingLine2} />
             </div>
           </h2>
           <CircleRevealButton
-            label="Explore the System"
+            label={t.howItWorks.cta}
             icon={arrowIcon}
             iconPosition="end"
             variant="light"
@@ -128,9 +157,9 @@ export default function HowItWorks() {
         </div>
 
         <div className={styles.cards} ref={cardsRef} data-testid="how-it-works-cards">
-          {STEPS.map((step) => (
+          {STEPS.map((step, i) => (
             <article
-              key={step.badge}
+              key={t.howItWorks.steps[i].badge}
               className={styles.card}
               style={{ left: step.left }}
               data-step-card
@@ -140,13 +169,13 @@ export default function HowItWorks() {
                   <img src={step.icon} alt="" />
                 </span>
                 <h3 className={styles.cardTitle}>
-                  <span>{step.title[0]}</span>
+                  <span>{t.howItWorks.steps[i].title[0]}</span>
                   <br />
-                  <span>{step.title[1]}</span>
+                  <span>{t.howItWorks.steps[i].title[1]}</span>
                 </h3>
-                <p className={styles.cardText}>{step.description}</p>
+                <p className={styles.cardText}>{t.howItWorks.steps[i].description}</p>
               </div>
-              <span className={styles.cardBadge}>{step.badge}</span>
+              <span className={styles.cardBadge}>{t.howItWorks.steps[i].badge}</span>
             </article>
           ))}
         </div>

@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
+import { renderWithProviders as render } from '../../../tests/renderWithProviders'
 import HeroTitle from './HeroTitle'
 
 test('renders the title, highlighted word, and description', () => {

@@ -1,36 +1,55 @@
-/* The panel is laid out in its OPEN geometry at all times — 279px wide, 20px of padding, and
-   pulled 20px up so that the padding lands outside the header row. That way the toggle pill
-   sits at exactly the same place on screen whether the menu is open or shut, and opening only
-   has to grow the panel's height downwards and fade its backdrop in. Nothing has to be
-   re-measured or re-positioned mid-flight, which is what the previous version got wrong. */
+/* The toggle sits at a fixed spot on screen (root's own top-left), and the disclosure card is
+   its own floating element anchored underneath — not grown around the toggle — so the toggle
+   always reads as a separate, permanent control rather than something that gets absorbed into
+   the card while it's open. */
+.root {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 10;
+  /* The card is wider than the toggle even when shut, so it must not swallow clicks meant for
+     the page underneath. Its children opt back in. */
+  pointer-events: none;
+}
+.root > * {
+  pointer-events: auto;
+}
+/* Purely a positioning frame — auto-height, no clip of its own — so .scrim (its own child,
+   not scoped inside .clip's overflow:hidden) is free to extend past this box's top edge on
+   desktop and read as one continuous surface behind the toggle. All the "shrink to a pill,
+   grow into a card" clipping lives on .clip instead. */
 .panel {
   position: absolute;
   left: 50%;
-  top: -20px;
+  /* 20px below the toggle's own 36px-tall box — the toggle's height plus the design's 20px
+     gap between the toggle and the card's own top padding (which then adds the 40px gap to
+     the content below it via .clip's padding-top). */
+  top: 56px;
   transform: translateX(-50%);
-  z-index: 10;
   width: 279px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  border-radius: 8px;
-  /* Height is owned by the open/close timeline; this is the closed value (pill + padding). */
-  height: 76px;
-  overflow: hidden;
-  /* The panel's box is wider than the pill even when shut, so it must not swallow clicks
-     meant for the page underneath. Its children opt back in. */
-  pointer-events: none;
 }
-.panel > * {
-  pointer-events: auto;
+.clip {
+  position: relative;
+  width: 100%;
+  /* Uniform 20px, matching the design — the extra 40px gap between the toggle and the
+     Sitemap content comes from .panel's own 20px offset plus this 20px padding. */
+  padding: 20px;
+  border-radius: 8px;
+  /* Height is owned by the open/close timeline; shut, the card is fully collapsed since it no
+     longer has to reserve room for the toggle. */
+  height: 0;
+  overflow: hidden;
 }
 
-/* Backdrop kept on its own layer so it can fade independently of the pill sitting on it. */
+/* Backdrop kept on its own layer so it can fade independently of the pill sitting on it. Sized
+   off .panel (its containing block), not .clip, so it isn't clipped by .clip's own
+   overflow:hidden and can extend past .panel's top edge on desktop — see the inset override
+   below the mobile breakpoint's own, unextended one. */
 .scrim {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  inset: -76px 0 0 0;
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.36);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
@@ -41,6 +60,9 @@
 /* --- the toggle pill --- */
 .toggle {
   position: relative;
+  /* Above .scrim (z-index: auto) despite coming first in .root's DOM order, so the desktop
+     backdrop it extends behind doesn't paint over — and blur — its own label. */
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +80,7 @@
   white-space: nowrap;
   transition: color 0.25s ease;
 }
-.panelOpen .toggle {
+.open .toggle {
   color: var(--color-white);
 }
 .icon {
@@ -171,10 +193,71 @@
   height: 20px;
 }
 
+/* Only rendered visually on mobile — see the comment beside it in NavMenu.tsx. */
+.getStartedRow {
+  display: none;
+  width: 100%;
+}
+.getStarted {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 12px 40px;
+  border: none;
+  border-radius: 60px;
+  background: var(--color-white);
+  color: var(--color-dark-gray);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+}
+
 @media (max-width: 640px) {
+  /* Desktop centres a "Menu"/"Close" pill in the middle of the header. Mobile instead tucks a
+     small icon-only toggle to the right of the account button, vertically centred on it — the
+     header reserves 48px (36px button + 12px gap) on its right edge for exactly this, and the
+     root is pulled out that same 48px so the toggle lands flush with the header's true right
+     edge, in the spot the account button used to occupy. The card anchors under the same edge,
+     its width capped so it can't also overflow the hero's own 16px-inset left edge. */
+  .root {
+    left: auto;
+    right: -48px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
   .panel {
     left: auto;
     right: 0;
+    /* 24px below the toggle's own 36px-tall box, per the design — tighter than the desktop
+       pill's 40px gap since there's no seamless pill-into-card morph to preserve here. */
+    top: 60px;
     transform: none;
+    width: min(361px, calc(100vw - 80px));
+  }
+  .clip {
+    padding: 24px;
+  }
+  /* The card floats free below the toggle rather than sitting behind it, so unlike desktop's
+     extended one (which reads as one continuous surface behind the toggle pill), this scrim
+     stays scoped to the card itself. */
+  .scrim {
+    inset: 0;
+  }
+  .toggle {
+    width: 36px;
+    padding: 8px;
+  }
+  /* The card floats free below the toggle rather than sitting behind it, so there's no dark
+     backdrop under the icon here to justify the desktop open-state color swap. */
+  .open .toggle {
+    color: var(--color-dark-gray);
+  }
+  .labelStack {
+    display: none;
+  }
+  .getStartedRow {
+    display: block;
   }
 }

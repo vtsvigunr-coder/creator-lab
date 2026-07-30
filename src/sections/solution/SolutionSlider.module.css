@@ -17,6 +17,9 @@
   align-items: center;
   gap: 40px;
 }
+.stageWrap {
+  position: relative;
+}
 .stage {
   position: relative;
   width: 560px;
@@ -146,4 +149,78 @@
 .navBtn img {
   width: 24px;
   height: 24px;
+}
+
+/* Same switch/autoplay mechanics as desktop (SolutionSlider.tsx is untouched) — the whole
+   560px stage is scaled down as one block via transform, so the ring's SVG viewBox and the
+   curved label's canvas-measured glyph offsets stay correct without any JS breakpoint logic.
+   The rest of the layout (side circles, caption, nav) switches from the desktop absolute
+   grid to a plain centred column, reordered to match the design with `order`. */
+@media (max-width: 640px) {
+  .slider {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .centre {
+    position: static;
+    transform: none;
+    /* Promotes .stageWrap and .nav to be direct flex items of .slider so they can be
+       reordered independently of one another. */
+    display: contents;
+  }
+  .stageWrap {
+    order: 2;
+    /* Capped to fit viewports narrower than the 360px design width (e.g. a 320px phone) —
+       plain `360px` pushed the page into horizontal scroll there. `.stage` keeps its fixed
+       scale, so below 360px it's clipped rather than reflowed — a rare-viewport trade-off,
+       not a redesign. */
+    width: min(360px, 100%);
+    aspect-ratio: 1;
+    overflow: hidden;
+    /* Fixed distance from the small circle above, regardless of that label's width/height. */
+    margin-bottom: 40px;
+  }
+  .stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(0.6428571429);
+    transform-origin: top left;
+  }
+  .nav {
+    order: 5;
+  }
+  .side {
+    position: static;
+    width: auto;
+  }
+  .sideLeft {
+    order: 1;
+    align-self: flex-start;
+    /* Pinned distance to the main circle below — a margin (not the row `gap`) so it can't
+       drift with the label's own height. */
+    margin-bottom: 30px;
+  }
+  .sideRight {
+    order: 4;
+    align-self: flex-end;
+    margin-bottom: 40px;
+  }
+  .sideLabel {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .caption {
+    order: 3;
+    position: static;
+    width: 100%;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    margin-bottom: 40px;
+  }
 }

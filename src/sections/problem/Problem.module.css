@@ -144,3 +144,40 @@
   white-space: nowrap;
   opacity: 0;
 }
+
+/* Same scrubbed curtain, just resized copy and full-bleed blocks — the pinned/scrub
+   mechanics in Problem.tsx are untouched on mobile. */
+@media (max-width: 640px) {
+  .intro,
+  .outro {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
+    gap: 24px;
+  }
+  .introHead {
+    gap: 16px;
+  }
+  .outroHead {
+    gap: 2px;
+  }
+  .heading {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+  }
+  .description,
+  .outro .description {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+    width: 100%;
+  }
+  .glassBox {
+    padding: 2px 12px;
+  }
+  .footnote {
+    bottom: 40px;
+  }
+}

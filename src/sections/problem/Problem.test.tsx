@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderWithProviders as render } from '../../../tests/renderWithProviders'
 import Problem from './Problem'
 
 describe('Problem', () => {

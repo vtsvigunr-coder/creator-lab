@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { screen, fireEvent } from '@testing-library/react'
+import { renderWithProviders as render } from '../../../tests/renderWithProviders'
 import NavMenu from './NavMenu'
 
 test('the single toggle opens and closes the panel', () => {

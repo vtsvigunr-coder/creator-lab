@@ -7,10 +7,15 @@ type CircleRevealButtonProps = {
   icon?: string
   /** Where the icon sits relative to the label. It is centred in the circle either way. */
   iconPosition?: 'start' | 'end'
-  variant: 'solid' | 'outline' | 'dark' | 'light' | 'outlineLight'
+  variant: 'solid' | 'outline' | 'dark' | 'light' | 'outlineLight' | 'darkPurple'
   delay?: number
   /** Hold the entrance until the button scrolls into view, instead of playing on mount. */
   startOnScroll?: boolean
+  /** Split evenly with its siblings across the full width of the row instead of sizing to its
+      own content — used for the two hero buttons at mobile widths, where the design has them
+      stretch flex:1 rather than stay pill-sized. Off by default: every other usage of this
+      button sizes to its label like normal. */
+  fluid?: boolean
 }
 
 // Timings traced frame-by-frame off the reference recording (the outline button's measured
@@ -31,6 +36,7 @@ export default function CircleRevealButton({
   variant,
   delay = 0,
   startOnScroll = false,
+  fluid = false,
 }: CircleRevealButtonProps) {
   const wrapRef = useRef<HTMLSpanElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -110,7 +116,7 @@ export default function CircleRevealButton({
   }, [delay, startOnScroll])
 
   return (
-    <span ref={wrapRef} className={styles.wrap}>
+    <span ref={wrapRef} className={`${styles.wrap} ${fluid ? styles.fluid : ''}`}>
       {/* The icon URL is quoted: Vite inlines small SVGs as data URIs whose attributes use
           single quotes, and an unquoted url() token may not contain them — the whole custom
           property would be dropped as invalid and the mask would fall back to a filled box. */}

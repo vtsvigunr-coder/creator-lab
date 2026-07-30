@@ -255,25 +255,93 @@
 }
 @media (max-width: 640px) {
   .forBrands {
-    padding: 64px 24px;
+    padding: 64px 16px;
+    gap: 64px;
+  }
+  .head {
+    width: 100%;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .copy {
+    width: 100%;
+    align-items: flex-start;
+    gap: 24px;
+  }
+  .tagAndHeading {
+    align-items: flex-start;
+    gap: 16px;
   }
   .heading {
-    font-size: 32px;
-    line-height: 36px;
-    letter-spacing: -0.64px;
+    width: 100%;
+    text-align: left;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.96px;
+  }
+  .description {
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .body {
+    gap: 40px;
+  }
+  .listCol {
+    align-items: flex-start;
+    text-align: left;
+    gap: 24px;
+  }
+  .listHeading {
+    width: 155px;
+    text-align: left;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.48px;
+  }
+  .list {
+    gap: 8px;
+  }
+  .listItem {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
   }
   .imageBlock {
     width: 100%;
-    height: 420px;
+    height: 392px;
   }
   .mask {
-    width: 172px;
+    width: 160px;
   }
   .statCard {
-    left: 50%;
-    top: auto;
-    bottom: 16px;
-    transform: translateX(-50%);
-    width: calc(100% - 48px);
+    left: auto;
+    right: 16px;
+    top: 234px;
+    bottom: auto;
+    transform: none;
+    width: 203px;
+    padding: 12px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+  .statIcon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+  .statIcon img {
+    width: 16px;
+    height: 16px;
+  }
+  .statValue {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.42px;
+  }
+  .statDelta {
+    gap: 2px;
   }
 }

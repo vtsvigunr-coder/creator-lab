@@ -4,18 +4,15 @@ import { CHAR_STAGGER, CHAR_START, SOFT_BLUR } from '../../lib/softBlurReveal'
 import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import titleImg from '../../assets/images/why-now-title-img.webp'
 import bento1 from '../../assets/images/why-now-bento-1.webp'
-import bento2 from '../../assets/images/why-now-bento-2.webp'
+import bento2 from '../../assets/images/why-now-bento-mobile.webp'
 import bento3 from '../../assets/images/why-now-bento-3.webp'
 import bento4 from '../../assets/images/why-now-bento-4.webp'
 import bento5 from '../../assets/images/why-now-bento-5.webp'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './WhyNow.module.css'
 
-const HEADING_BEFORE_IMG = 'Built for'
-const HEADING_AFTER_IMG = 'the reality'
-const HEADING_LINE_2 = 'of Uzbekistan'
-const DESCRIPTION = "Creator Lab is designed for the local market, not copied from someone else's playbook"
-
 export default function WhyNow() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -95,7 +92,7 @@ export default function WhyNow() {
           <h2 className={styles.heading}>
             <div className={styles.headingLine}>
               <span>
-                <AnimatedChars text={HEADING_BEFORE_IMG} />
+                <AnimatedChars text={t.whyNow.headingBeforeImg} />
               </span>
               <img
                 className={styles.headingImg}
@@ -105,16 +102,16 @@ export default function WhyNow() {
                 data-heading-img
               />
               <span>
-                <AnimatedChars text={HEADING_AFTER_IMG} />
+                <AnimatedChars text={t.whyNow.headingAfterImg} />
               </span>
             </div>
             <div>
-              <AnimatedChars text={HEADING_LINE_2} />
+              <AnimatedChars text={t.whyNow.headingLine2} />
             </div>
           </h2>
         </div>
         <p className={styles.description}>
-          <AnimatedWords text={DESCRIPTION} />
+          <AnimatedWords text={t.whyNow.description} />
         </p>
       </div>
 
@@ -122,29 +119,29 @@ export default function WhyNow() {
         <div className={styles.hero}>
           <img className={styles.heroPhoto} src={bento1} alt="" />
           <div className={styles.heroFade} />
-          <p className={styles.heroLabel}>We understand the real operating conditions:</p>
-          <h3 className={styles.heroHeading}>Social-first product discovery</h3>
+          <p className={styles.heroLabel}>{t.whyNow.conditionsLabel}</p>
+          <h3 className={styles.heroHeading}>{t.whyNow.heroHeading}</h3>
         </div>
 
         <div className={styles.grid}>
           <article className={styles.card} data-bento-card>
             <img className={styles.cardPhoneImg} src={bento2} alt="" />
-            <p className={styles.cardLabel}>DM-based selling habits</p>
+            <p className={styles.cardLabel}>{t.whyNow.bento[0]}</p>
           </article>
 
           <article className={styles.card} data-bento-card>
             <img className={styles.cardCollageImg} src={bento4} alt="" />
-            <p className={styles.cardLabel}>Fragmented creator-brand relationships</p>
+            <p className={styles.cardLabel}>{t.whyNow.bento[1]}</p>
           </article>
 
           <article className={styles.card} data-bento-card>
             <img className={styles.cardNotebookImg} src={bento3} alt="" />
-            <p className={styles.cardLabel}>Weak tracking and informal reporting</p>
+            <p className={styles.cardLabel}>{t.whyNow.bento[2]}</p>
           </article>
 
           <article className={styles.card} data-bento-card>
             <img className={styles.cardCommerceImg} src={bento5} alt="" />
-            <p className={styles.cardLabel}>Demand for better commerce systems</p>
+            <p className={styles.cardLabel}>{t.whyNow.bento[3]}</p>
           </article>
         </div>
       </div>

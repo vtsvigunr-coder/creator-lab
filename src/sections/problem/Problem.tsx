@@ -3,18 +3,9 @@ import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
 import { clampApexRadius, peakedEdgeClipPath } from '../../lib/peakedEdgeClipPath'
+import { useTranslation } from '../../i18n/LanguageContext'
 import problemImage from '../../assets/images/problem.webp'
 import styles from './Problem.module.css'
-
-const INTRO_LINE_1 = 'Social commerce'
-const INTRO_LINE_2 = 'is already here'
-const INTRO_DESCRIPTION =
-  'Across Uzbekistan, brands are selling through Instagram, Telegram, and direct messages. Creators are influencing buying decisions every day. Customers are discovering products through content, stories, and recommendations.'
-
-const OUTRO_LINE_1 = 'But the system behind it'
-const OUTRO_DESCRIPTION =
-  'Brands struggle with manual sales flows, weak attribution, and inconsistent fulfillment. Creators drive traffic and demand without clear visibility into performance, earnings, or long-term upside. Too much commerce is happening informally, and too much value gets lost in the process.'
-const FOOTNOTE = 'Creator Lab is built to fix that.'
 
 // Where inside the 300vh scroll the curtain travels. Before it the intro copy sits alone on
 // white; after it the photo is full-bleed and the outro copy plays.
@@ -26,7 +17,7 @@ const CURTAIN_END = 0.75
 const PEAK = 0.18
 // Corner radius of the apex, in px of horizontal run: the point is blunted with a curve
 // tangent to both slopes rather than meeting at a hard vertex.
-const APEX_RADIUS = 160
+const APEX_RADIUS = 90
 // How much faster the outro rewinds than it played in.
 const REVERSE_SPEED = 3
 // Top of the mask at a given progress — the apex of the peak, i.e. the highest point the
@@ -52,6 +43,7 @@ function curtainClip(p: number, w: number, h: number) {
 }
 
 export default function Problem() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const introRef = useRef<HTMLDivElement>(null)
   const curtainRef = useRef<HTMLDivElement>(null)
@@ -205,18 +197,18 @@ export default function Problem() {
       <div className={styles.stage}>
         <div className={`${styles.block} ${styles.intro}`} ref={introRef}>
           <div className={styles.introHead}>
-            <WipeRevealTag label="Problem" />
+            <WipeRevealTag label={t.problem.tag} />
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={INTRO_LINE_1} />
+                <AnimatedChars text={t.problem.introLine1} />
               </div>
               <div>
-                <AnimatedChars text={INTRO_LINE_2} />
+                <AnimatedChars text={t.problem.introLine2} />
               </div>
             </h2>
           </div>
           <p className={styles.description}>
-            <AnimatedWords text={INTRO_DESCRIPTION} />
+            <AnimatedWords text={t.problem.introDescription} />
           </p>
         </div>
 
@@ -229,28 +221,28 @@ export default function Problem() {
           <div className={styles.outroHead}>
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={OUTRO_LINE_1} />
+                <AnimatedChars text={t.problem.outroLine1} />
               </div>
               <div className={styles.glassRow}>
                 <span>
-                  <AnimatedChars text="is still" />
+                  <AnimatedChars text={t.problem.outroIsStill} />
                 </span>
                 <span className={styles.glassBox} data-testid="fragmented-plate">
                   <span className={styles.glassFill} ref={glassFillRef} />
                   <span className={styles.glassText}>
-                    <AnimatedChars text="fragmented." />
+                    <AnimatedChars text={t.problem.outroFragmented} />
                   </span>
                 </span>
               </div>
             </h2>
           </div>
           <p className={styles.description}>
-            <AnimatedWords text={OUTRO_DESCRIPTION} />
+            <AnimatedWords text={t.problem.outroDescription} />
           </p>
         </div>
 
         <p className={styles.footnote} ref={footnoteRef}>
-          {FOOTNOTE}
+          {t.problem.footnote}
         </p>
       </div>
     </section>

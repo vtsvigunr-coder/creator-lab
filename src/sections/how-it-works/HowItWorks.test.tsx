@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { renderWithProviders as render } from '../../../tests/renderWithProviders'
 import HowItWorks from './HowItWorks'
-import { STEPS } from './steps'
+import { en } from '../../i18n/translations/en'
 
 describe('HowItWorks', () => {
   it('renders the heading and all four step cards', () => {
@@ -10,7 +11,7 @@ describe('HowItWorks', () => {
     expect(screen.getByTestId('how-it-works')).toHaveTextContent(
       'Simple onthe outside.Powerful underneath.',
     )
-    for (const step of STEPS) {
+    for (const step of en.howItWorks.steps) {
       expect(screen.getByText(step.description)).toBeInTheDocument()
       expect(screen.getByText(step.badge)).toBeInTheDocument()
     }

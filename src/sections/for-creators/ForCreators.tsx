@@ -9,20 +9,8 @@ import arrowUpIcon from '../../assets/icons/arrow-up-02-sharp.svg'
 import linkIcon from '../../assets/icons/link-04.svg'
 import copyIcon from '../../assets/icons/copy-01.svg'
 import photo from '../../assets/images/for-creators.webp'
+import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './ForCreators.module.css'
-
-const HEADING_LINE_1 = 'Turn influence into'
-const HEADING_LINE_2 = 'structured income'
-const DESCRIPTION =
-  'Creators should not have to rely on random deals, unclear terms, and late payments to earn online'
-
-const CAN_LIST = [
-  'Access to brand and product opportunities',
-  'A verified creator profile',
-  'Trackable links and campaign visibility',
-  'Earnings clarity',
-  'Long-term reputation and growth inside a real ecosystem',
-]
 
 const TRACKED_LINK = 'my.link/skincare'
 const EARNINGS_TARGET = 3246.75
@@ -42,6 +30,7 @@ function formatDelta(value: number) {
 }
 
 export default function ForCreators() {
+  const { t } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -197,22 +186,22 @@ export default function ForCreators() {
       <div className={styles.head} ref={headRef}>
         <div className={styles.copy}>
           <div className={styles.tagAndHeading}>
-            <WipeRevealTag label="Why creators join" />
+            <WipeRevealTag label={t.forCreators.tag} />
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={HEADING_LINE_1} />
+                <AnimatedChars text={t.forCreators.headingLine1} />
               </div>
               <div>
-                <AnimatedChars text={HEADING_LINE_2} />
+                <AnimatedChars text={t.forCreators.headingLine2} />
               </div>
             </h2>
           </div>
           <p className={styles.description}>
-            <AnimatedWords text={DESCRIPTION} />
+            <AnimatedWords text={t.forCreators.description} />
           </p>
         </div>
         <CircleRevealButton
-          label="For Creators"
+          label={t.forCreators.cta}
           icon={arrowIcon}
           iconPosition="end"
           variant="solid"
@@ -227,7 +216,7 @@ export default function ForCreators() {
           <div className={styles.groundLine} />
 
           <div className={styles.trackedCard} ref={trackedCardRef}>
-            <p className={styles.cardLabel}>Your tracked link</p>
+            <p className={styles.cardLabel}>{t.forCreators.trackedLinkLabel}</p>
             <div className={styles.linkRow}>
               <div className={styles.linkPill}>
                 <span className={styles.linkIconChip}>
@@ -242,7 +231,7 @@ export default function ForCreators() {
           </div>
 
           <div className={styles.earningsCard} ref={earningsCardRef}>
-            <p className={styles.cardLabel}>Earnings this month</p>
+            <p className={styles.cardLabel}>{t.forCreators.earningsLabel}</p>
             <div className={styles.earningsRow}>
               <span className={styles.earningsValue} data-earn-value>
                 {formatEarnings(0)}
@@ -259,9 +248,11 @@ export default function ForCreators() {
         </div>
 
         <div className={styles.textCol}>
-          <p className={styles.listHeading}>Creator Lab gives creators a more professional path:</p>
+          <p className={styles.listHeading} data-line-reveal>
+            {t.forCreators.listHeading}
+          </p>
           <ul className={styles.list}>
-            {CAN_LIST.map((item) => (
+            {t.forCreators.canList.map((item) => (
               <li key={item} className={styles.listItem} data-line-reveal>
                 {item}
               </li>

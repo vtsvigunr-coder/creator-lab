@@ -3,6 +3,15 @@
   width: 185px;
   height: 122px;
 }
+/* Holds the svg + marker at their native 185x122 geometry; scaled as one unit at the mobile
+   breakpoint so the marker never drifts from the chart it's meant to sit on. */
+.inner {
+  position: absolute;
+  inset: 0;
+  width: 185px;
+  height: 122px;
+  transform-origin: top left;
+}
 .svg {
   display: block;
   width: 100%;
@@ -17,4 +26,15 @@
   width: 7px;
   height: 101px;
   pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  .wrap {
+    width: 139px;
+    height: 68px;
+  }
+  /* 139/185, 68/122 — matches the Figma mobile card's own w/h exactly. */
+  .inner {
+    transform: scale(0.75135, 0.55738);
+  }
 }
