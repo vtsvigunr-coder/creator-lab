@@ -251,6 +251,14 @@
    scrub at this width too) — only the type scale and the footer bar's column reflow are
    mobile-specific. Nothing here disables or forks the animation. */
 @media (max-width: 900px) {
+  /* Desktop holds a full extra 120vh of scroll (220vh total) before the rise finishes — on
+     mobile that read as a long stretch of blank white between the FAQ section ending and the
+     footer photo becoming visible. Halving the extra distance to 60vh gets the panel into view
+     twice as fast without changing the rise mechanics themselves (CtaFooter.tsx's `end` is
+     already derived from this element's own height, so nothing there needs to change). */
+  .ctaFooter {
+    height: 160vh;
+  }
   .stage {
     min-height: 100vh;
   }
@@ -305,6 +313,10 @@
   }
   .copyright {
     grid-area: copy;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.36px;
   }
   .navGlass {
     grid-area: nav;
@@ -327,6 +339,7 @@
   .social {
     grid-area: social;
     justify-self: end;
+    gap: 12px;
   }
   /* Present here too (unlike the "Final CTA" node this was first built against, node
      2312:20343 confirms the legal row IS part of the mobile footer) — just shrunk to the

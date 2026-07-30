@@ -119,7 +119,25 @@ export default function CtaFooter() {
         },
         [MOBILE_MEDIA_QUERY]: () => {
           const trigger = createRiseTrigger()
-          return () => trigger.kill()
+
+          // Mobile browser chrome (address bar) hides/shows as the page scrolls, which changes
+          // `window.innerHeight` mid-gesture — the value `end` above is built from. A *global*
+          // ScrollTrigger.refresh() would keep that honest too, but it re-measures every trigger
+          // on the page and was visibly janky when tried. Refreshing just this one instance is
+          // cheap enough to do on every resize without that cost, and rAF-coalescing collapses
+          // the burst of resize events the address-bar animation fires into one recalculation.
+          let raf = 0
+          const onResize = () => {
+            cancelAnimationFrame(raf)
+            raf = requestAnimationFrame(() => trigger.refresh())
+          }
+          window.addEventListener('resize', onResize)
+
+          return () => {
+            window.removeEventListener('resize', onResize)
+            cancelAnimationFrame(raf)
+            trigger.kill()
+          }
         },
       })
     }, root)
