@@ -1,63 +1,18 @@
-/* Two viewports of scroll drive one pinned stage: the extra viewport is the distance the
-   whole footer panel travels as it rises up out of the bottom of the screen. */
+/* A plain, static, in-flow section — no pin, no scrub, no counter-animated layers, no shaped
+   edge. Scrolls like every other section on the page. */
 .ctaFooter {
   position: relative;
-  height: 220vh;
-  /* Height of the arched top edge. The panel is this much taller than the stage and starts
-     that much higher, so by the time it comes to rest the arch has cleared the top of the
-     viewport and the photo reads as full-bleed. CtaFooter.tsx is the source of truth for
-     this value — ARCH there overwrites it as an inline style on mount — so this is only a
-     pre-JS/no-JS fallback, not a value that needs to be kept in sync by hand. */
-  --arch: 120px;
-}
-.stage {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  min-height: 760px;
-  overflow: hidden;
   background: var(--color-white);
+  display: flex;
+  flex-direction: column;
 }
 
-/* --- the rising panel --- */
-/* Everything visible lives in here and moves as one rigid block. Its arched top edge is a
-   fixed clip-path shape, set from JS once the width is known; only the translation changes
-   as the section scrolls. */
-.rise {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(-1 * var(--arch));
-  bottom: 0;
-  transform: translate3d(0, 100%, 0);
-  will-change: transform;
-}
-/* Inset back down to exactly the stage box, so the children below can be positioned against
-   the viewport as if the arch overhang did not exist. */
-.content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: var(--arch);
-  bottom: 0;
-}
-
-/* --- the photograph, held still while the panel rides up over it --- */
-/* Both layers take the panel's translation back off again (see CtaFooter.tsx), which is
-   what pins them to the viewport. The cut-out copy sits above the copy so the heading
-   travels up behind the two figures; the footer bar and legal row still sit above it. */
+/* --- the photograph --- */
+/* Fills the section, flat top edge, no mask. */
 .photo {
   position: absolute;
   inset: 0;
   z-index: 0;
-  will-change: transform;
-}
-.foreground {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  will-change: transform;
 }
 .photoImage {
   position: absolute;
@@ -65,27 +20,27 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The design lays a flat rgba(0,0,0,0.2) over both frames. Multiplying by 0.8 is that exact
-     composite, and unlike an overlay element it follows the alpha of the cut-out figures
-     instead of dropping a rectangle of shade over the transparent parts. */
+  /* The design lays a flat rgba(0,0,0,0.2) over the photo. Multiplying by 0.8 is that exact
+     composite. */
   filter: brightness(0.8);
 }
 
+/* --- everything else, stacked above the photo --- */
+.content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* --- CTA copy + buttons --- */
-/* No entrance animation of their own: they simply ride up with the panel. */
 .center {
-  position: absolute;
-  left: 50%;
-  /* Sits high enough in the frame that the cut-out figures, which are pinned over this
-     layer, clear the button row entirely — they only ever pass behind the copy while it is
-     still travelling up. */
-  top: calc(50% - 140px);
-  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 32px;
-  z-index: 1;
 }
 .textBlock {
   width: 688px;
@@ -107,7 +62,7 @@
 }
 .description {
   margin: 0;
-  width: 524px;
+  width: 640px;
   max-width: 100%;
   font-weight: 600;
   font-size: 16px;
@@ -122,16 +77,16 @@
   justify-content: center;
 }
 
-/* --- footer bar --- */
+/* --- footer bar + legal row --- */
+.footerLinks {
+  margin-top: auto;
+  width: 100%;
+}
 .footerBar {
-  position: absolute;
-  left: 120px;
-  right: 120px;
-  bottom: 92px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 3;
 }
 .copyright {
   margin: 0;
@@ -147,10 +102,7 @@
    slightly saturated lift with a bright top edge so it reads as a pane of glass sitting on
    the photo, not a flat tint. */
 .navGlass {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  position: relative;
 }
 /* Same fill as the bento plates, and held to the same rule: the body is exactly the design's
    rgba(255,255,255,0.2), with the rim and top edge the only lift. The blur has real work to do
@@ -206,19 +158,17 @@
   display: block;
 }
 
-/* --- legal row, below the main footer bar --- */
+/* --- legal row --- */
+/* Mobile-only per the Figma footer (node 2312:20343) — the desktop frame (node 1203:15997)
+   has no legal row at all, just the footer bar. Hidden by default; the `max-width: 900px`
+   block below is the only place that turns it back on. */
 .legalRow {
-  position: absolute;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  display: flex;
+  display: none;
   align-items: center;
   gap: 16px;
   margin: 0;
   padding: 0;
   list-style: none;
-  z-index: 3;
 }
 .legalItem {
   display: flex;
@@ -247,38 +197,29 @@
   opacity: 1;
 }
 
-/* Same rise-and-pin mechanics as desktop (CtaFooter.tsx runs the identical ScrollTrigger
-   scrub at this width too) — only the type scale and the footer bar's column reflow are
-   mobile-specific. Nothing here disables or forks the animation. */
 @media (max-width: 900px) {
-  /* Desktop pins the stage and holds an extra 120vh of scroll so the panel has room to rise
-     into place. On mobile that read as a stretch of blank white before the footer photo caught
-     up, no matter how much the hold or the panel's rest position were tuned — so there's no
-     rise here at all: CtaFooter.tsx skips the ScrollTrigger on this breakpoint and renders the
-     panel already at its finished position. Nothing to pin or hold extra scroll for, so the
-     section is just its one viewport tall, sitting in normal flow right after FAQ. */
   .ctaFooter {
-    height: auto;
+    min-height: 712px;
+    padding: 64px 16px 32px;
   }
-  .stage {
-    position: relative;
-    top: auto;
-    min-height: 100vh;
+  .content {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .footerLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
   /* At this aspect ratio object-fit: cover crops in tight on both sides; the design's mobile
      photo (node 2312:20344) keeps the two figures shifted toward the left of frame rather
-     than centered, so the crop is nudged the same way. Both layers share this class, so the
-     cut-out foreground stays pixel-aligned with the sky background behind it. */
+     than centered, so the crop is nudged the same way. */
   .photoImage {
     object-position: 47% center;
   }
-  /* Figma's mobile footer (node 2312:20343) pins the CTA block to a fixed offset below the
-     arch rather than centering it — the 140px desktop hand-tune that clears the cut-out
-     figures doesn't apply here, so this drops the centering entirely in favor of a top
-     anchor matching the design's own 64px. */
   .center {
-    top: 64px;
-    transform: translateX(-50%);
+    gap: 24px;
+    width: 100%;
   }
   .textBlock {
     width: 100%;
@@ -303,12 +244,8 @@
     max-width: 361px;
     gap: 8px;
   }
-  /* Bottom offset stacks with .legalRow below it: 32px (legalRow's own offset) + 20px
-     (legalRow height) + 24px (the design's footer-links gap) = 76px. */
   .footerBar {
-    left: 16px;
-    right: 16px;
-    bottom: 76px;
+    max-width: 361px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-areas: 'nav nav' 'copy social';
@@ -323,15 +260,6 @@
   }
   .navGlass {
     grid-area: nav;
-    /* `relative`, not `static` — .navGlassFill below is `position:absolute; inset:0`, so this
-       still has to be the positioned ancestor that pins the fill to the pill's own box rather
-       than escalating up to the viewport. Desktop's `left/top: 50%` are relative offsets once
-       positioning is `relative` rather than `absolute`, so they need resetting too, not just
-       the transform that paired with them. */
-    position: relative;
-    left: 0;
-    top: 0;
-    transform: none;
     width: 100%;
   }
   .navList {
@@ -340,24 +268,15 @@
     gap: 0;
   }
   .social {
-    grid-area: social;
     justify-self: end;
     gap: 12px;
   }
-  /* Present here too (unlike the "Final CTA" node this was first built against, node
-     2312:20343 confirms the legal row IS part of the mobile footer) — just shrunk to the
+  /* Present here (node 2312:20343 has it directly below the footer bar) — shrunk to the
      design's own mobile type/dot scale and single-row width instead of wrapped. */
   .legalRow {
-    left: 16px;
-    right: 16px;
-    bottom: 32px;
-    transform: none;
-    width: auto;
+    display: flex;
+    width: 100%;
     justify-content: center;
-    gap: 16px;
-  }
-  .legalItem {
-    gap: 16px;
   }
   .legalDot {
     width: 4px;
@@ -371,5 +290,13 @@
     font-size: 12px;
     line-height: 16px;
     letter-spacing: -0.36px;
+  }
+}
+
+@media (min-width: 901px) {
+  .ctaFooter {
+    margin-top: 120px;
+    min-height: 900px;
+    padding: 224px 120px 60px;
   }
 }

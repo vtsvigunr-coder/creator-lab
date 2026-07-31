@@ -5,8 +5,13 @@ import { sortLogoPaths } from '../../lib/sortLogoPaths'
 import { partitionLogoPaths } from '../../lib/partitionLogoPaths'
 import styles from './AnimatedLogo.module.css'
 
-export default function AnimatedLogo() {
-  const hostRef = useRef<HTMLDivElement>(null)
+type AnimatedLogoProps = {
+  /** 'light' turns the mark and wordmark white, for use over photos — see the 404 header. */
+  variant?: 'dark' | 'light'
+}
+
+export default function AnimatedLogo({ variant = 'dark' }: AnimatedLogoProps) {
+  const hostRef = useRef<HTMLAnchorElement>(null)
 
   useLayoutEffect(() => {
     const host = hostRef.current
@@ -34,8 +39,14 @@ export default function AnimatedLogo() {
   }, [])
 
   return (
-    <div ref={hostRef} className={styles.host} data-testid="animated-logo">
+    <a
+      ref={hostRef}
+      href="/"
+      className={`${styles.host} ${variant === 'light' ? styles.light : ''}`}
+      data-testid="animated-logo"
+      aria-label="Creator Lab home"
+    >
       <Logo />
-    </div>
+    </a>
   )
 }

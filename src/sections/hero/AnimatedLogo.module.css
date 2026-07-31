@@ -1,4 +1,5 @@
 .host {
+  display: block;
   overflow: visible;
   padding-top: 16px;
   margin-top: -16px;
@@ -7,4 +8,7 @@
 .host :global(svg) {
   overflow: visible;
   display: block;
+}
+.light {
+  filter: brightness(0) invert(1);
 }

@@ -16,26 +16,12 @@ describe('CtaFooter', () => {
     expect(screen.getByText('Apply as a Creator')).toBeInTheDocument()
   })
 
-  it('starts the footer panel below the viewport, arched edge already shaped', () => {
+  it('renders the photo as a plain, unshaped, unanimated layer', () => {
     render(<CtaFooter />)
 
-    const rise = screen.getByTestId('cta-rise')
-    // A fixed arch, not a morphing curtain: the shape is set once and only the panel moves.
-    // Values below are the arch for the 1200x800 rect the test environment's
-    // getBoundingClientRect polyfill hands out (see tests/setupTests.ts) — a real shape, not
-    // just the presence of a `path(...)` call.
-    expect(rise.style.clipPath).toContain("M 0 120 L 440 32 Q 600 0 760 32 L 1200 120")
-    expect(rise.style.transform).toContain('translate3d')
-  })
-
-  it('holds the photo still by giving it the inverse of the panel travel', () => {
-    render(<CtaFooter />)
-
-    const rise = screen.getByTestId('cta-rise')
     const photo = screen.getByTestId('cta-photo')
-    const travel = (s: string) => Number(s.match(/translate3d\(0(?:px)?, (-?[\d.]+)px/)?.[1])
-
-    expect(travel(photo.style.transform)).toBe(-travel(rise.style.transform))
+    expect(photo.style.clipPath).toBe('')
+    expect(photo.style.transform).toBe('')
   })
 
   it('renders the legal links below the footer bar', () => {

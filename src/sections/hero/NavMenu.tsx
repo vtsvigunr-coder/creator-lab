@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
-import { NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './NavMenu.module.css'
 
@@ -37,7 +37,12 @@ function Chars({ text }: { text: string }) {
   )
 }
 
-export default function NavMenu() {
+type NavMenuProps = {
+  /** 'light' keeps the closed toggle white, for use over photos — see the 404 header. */
+  variant?: 'dark' | 'light'
+}
+
+export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -185,7 +190,7 @@ export default function NavMenu() {
   }
 
   return (
-    <div className={`${styles.root} ${open ? styles.open : ''}`}>
+    <div className={`${styles.root} ${open ? styles.open : ''} ${variant === 'light' ? styles.light : ''}`}>
       <button
         ref={toggleRef}
         className={styles.toggle}
@@ -247,18 +252,31 @@ export default function NavMenu() {
           <div className={styles.group} data-row>
             <span className={styles.groupTitle}>{t.nav.legalTitle}</span>
             <ul className={styles.links}>
-              {t.nav.legal.map((label) => (
-                <li key={label}>
-                  <button
-                    className={`${styles.link} ${styles.linkSmall}`}
-                    type="button"
-                    tabIndex={open ? 0 : -1}
-                    onClick={() => setOpen(false)}
-                  >
-                    {label}
-                  </button>
-                </li>
-              ))}
+              {t.nav.legal.map((label, i) =>
+                LEGAL_LINKS[i] ? (
+                  <li key={label}>
+                    <a
+                      className={`${styles.link} ${styles.linkSmall}`}
+                      href={LEGAL_LINKS[i]}
+                      tabIndex={open ? 0 : -1}
+                      onClick={() => setOpen(false)}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={label}>
+                    <button
+                      className={`${styles.link} ${styles.linkSmall}`}
+                      type="button"
+                      tabIndex={open ? 0 : -1}
+                      onClick={() => setOpen(false)}
+                    >
+                      {label}
+                    </button>
+                  </li>
+                ),
+              )}
             </ul>
           </div>
         </div>

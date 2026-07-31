@@ -18,6 +18,10 @@ export const NAV_LINKS: NavLink[] = [
   { key: 'faq', targetTestId: 'faq' },
 ]
 
+/** Hrefs for `t.nav.legal`, matched by index. `undefined` renders the item as inert text —
+    used for pages (like Cookie Policy) that don't exist yet. */
+export const LEGAL_LINKS: (string | undefined)[] = ['/privacy-policy.html', '/terms-of-service.html', undefined]
+
 export const SOCIAL_ICONS = [
   { label: 'Instagram', icon: instagramIcon },
   { label: 'LinkedIn', icon: linkedinIcon },

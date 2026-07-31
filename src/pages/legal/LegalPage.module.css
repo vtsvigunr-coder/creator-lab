@@ -1,0 +1,123 @@
+.root {
+  min-height: 100vh;
+  background: var(--color-white);
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 64px;
+  padding: 64px 120px 100px;
+}
+
+.textBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+}
+.title {
+  margin: 0;
+  max-width: 488px;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 50px;
+  letter-spacing: -0.92px;
+  text-transform: uppercase;
+  color: var(--color-dark-gray);
+}
+.updated {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.48px;
+  color: var(--color-gray);
+}
+
+.layout {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+}
+
+/* --- table of contents --- */
+.toc {
+  position: sticky;
+  top: 32px;
+  flex: none;
+  width: 321px;
+  background: var(--color-gray-100);
+  border-radius: 8px;
+  padding: 30px 20px;
+}
+.tocList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tocLink {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+  color: var(--color-gray);
+  cursor: pointer;
+}
+.tocLinkActive {
+  color: var(--color-dark-gray);
+  text-decoration: underline;
+  text-underline-position: from-font;
+}
+
+/* --- article content --- */
+.content {
+  flex: 1;
+  min-width: 0;
+  max-width: 770px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: 48px 40px 80px;
+    gap: 48px;
+  }
+  .layout {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .toc {
+    position: static;
+    width: 100%;
+  }
+  .content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 32px 16px 64px;
+  }
+  .title {
+    font-size: 32px;
+    line-height: 36px;
+    letter-spacing: -0.64px;
+    max-width: 100%;
+  }
+}

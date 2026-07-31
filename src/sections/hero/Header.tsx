@@ -7,9 +7,16 @@ import { useTranslation } from '../../i18n/LanguageContext'
 import userIcon from '../../assets/icons/user.svg'
 import styles from './Header.module.css'
 
-export default function Header() {
+type HeaderProps = {
+  /** 'light' inverts the logo, user icon, and Get Started button for use over a photo — see
+      the 404 page. */
+  variant?: 'dark' | 'light'
+}
+
+export default function Header({ variant = 'dark' }: HeaderProps) {
   const { t } = useTranslation()
   const userBtnRef = useRef<HTMLButtonElement>(null)
+  const light = variant === 'light'
 
   useLayoutEffect(() => {
     const btn = userBtnRef.current
@@ -23,17 +30,23 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.row}>
-        <AnimatedLogo />
-        <NavMenu />
+        <AnimatedLogo variant={variant} />
+        <NavMenu variant={variant} />
         <div className={styles.right}>
           <button ref={userBtnRef} className={styles.userBtn} type="button">
-            <img src={userIcon} alt={t.header.accountAlt} width={20} height={20} />
+            <img
+              className={light ? styles.userIconLight : undefined}
+              src={userIcon}
+              alt={t.header.accountAlt}
+              width={20}
+              height={20}
+            />
           </button>
           {/* Hidden at mobile widths — it moves inside the burger menu instead (see
               NavMenu's Get Started row). `display: contents` on the wrapper keeps it out of
               the flex layout on desktop, so .right's own gap isn't affected by it existing. */}
           <div className={styles.desktopOnly}>
-            <CircleRevealButton label={t.header.getStarted} variant="dark" />
+            <CircleRevealButton label={t.header.getStarted} variant={light ? 'light' : 'dark'} />
           </div>
         </div>
       </div>

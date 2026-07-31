@@ -16,6 +16,7 @@ type CircleRevealButtonProps = {
       stretch flex:1 rather than stay pill-sized. Off by default: every other usage of this
       button sizes to its label like normal. */
   fluid?: boolean
+  onClick?: () => void
 }
 
 // Timings traced frame-by-frame off the reference recording (the outline button's measured
@@ -37,6 +38,7 @@ export default function CircleRevealButton({
   delay = 0,
   startOnScroll = false,
   fluid = false,
+  onClick,
 }: CircleRevealButtonProps) {
   const wrapRef = useRef<HTMLSpanElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -120,7 +122,7 @@ export default function CircleRevealButton({
       {/* The icon URL is quoted: Vite inlines small SVGs as data URIs whose attributes use
           single quotes, and an unquoted url() token may not contain them — the whole custom
           property would be dropped as invalid and the mask would fall back to a filled box. */}
-      <button ref={btnRef} className={`${styles.btn} ${styles[variant]}`} type="button">
+      <button ref={btnRef} className={`${styles.btn} ${styles[variant]}`} type="button" onClick={onClick}>
         <span ref={contentRef} className={styles.content}>
           {icon && iconPosition === 'start' && (
             <span ref={iconRef} className={styles.icon} style={{ '--icon': `url("${icon}")` } as CSSProperties} />
