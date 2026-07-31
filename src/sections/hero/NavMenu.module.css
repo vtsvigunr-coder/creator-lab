@@ -222,13 +222,13 @@
 @media (max-width: 640px) {
   /* Desktop centres a "Menu"/"Close" pill in the middle of the header. Mobile instead tucks a
      small icon-only toggle to the right of the account button, vertically centred on it — the
-     header reserves 48px (36px button + 12px gap) on its right edge for exactly this, and the
-     root is pulled out that same 48px so the toggle lands flush with the header's true right
-     edge, in the spot the account button used to occupy. The card anchors under the same edge,
-     its width capped so it can't also overflow the hero's own 16px-inset left edge. */
+     account button's own group (Header's `.right`) reserves 48px (36px toggle + 12px gap) of
+     margin for exactly this, so anchoring the root flush with the row's own right edge lands
+     the toggle right after it. The card anchors under the same edge, its width capped so it
+     can't also overflow the hero's own 16px-inset left edge. */
   .root {
     left: auto;
-    right: -48px;
+    right: 0;
     top: 50%;
     transform: translateY(-50%);
   }

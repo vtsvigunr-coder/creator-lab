@@ -10,11 +10,7 @@
   left: 0;
   right: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0);
-  transition:
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 0.3s ease,
-    backdrop-filter 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .header.hidden {
   transform: translateY(-100%);
@@ -22,13 +18,27 @@
 /* Sliding back in over content that's already scrolled past the hero otherwise leaves the
    header illegible — nothing behind it is the plain white it was designed against. This plate
    only kicks in once we're actually scrolled (mirrors the reveal/hide threshold), so the header
-   still reads as transparent over the hero itself. */
-.header.scrolled {
+   still reads as transparent over the hero itself.
+   It's a separate layer behind `.row` rather than `.header`'s own background because a
+   backdrop-filter clips any *nested* backdrop-filter to its own bounds — NavMenu's disclosure
+   card (a descendant of `.row`) has one for its scrim, and putting this filter on a shared
+   ancestor broke that inner blur. As siblings, both correctly sample the real page behind them. */
+.plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0);
+  transition:
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+  pointer-events: none;
+}
+.header.scrolled .plate {
   background: rgba(255, 255, 255, 0.72);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
 }
-.header.light.scrolled {
+.header.light.scrolled .plate {
   background: rgba(0, 0, 0, 0.36);
 }
 .row {
@@ -36,6 +46,7 @@
   align-items: center;
   justify-content: space-between;
   position: relative;
+  z-index: 1;
   width: 100%;
 }
 .right {
@@ -63,12 +74,14 @@
 
 @media (max-width: 640px) {
   .header {
-    /* The right 48px (36px toggle + 12px gap) is reserved for the nav's mobile burger, which
-       anchors itself flush with this edge — see NavMenu.module.css. */
-    padding: 24px 48px 0 0;
+    padding: 24px 16px 0;
   }
   .right {
     gap: 12px;
+    /* Reserves the 48px (36px toggle + 12px gap) that NavMenu's mobile burger sits in — it
+       anchors itself flush with the row's own right edge, past this group, rather than
+       living in the flex flow itself. See NavMenu.module.css. */
+    margin-right: 48px;
   }
   .desktopOnly {
     display: none;

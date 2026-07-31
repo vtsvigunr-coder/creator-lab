@@ -73,6 +73,7 @@ export default function Header({ variant = 'dark' }: HeaderProps) {
           hidden ? styles.hidden : ''
         }`}
       >
+        <div className={styles.plate} aria-hidden="true" />
         <div className={styles.row}>
           <AnimatedLogo variant={variant} />
           <NavMenu variant={variant} />
