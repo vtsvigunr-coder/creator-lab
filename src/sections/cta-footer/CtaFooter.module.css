@@ -158,45 +158,6 @@
   display: block;
 }
 
-/* --- legal row --- */
-/* Mobile-only per the Figma footer (node 2312:20343) — the desktop frame (node 1203:15997)
-   has no legal row at all, just the footer bar. Hidden by default; the `max-width: 900px`
-   block below is the only place that turns it back on. */
-.legalRow {
-  display: none;
-  align-items: center;
-  gap: 16px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.legalItem {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.legalDot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-white);
-  flex: none;
-}
-.legalLink {
-  font-family: var(--font-display);
-  font-size: 16px;
-  line-height: 20px;
-  letter-spacing: -0.48px;
-  color: var(--color-white);
-  text-decoration: underline;
-  white-space: nowrap;
-  opacity: 0.9;
-  transition: opacity 0.15s ease;
-}
-.legalLink:hover {
-  opacity: 1;
-}
-
 @media (max-width: 900px) {
   .ctaFooter {
     min-height: 712px;
@@ -270,26 +231,6 @@
   .social {
     justify-self: end;
     gap: 12px;
-  }
-  /* Present here (node 2312:20343 has it directly below the footer bar) — shrunk to the
-     design's own mobile type/dot scale and single-row width instead of wrapped. */
-  .legalRow {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-  }
-  .legalDot {
-    width: 4px;
-    height: 4px;
-  }
-  .legalLink {
-    /* Design spec is Pretendard Medium here, not the Gabarito `--font-display` the desktop
-       rule inherits (that's Gabarito to match the nav links/copyright next to it). */
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 16px;
-    letter-spacing: -0.36px;
   }
 }
 

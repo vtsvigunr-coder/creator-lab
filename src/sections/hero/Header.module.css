@@ -2,8 +2,10 @@
    (here, the Hero section), so it would fall away as soon as the page scrolled into the next
    section. Header itself renders a same-height .spacer alongside this to keep the flow
    layout of every page that mounts it unchanged — see Header.tsx. */
+/* Top and bottom padding match (32px) so the blur .plate below reads as a symmetric bar
+   rather than one that's visibly taller above the row than below it. */
 .header {
-  padding: 32px 120px 20px;
+  padding: 32px 120px;
   width: 100%;
   position: fixed;
   top: 0;
@@ -73,8 +75,9 @@
 }
 
 @media (max-width: 640px) {
+  /* Same symmetric-padding rule as desktop (see .header above), just at the mobile scale. */
   .header {
-    padding: 24px 16px 0;
+    padding: 24px 16px;
   }
   .right {
     gap: 12px;

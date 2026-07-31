@@ -24,11 +24,11 @@ describe('CtaFooter', () => {
     expect(photo.style.transform).toBe('')
   })
 
-  it('renders the legal links below the footer bar', () => {
+  it('renders no legal links — neither breakpoint has them in the design', () => {
     render(<CtaFooter />)
 
     for (const label of ['Privacy Policy', 'Terms of Service', 'Cookie Policy']) {
-      expect(screen.getByText(label)).toBeInTheDocument()
+      expect(screen.queryByText(label)).not.toBeInTheDocument()
     }
   })
 

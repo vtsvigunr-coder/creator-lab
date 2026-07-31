@@ -3,7 +3,7 @@ import ctaBg from '../../assets/images/cta-section.webp'
 import ctaBgMobile from '../../assets/images/cta-section-mobile.webp'
 import basketIcon from '../../assets/icons/shopping-basket-favorite-03.svg'
 import videoIcon from '../../assets/icons/computer-video.svg'
-import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './CtaFooter.module.css'
 
@@ -44,10 +44,11 @@ export default function CtaFooter() {
           </div>
         </div>
 
-        {/* Groups the footer bar with the (mobile-only) legal row, so `.content` only ever
-            has two children — `.center` and this — for `justify-content: space-between` to
-            push apart on mobile. Desktop instead pins this to the bottom via margin-top: auto,
-            with the legal row hidden (see the stylesheet). */}
+        {/* Its own wrapper (rather than being `.content`'s direct second child) purely so the
+            `justify-content: space-between` on mobile has exactly two children — `.center`
+            and this — to push apart. Desktop instead pins it to the bottom via
+            margin-top: auto. No legal row on either breakpoint — neither Figma frame has
+            one (nodes 1203:15997 and 2312:20343). */}
         <div className={styles.footerLinks}>
           <div className={styles.footerBar}>
             <p className={styles.copyright}>{t.ctaFooter.copyright}</p>
@@ -75,19 +76,6 @@ export default function CtaFooter() {
               ))}
             </div>
           </div>
-
-          {/* Desktop's Figma frame (node 1203:15997) has no legal row at all — only the
-              mobile one (node 2312:20343) does; see the `max-width: 900px` block below. */}
-          <ul className={styles.legalRow}>
-            {t.nav.legal.map((label, i) => (
-              <li key={label} className={styles.legalItem}>
-                {i > 0 && <span className={styles.legalDot} aria-hidden="true" />}
-                <a className={styles.legalLink} href={LEGAL_LINKS[i] ?? '#'}>
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </section>
