@@ -66,6 +66,8 @@ export default function SolutionSlider() {
     const caption = captionRef.current
     if (!incoming || !label || !caption) return
 
+    const outgoingLabel = outgoingLabelRef.current
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => setState((s) => (s.previous === null ? s : { ...s, previous: null })),
@@ -85,18 +87,25 @@ export default function SolutionSlider() {
           { rotation: 0, duration: LABEL_SPIN, ease: 'power2.inOut' },
           0,
         )
-        .to(
-          outgoingLabelRef.current,
+
+      // The outgoing label only exists once a previous slide is mounted — on first render
+      // there's nothing to spin or fade out.
+      if (outgoingLabel) {
+        tl.to(
+          outgoingLabel,
           { rotation: dir * LABEL_TURN, duration: LABEL_SPIN, ease: 'power2.inOut' },
           0,
         )
-        // It fades over the back half of its trip, so it is gone by the time it would come
-        // back into view along the bottom of the circle.
-        .to(
-          outgoingLabelRef.current,
-          { opacity: 0, duration: LABEL_SPIN * 0.45, ease: 'power1.in' },
-          LABEL_SPIN * 0.4,
-        )
+          // It fades over the back half of its trip, so it is gone by the time it would come
+          // back into view along the bottom of the circle.
+          .to(
+            outgoingLabel,
+            { opacity: 0, duration: LABEL_SPIN * 0.45, ease: 'power1.in' },
+            LABEL_SPIN * 0.4,
+          )
+      }
+
+      tl
         // The incoming one is the exact mirror of that: it fades up over the first half of
         // its climb instead of snapping into existence at the bottom of the circle.
         .fromTo(
