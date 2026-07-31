@@ -1,7 +1,35 @@
+/* Fixed rather than sticky: sticky can't stay pinned past the bottom edge of its own parent
+   (here, the Hero section), so it would fall away as soon as the page scrolled into the next
+   section. Header itself renders a same-height .spacer alongside this to keep the flow
+   layout of every page that mounts it unchanged — see Header.tsx. */
 .header {
-  padding: 32px 120px 0;
-  align-self: stretch;
+  padding: 32px 120px 20px;
   width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0);
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+.header.hidden {
+  transform: translateY(-100%);
+}
+/* Sliding back in over content that's already scrolled past the hero otherwise leaves the
+   header illegible — nothing behind it is the plain white it was designed against. This plate
+   only kicks in once we're actually scrolled (mirrors the reveal/hide threshold), so the header
+   still reads as transparent over the hero itself. */
+.header.scrolled {
+  background: rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.header.light.scrolled {
+  background: rgba(0, 0, 0, 0.36);
 }
 .row {
   display: flex;

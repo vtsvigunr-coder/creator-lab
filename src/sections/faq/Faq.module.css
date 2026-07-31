@@ -1,8 +1,8 @@
 .faq {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: 40px;
+  justify-content: center;
+  gap: 292px;
   padding: 100px 120px;
   background: var(--color-white);
 }

@@ -30,7 +30,7 @@ test('renders the sitemap, legal and social groups once open', () => {
   for (const label of ['Privacy Policy', 'Terms of Service']) {
     expect(screen.getByRole('link', { name: label })).toBeInTheDocument()
   }
-  expect(screen.getByRole('button', { name: 'Cookie Policy' })).toBeInTheDocument()
+  expect(screen.queryByText('Cookie Policy')).not.toBeInTheDocument()
   for (const label of ['Instagram', 'LinkedIn', 'X', 'Telegram']) {
     expect(screen.getByAltText(label)).toBeInTheDocument()
   }

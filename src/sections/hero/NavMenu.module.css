@@ -162,10 +162,11 @@
   font-weight: 600;
   text-transform: uppercase;
   opacity: 0.92;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, color 0.15s ease;
 }
 .link:hover {
   opacity: 1;
+  color: #e8e8e8;
 }
 /* The sitemap reads a step larger than the legal column, per the design. */
 .linkLarge {

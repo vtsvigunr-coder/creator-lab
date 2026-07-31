@@ -252,6 +252,8 @@ export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
           <div className={styles.group} data-row>
             <span className={styles.groupTitle}>{t.nav.legalTitle}</span>
             <ul className={styles.links}>
+              {/* Cookie Policy (the entry with no real href yet) stays in the footer but is
+                  dropped here — the menu only lists pages that actually exist. */}
               {t.nav.legal.map((label, i) =>
                 LEGAL_LINKS[i] ? (
                   <li key={label}>
@@ -264,18 +266,7 @@ export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
                       {label}
                     </a>
                   </li>
-                ) : (
-                  <li key={label}>
-                    <button
-                      className={`${styles.link} ${styles.linkSmall}`}
-                      type="button"
-                      tabIndex={open ? 0 : -1}
-                      onClick={() => setOpen(false)}
-                    >
-                      {label}
-                    </button>
-                  </li>
-                ),
+                ) : null,
               )}
             </ul>
           </div>
