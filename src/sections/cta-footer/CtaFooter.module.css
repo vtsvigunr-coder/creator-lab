@@ -88,14 +88,21 @@
   align-items: center;
   justify-content: space-between;
 }
+/* The copyright and the socials each take an equal share of the leftover width so the nav pill
+   lands on the true horizontal centre of the bar — the same axis as the CTA buttons above —
+   rather than wherever `space-between` leaves it given two side blocks of unequal width. */
 .copyright {
+  flex: 1 1 0;
   margin: 0;
   font-family: var(--font-display);
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.48px;
   color: var(--color-white);
-  white-space: nowrap;
+  /* Shrinkable rather than nowrap: between 900px and ~1150px the copyright's min-content width
+     exceeds its half of the leftover space, and an unshrinkable column would push the pill off
+     centre. Letting it wrap keeps the two side columns equal, so the pill stays centred. */
+  min-width: 0;
 }
 
 /* Liquid glass pill, same treatment as the Problem section's "fragmented." plate: a blurred,
@@ -148,9 +155,15 @@
 }
 
 .social {
+  flex: 1 1 0;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+}
+.socialLink {
+  display: block;
+  line-height: 0;
 }
 .socialIcon {
   width: 20px;
@@ -214,6 +227,9 @@
   }
   .copyright {
     grid-area: copy;
+    /* The grid puts the nav on its own row, so the copyright no longer competes with it for
+       width — keep it on one line as the design has it. */
+    white-space: nowrap;
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;

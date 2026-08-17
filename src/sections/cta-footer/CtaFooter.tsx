@@ -71,9 +71,25 @@ export default function CtaFooter() {
             </nav>
 
             <div className={styles.social}>
-              {SOCIAL_ICONS.map((item) => (
-                <img key={item.label} className={styles.socialIcon} src={item.icon} alt={item.label} />
-              ))}
+              {SOCIAL_ICONS.map((item) => {
+                const icon = <img className={styles.socialIcon} src={item.icon} alt={item.label} />
+                // Accounts without an `href` stay plain images rather than dead links.
+                return item.href ? (
+                  <a
+                    key={item.label}
+                    className={styles.socialLink}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {icon}
+                  </a>
+                ) : (
+                  <span key={item.label} className={styles.socialLink}>
+                    {icon}
+                  </span>
+                )
+              })}
             </div>
           </div>
         </div>

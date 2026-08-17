@@ -22,8 +22,9 @@ export const NAV_LINKS: NavLink[] = [
     used for pages (like Cookie Policy) that don't exist yet. */
 export const LEGAL_LINKS: (string | undefined)[] = ['/privacy-policy.html', '/terms-of-service.html', undefined]
 
-export const SOCIAL_ICONS = [
-  { label: 'Instagram', icon: instagramIcon },
+/** `href` is omitted for the accounts that don't exist yet — those render as inert icons. */
+export const SOCIAL_ICONS: { label: string; icon: string; href?: string }[] = [
+  { label: 'Instagram', icon: instagramIcon, href: 'https://www.instagram.com/creatorlab_manager/' },
   { label: 'LinkedIn', icon: linkedinIcon },
   { label: 'X', icon: xIcon },
   { label: 'Telegram', icon: telegramIcon },

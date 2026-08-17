@@ -279,9 +279,11 @@ export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
               <a
                 key={social.label}
                 className={styles.socialLink}
-                href="#"
+                href={social.href ?? '#'}
+                target={social.href ? '_blank' : undefined}
+                rel={social.href ? 'noreferrer' : undefined}
                 tabIndex={open ? 0 : -1}
-                onClick={(e) => e.preventDefault()}
+                onClick={social.href ? undefined : (e) => e.preventDefault()}
               >
                 <img className={styles.socialIcon} src={social.icon} alt={social.label} width={20} height={20} />
               </a>
