@@ -22,12 +22,13 @@ export const NAV_LINKS: NavLink[] = [
     used for pages (like Cookie Policy) that don't exist yet. */
 export const LEGAL_LINKS: (string | undefined)[] = ['/privacy-policy.html', '/terms-of-service.html', undefined]
 
-/** `href` is omitted for the accounts that don't exist yet — those render as inert icons. */
+/** Each icon points at the network itself, not at a Creator Lab account — swap in the real
+    profile URLs here once those accounts exist. `href` may be omitted to render an inert icon. */
 export const SOCIAL_ICONS: { label: string; icon: string; href?: string }[] = [
-  { label: 'Instagram', icon: instagramIcon, href: 'https://www.instagram.com/creatorlab_manager/' },
-  { label: 'LinkedIn', icon: linkedinIcon },
-  { label: 'X', icon: xIcon },
-  { label: 'Telegram', icon: telegramIcon },
+  { label: 'Instagram', icon: instagramIcon, href: 'https://www.instagram.com/' },
+  { label: 'LinkedIn', icon: linkedinIcon, href: 'https://www.linkedin.com/' },
+  { label: 'X', icon: xIcon, href: 'https://x.com/' },
+  { label: 'Telegram', icon: telegramIcon, href: 'https://telegram.org/' },
 ]
 
 export function scrollToSection(testId?: string) {
