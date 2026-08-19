@@ -130,10 +130,18 @@
   color: var(--color-gray);
 }
 /* Sits mostly below the card's bottom edge; the fixed 331px card height + overflow hidden
-   clip it down to the top sliver that pokes out as a tab. */
+   clip it down to the top sliver that pokes out as a tab.
+
+   Positioned rather than in flow: pushed down by a margin, the tab's place depended on how
+   tall the copy above it was, and the Russian cards 3 and 4 run a line longer — enough to
+   push the whole badge past the card's fixed height, where overflow: hidden ate it. Anchoring
+   it to the bottom edge is also what the frames do (23px of the 46px pill showing). */
 .cardBadge {
+  position: absolute;
+  left: 50%;
+  bottom: -23px;
+  transform: translateX(-50%);
   flex: none;
-  margin-top: 54px;
   height: 46px;
   display: flex;
   align-items: flex-start;
@@ -247,12 +255,5 @@
      it get the lift. */
   .card:nth-child(odd) {
     box-shadow: none;
-  }
-  .cardBadge {
-    position: absolute;
-    left: 50%;
-    bottom: -23px;
-    transform: translateX(-50%);
-    margin-top: 0;
   }
 }
