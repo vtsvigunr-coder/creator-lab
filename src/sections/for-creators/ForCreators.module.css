@@ -295,8 +295,11 @@
   :global(html[lang='ru']) .description {
     width: 438px;
   }
+  /* The frame's box is 338px, but that is measured against its 18px/22px type — this heading
+     renders at the site's 20px/24px display face, where 338px drops "путь:" onto a third line.
+     400px is the nearest box that reproduces the design's two lines. */
   :global(html[lang='ru']) .listHeading {
-    width: 338px;
+    width: 400px;
   }
 }
 
