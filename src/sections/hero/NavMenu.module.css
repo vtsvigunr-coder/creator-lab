@@ -198,6 +198,52 @@
   height: 20px;
 }
 
+/* Language switch, sharing the Social row: the icons keep the left, this sits at the far right
+   so it reads as a control rather than a fifth icon. */
+.socialRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.langSwitch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.langOption {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.42px;
+  color: var(--color-gray-200);
+  opacity: 0.92;
+  cursor: pointer;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+.langOption:hover {
+  opacity: 1;
+}
+/* The active language is not a button you can press to no effect — it is plain text. */
+.langOptionActive {
+  color: var(--color-white);
+  font-weight: 600;
+  opacity: 1;
+  cursor: default;
+}
+.langSeparator {
+  color: var(--color-gray-200);
+  opacity: 0.5;
+  font-size: 14px;
+  line-height: 18px;
+}
+
 /* Only rendered visually on mobile — see the comment beside it in NavMenu.tsx. */
 .getStartedRow {
   display: none;

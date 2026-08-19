@@ -1,9 +1,16 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import { LEGAL_LINKS, NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
-import { useTranslation } from '../../i18n/LanguageContext'
+import { useTranslation, type Lang } from '../../i18n/LanguageContext'
 import styles from './NavMenu.module.css'
+
+// Labels stay in their own language rather than being translated — a language switch nobody can
+// read is useless to the visitor who needs it.
+const LANGS: { lang: Lang; label: string }[] = [
+  { lang: 'en', label: 'EN' },
+  { lang: 'ru', label: 'RU' },
+]
 
 // Hamburger (3 lines) <-> close (X), both in the icon's 20x20 viewBox. The hamburger's outer
 // lines become the X's two diagonals; the middle one collapses to a point at the centre and
@@ -43,7 +50,7 @@ type NavMenuProps = {
 }
 
 export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
-  const { t } = useTranslation()
+  const { t, lang, switchLanguage } = useTranslation()
   const [open, setOpen] = useState(false)
   const panelRef = useRef<HTMLDivElement>(null)
   const clipRef = useRef<HTMLDivElement>(null)
@@ -274,20 +281,42 @@ export default function NavMenu({ variant = 'dark' }: NavMenuProps) {
 
         <div className={styles.group} data-row>
           <span className={styles.groupTitle}>{t.nav.socialTitle}</span>
-          <div className={styles.social}>
-            {SOCIAL_ICONS.map((social) => (
-              <a
-                key={social.label}
-                className={styles.socialLink}
-                href={social.href ?? '#'}
-                target={social.href ? '_blank' : undefined}
-                rel={social.href ? 'noreferrer' : undefined}
-                tabIndex={open ? 0 : -1}
-                onClick={social.href ? undefined : (e) => e.preventDefault()}
-              >
-                <img className={styles.socialIcon} src={social.icon} alt={social.label} width={20} height={20} />
-              </a>
-            ))}
+          <div className={styles.socialRow}>
+            <div className={styles.social}>
+              {SOCIAL_ICONS.map((social) => (
+                <a
+                  key={social.label}
+                  className={styles.socialLink}
+                  href={social.href ?? '#'}
+                  target={social.href ? '_blank' : undefined}
+                  rel={social.href ? 'noreferrer' : undefined}
+                  tabIndex={open ? 0 : -1}
+                  onClick={social.href ? undefined : (e) => e.preventDefault()}
+                >
+                  <img className={styles.socialIcon} src={social.icon} alt={social.label} width={20} height={20} />
+                </a>
+              ))}
+            </div>
+
+            <div className={styles.langSwitch}>
+              {LANGS.map((option, i) => (
+                <Fragment key={option.lang}>
+                  {i > 0 ? <span className={styles.langSeparator}>/</span> : null}
+                  <button
+                    type="button"
+                    className={`${styles.langOption} ${option.lang === lang ? styles.langOptionActive : ''}`}
+                    aria-current={option.lang === lang ? 'true' : undefined}
+                    tabIndex={open ? 0 : -1}
+                    onClick={() => {
+                      switchLanguage(option.lang)
+                      setOpen(false)
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                </Fragment>
+              ))}
+            </div>
           </div>
         </div>
 
