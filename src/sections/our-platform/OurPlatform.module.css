@@ -166,6 +166,21 @@
   color: var(--color-white);
 }
 
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 1281px) {
+  /* Russian widths from the Russian frames: the heading block is wider and starts further left
+     (node 2801:9931) while keeping the same right edge, and the caption column is wide enough
+     that the two authored lines stay two lines (the widest is 2801:9959 at 359px). */
+  :global(html[lang='ru']) .heroText {
+    left: calc(33.33% + 103px);
+    width: 737px;
+  }
+  :global(html[lang='ru']) .captionStack {
+    width: 366px;
+  }
+}
+
 @media (max-width: 1280px) {
   .canvas {
     --platform-scale: 0.82;

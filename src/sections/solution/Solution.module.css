@@ -51,6 +51,19 @@
   margin: -8px 0;
 }
 
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 641px) {
+  /* Russian widths from the Russian frame (nodes 2801:9071 and 2801:9072) — the English boxes
+     drop both onto a third line. */
+  :global(html[lang='ru']) .heading {
+    width: 858px;
+  }
+  :global(html[lang='ru']) .description {
+    width: 348px;
+  }
+}
+
 @media (max-width: 640px) {
   .solution {
     gap: 64px;

@@ -226,6 +226,19 @@
    panel's own padding. Card-internal image positions are kept as the same percentages
    of card size as desktop (card aspect-ratio is unchanged), so they scale with the card
    instead of needing separate px per breakpoint. */
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 641px) {
+  /* Russian frame (nodes 2801:9256 and 2801:9261): a wider description box, and the card's
+     heading sits 50px higher than in English because the Russian one takes an extra line. */
+  :global(html[lang='ru']) .description {
+    width: 342px;
+  }
+  :global(html[lang='ru']) .heroHeading {
+    top: 383px;
+  }
+}
+
 @media (max-width: 640px) {
   .whyNow {
     padding: 64px 16px;

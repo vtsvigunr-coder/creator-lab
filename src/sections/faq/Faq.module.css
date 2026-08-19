@@ -16,6 +16,13 @@
   width: 318px;
   flex: none;
 }
+/* Desktop only: below this the column goes fluid and this fixed box would out-specify it. */
+@media (min-width: 1025px) {
+  /* Russian copy column from node 2801:9339. */
+  :global(html[lang='ru']) .left {
+    width: 331px;
+  }
+}
 .imageBox {
   position: relative;
   width: 248px;

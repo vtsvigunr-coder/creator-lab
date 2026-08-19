@@ -255,7 +255,7 @@ export default function SolutionSlider() {
         </div>
       </div>
 
-      <p className={styles.caption} ref={captionRef} key={slide.id}>
+      <p className={styles.caption} ref={captionRef} key={slide.id} data-slide={index}>
         <AnimatedWords text={t.solution.slides[index].caption} />
       </p>
     </div>

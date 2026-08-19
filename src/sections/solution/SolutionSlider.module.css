@@ -111,6 +111,23 @@
   white-space: nowrap;
 }
 
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 641px) {
+  /* Each Russian caption gets the width its own frame uses — 2801:9075, 2801:9706 and
+     2801:9744 — because the three sentences differ enough in length that one shared box would
+     break them where the design does not. */
+  :global(html[lang='ru']) .caption[data-slide='0'] {
+    width: 342px;
+  }
+  :global(html[lang='ru']) .caption[data-slide='1'] {
+    width: 343px;
+  }
+  :global(html[lang='ru']) .caption[data-slide='2'] {
+    width: 410px;
+  }
+}
+
 /* --- caption --- */
 .caption {
   position: absolute;

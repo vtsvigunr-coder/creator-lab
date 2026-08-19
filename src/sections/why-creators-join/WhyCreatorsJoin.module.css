@@ -108,6 +108,20 @@
     --join-scale: 0.82;
   }
 }
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 1025px) {
+  /* Russian frame (node 2816:9702) — the English 357px box drops this onto an extra line. */
+  :global(html[lang='ru']) .description {
+    width: 449px;
+  }
+  /* Only the first caption differs: 277px is what breaks it after "готовые" and
+     "масштабироваться", the way node 2801:9324 does. */
+  :global(html[lang='ru']) .caption[data-slide='0'] {
+    width: 277px;
+  }
+}
+
 @media (max-width: 1024px) {
   .canvas {
     --join-scale: 0.66;

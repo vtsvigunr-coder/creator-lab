@@ -39,8 +39,10 @@ export const ru: Translations = {
   },
   problem: {
     tag: 'Проблема',
-    introLine1: 'Социальная коммерция',
-    introLine2: 'уже здесь',
+    // The design's heading is one paragraph that wraps after the first word, not after
+    // "коммерция" the way the English one does.
+    introLine1: 'Социальная',
+    introLine2: 'коммерция уже здесь',
     introDescription:
       'По всему Узбекистану бренды продают через Instagram, Telegram и личные сообщения. Авторы каждый день влияют на решения о покупке. Клиенты находят товары через контент, stories и рекомендации.',
     outroLine1: 'Но система, стоящая за этим',
@@ -122,8 +124,9 @@ export const ru: Translations = {
   },
   forCreators: {
     tag: 'Почему авторы выбирают',
-    headingLine1: 'Превратите влияние в',
-    headingLine2: 'стабильный доход',
+    // The design's box (536px) breaks before the preposition, not after it.
+    headingLine1: 'Превратите влияние',
+    headingLine2: 'в стабильный доход',
     description:
       'Авторам не нужно зависеть от случайных сделок, неясных условий и поздних выплат, чтобы зарабатывать онлайн',
     listHeading: 'Creator Lab даёт авторам более профессиональный путь:',
@@ -143,7 +146,7 @@ export const ru: Translations = {
     chipLabel: 'Наша платформа',
     cta: 'Изучить платформу',
     tabs: [
-      { label: 'Брендам', captionLines: ['Запускайте кампании с авторами', 'и ясно отслеживайте каждую продажу'] },
+      { label: 'Брендам', captionLines: ['Запускайте кампании с авторами и', 'ясно отслеживайте каждую продажу'] },
       { label: 'Авторам', captionLines: ['Делитесь ссылками и отслеживайте', 'доход в реальном времени'] },
       {
         label: 'Платформам',
@@ -216,7 +219,7 @@ export const ru: Translations = {
     ],
   },
   ctaFooter: {
-    headingLines: ['Присоединяйтесь', 'к новому уровню коммерции', 'в Узбекистане'],
+    headingLines: ['Присоединяйтесь', 'к новому уровню', 'коммерции в Узбекистане'],
     description:
       'Если вы бренд и ищете масштабируемую дистрибуцию или автор, которому нужна понятная монетизация, Creator Lab — место, где строится система',
     applyAsBrand: 'Заявка бренда',

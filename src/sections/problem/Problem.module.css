@@ -63,6 +63,19 @@
   /* Stacked under the intro until the curtain is up; the timeline fades it in. */
   opacity: 0;
 }
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 641px) {
+  /* Russian runs longer than English at the same 46px, so both headings here spill onto a third
+     line inside the English boxes. These are the widths the Russian frames use (nodes 2801:9058
+     and 2801:9817), which is what puts each heading back on the two lines both designs show. */
+  :global(html[lang='ru']) .intro {
+    width: 591px;
+  }
+  :global(html[lang='ru']) .outro {
+    width: 800px;
+  }
+}
 .outroHead {
   display: flex;
   flex-direction: column;

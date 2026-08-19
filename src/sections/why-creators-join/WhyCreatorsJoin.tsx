@@ -42,7 +42,10 @@ function buildSlideSwitch(
         filter: 'blur(12px)',
         duration: 0.15,
         ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        stagger: 0.008,
+        // Bounded rather than per-character: the Russian captions are long enough that a flat
+        // 0.008s/char runs past the end of the switch, leaving the tail of the sentence still
+        // blurred once the transition has visibly finished.
+        stagger: { each: 0.008, amount: 0.24 },
       },
       0,
     )
@@ -55,7 +58,7 @@ function buildSlideSwitch(
         filter: 'blur(0px)',
         duration: 0.2,
         ease: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        stagger: 0.01,
+        stagger: { each: 0.01, amount: 0.3 },
       },
       0.18,
     )
@@ -223,6 +226,7 @@ export default function WhyCreatorsJoin() {
                 style={{ top: slide.captionTop }}
                 data-join-caption
                 data-join-id={slide.id}
+                data-slide={i}
               >
                 <AnimatedChars text={t.whyCreatorsJoin.slides[i].caption} />
               </p>

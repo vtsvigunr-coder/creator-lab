@@ -70,6 +70,13 @@
   letter-spacing: -0.48px;
   color: var(--color-white);
 }
+/* Desktop only — below 900px the block goes fluid. Russian description box from the footer
+   frame (node 2801:9374). */
+@media (min-width: 901px) {
+  :global(html[lang='ru']) .description {
+    width: 570px;
+  }
+}
 .buttons {
   display: flex;
   gap: 16px;
@@ -94,7 +101,10 @@
 .copyright {
   flex: 1 1 0;
   margin: 0;
-  font-family: var(--font-display);
+  /* Pretendard Medium, per the footer frame (node 2801:9379) — the display face reads a weight
+     heavier here than the design, which is why it looked bold next to the rest of the bar. */
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.48px;
@@ -140,7 +150,9 @@
   border: none;
   padding: 0;
   margin: 0;
-  font-family: var(--font-display);
+  /* Same as the copyright: the design's nav pill is Pretendard Medium (node 2801:9381). */
+  font-family: var(--font-sans);
+  font-weight: 500;
   font-size: 16px;
   line-height: 20px;
   letter-spacing: -0.48px;

@@ -11,7 +11,7 @@ import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './Faq.module.css'
 
 export default function Faq() {
-  const { t } = useTranslation()
+  const { t, lang } = useTranslation()
   const rootRef = useRef<HTMLElement>(null)
   const leftRef = useRef<HTMLDivElement>(null)
   const rightRef = useRef<HTMLDivElement>(null)
@@ -125,7 +125,9 @@ export default function Faq() {
         <div className={styles.textBlock}>
           <p className={styles.copy}>
             <AnimatedWords text={t.faq.copyLine1} />
-            <br />
+            {/* English breaks after the question, per its frame; the Russian frame
+                (node 2801:9339) is one paragraph that just wraps. */}
+            {lang === 'en' ? <br /> : ' '}
             <AnimatedWords text={t.faq.copyLine2} />
           </p>
           <CircleRevealButton

@@ -89,6 +89,14 @@
   width: 100%;
   text-align: center;
 }
+/* Desktop only. The Russian frame gives the third card a slightly narrower text column than
+   the others (218px against 221px, node 2801:9646) — which is what breaks its title after
+   "продукты" instead of stranding "покупки" on a line of its own. */
+@media (min-width: 641px) {
+  :global(html[lang='ru']) [data-step='2'] .cardBody {
+    width: 218px;
+  }
+}
 .cardIcon {
   display: flex;
   align-items: center;

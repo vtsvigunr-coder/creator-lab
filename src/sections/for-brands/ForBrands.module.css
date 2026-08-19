@@ -217,6 +217,22 @@
   white-space: nowrap;
 }
 
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 1281px) {
+  /* Russian widths from the Russian frame: heading 2801:9121, description 2801:9122, and the
+     list heading 2801:9126 — 193px is what puts "бренды могут" on its own second line. */
+  :global(html[lang='ru']) .heading {
+    width: 794px;
+  }
+  :global(html[lang='ru']) .description {
+    width: 484px;
+  }
+  :global(html[lang='ru']) .listHeading {
+    width: 193px;
+  }
+}
+
 @media (max-width: 1280px) {
   .forBrands {
     padding: 80px 48px;

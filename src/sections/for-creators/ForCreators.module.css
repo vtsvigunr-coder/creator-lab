@@ -287,6 +287,19 @@
   margin: -6px 0;
 }
 
+/* Desktop only: below this the layout switches to its own fluid widths, and these
+   fixed Russian boxes would out-specify them. */
+@media (min-width: 1281px) {
+  /* Russian widths from the Russian frame — description 2801:9181, list heading 2829:10688.
+     The heading already matches the design's 536px. */
+  :global(html[lang='ru']) .description {
+    width: 438px;
+  }
+  :global(html[lang='ru']) .listHeading {
+    width: 338px;
+  }
+}
+
 @media (max-width: 1280px) {
   .forCreators {
     padding: 80px 48px;

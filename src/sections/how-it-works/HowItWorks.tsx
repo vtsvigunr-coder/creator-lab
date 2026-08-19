@@ -163,6 +163,7 @@ export default function HowItWorks() {
               className={styles.card}
               style={{ left: step.left }}
               data-step-card
+              data-step={i}
             >
               <div className={styles.cardBody}>
                 <span className={styles.cardIcon}>
