@@ -79,6 +79,12 @@
   padding: 10px 0;
   margin: -10px 0;
 }
+/* The Russian sentence is longer and wraps to three lines inside the English 441px box. The
+   Russian frame (node 2801:9054) sets its own 479px for exactly this reason, which brings it
+   back to the two lines both designs show. */
+:global(html[lang='ru']) .description {
+  width: 479px;
+}
 .wordUnit {
   display: inline-block;
   will-change: transform, filter, opacity;
