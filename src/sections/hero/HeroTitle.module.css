@@ -82,11 +82,21 @@
 /* Desktop only: below this the layout switches to its own fluid widths, and these
    fixed Russian boxes would out-specify them. */
 @media (min-width: 641px) {
-  /* The Russian sentence is longer and wraps to three lines inside the English 441px box. The
-     Russian frame (node 2801:9054) sets its own 479px for exactly this reason, which brings it
-     back to the two lines both designs show. */
+  /* Requested step up from the frames' 14px to the site's 16px body style — same 16/20/-0.48
+     the other section descriptions use. Mobile keeps 14px. */
+  .description {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.48px;
+  }
+  /* The Russian sentence is longer and wraps to three lines inside the English box. The Russian
+     frame (node 2801:9054) sets its own wider box for exactly this reason; both widths are
+     scaled here from the frames' 14px to the 16px above so each keeps its two lines. */
+  .description {
+    width: 504px;
+  }
   :global(html[lang='ru']) .description {
-    width: 479px;
+    width: 548px;
   }
 }
 .wordUnit {
