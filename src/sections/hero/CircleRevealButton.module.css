@@ -157,3 +157,14 @@
     width: 100%;
   }
 }
+
+/* Both mobile frames (hero node 2801:10032, footer node 2801:10413) split the row into two
+   equal halves — `flex: 1 0 0` — rather than letting each button take the width of its own
+   label. English keeps `1 1 auto` above because its longer labels need that to wrap below
+   360px; the Russian labels fit either way, so they get the design's even split.
+   Held above 360px, where the row still fits side by side at all. */
+@media (min-width: 360px) and (max-width: 640px) {
+  :global(html[lang='ru']) .fluid {
+    flex: 1 0 0;
+  }
+}

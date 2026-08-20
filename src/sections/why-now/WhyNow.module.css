@@ -361,3 +361,15 @@
     width: 80.8%;
   }
 }
+
+/* The Russian mobile frame sets the bento labels one step smaller and lighter than the English
+   mobile ones — 10/14 SemiBold against 12/16 Bold (nodes 2801:10313, 10345 and 10347) — which
+   is what keeps the longer Russian labels to the two lines the cards are sized for. */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .cardLabel {
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: -0.3px;
+    font-weight: 600;
+  }
+}

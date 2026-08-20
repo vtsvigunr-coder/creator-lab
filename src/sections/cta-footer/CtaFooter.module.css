@@ -225,6 +225,10 @@
     line-height: 18px;
     letter-spacing: -0.42px;
   }
+  /* The Russian mobile frame (node 2801:10412) runs it the full width of the column. */
+  :global(html[lang='ru']) .description {
+    max-width: 100%;
+  }
   .buttons {
     width: 100%;
     max-width: 361px;

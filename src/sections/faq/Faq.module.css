@@ -215,3 +215,12 @@
     max-width: calc(100vw - 32px);
   }
 }
+
+/* The Russian mobile frame keeps the copy in the 318px column under the photo (node
+   2801:10401 inside 2801:10392) rather than running it edge to edge. */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .copy {
+    width: 318px;
+    max-width: calc(100vw - 32px);
+  }
+}
