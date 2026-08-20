@@ -7,6 +7,8 @@ import CircleRevealButton from '../hero/CircleRevealButton'
 import arrowIcon from '../../assets/icons/arrow-right-02-sharp.svg'
 import headingIcon from '../../assets/icons/how-it-works-icon.svg'
 import { STEPS } from './steps'
+import { useIsMobile } from '../../lib/useIsMobile'
+import type { Translations } from '../../i18n/types'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './HowItWorks.module.css'
 
@@ -21,8 +23,15 @@ const CARD_OFFSET = 0.55
 const DESKTOP_MEDIA_QUERY = '(min-width: 641px)'
 const MOBILE_MEDIA_QUERY = '(max-width: 640px)'
 
+// The mobile card is wider than the tilted desktop one, so a couple of the Russian titles
+// break at a different word there — those steps carry a `titleMobile`.
+function stepTitle(step: Translations['howItWorks']['steps'][number], isMobile: boolean) {
+  return isMobile && step.titleMobile ? step.titleMobile : step.title
+}
+
 export default function HowItWorks() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
@@ -170,9 +179,9 @@ export default function HowItWorks() {
                   <img src={step.icon} alt="" />
                 </span>
                 <h3 className={styles.cardTitle}>
-                  <span>{t.howItWorks.steps[i].title[0]}</span>
+                  <span>{stepTitle(t.howItWorks.steps[i], isMobile)[0]}</span>
                   <br />
-                  <span>{t.howItWorks.steps[i].title[1]}</span>
+                  <span>{stepTitle(t.howItWorks.steps[i], isMobile)[1]}</span>
                 </h3>
                 <p className={styles.cardText}>{t.howItWorks.steps[i].description}</p>
               </div>

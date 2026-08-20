@@ -2,6 +2,7 @@ import { useLayoutEffect, useMemo, useRef } from 'react'
 import { gsap } from '../../lib/gsap'
 import { splitChars } from '../../lib/splitChars'
 import { splitWords } from '../../lib/splitWords'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './HeroTitle.module.css'
 
@@ -68,6 +69,7 @@ function AnimatedDescription({ text }: { text: string }) {
 
 export default function HeroTitle() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const rootRef = useRef<HTMLDivElement>(null)
   const markerFillRef = useRef<HTMLDivElement>(null)
 
@@ -128,9 +130,18 @@ export default function HeroTitle() {
           <div>
             <AnimatedChars text={t.hero.titleLine1} />
           </div>
-          <div>
-            <AnimatedChars text={t.hero.titleLine2} />
-          </div>
+          {/* The mobile frame breaks this line in two; desktop keeps it whole. */}
+          {isMobile && t.hero.titleLine2Mobile ? (
+            t.hero.titleLine2Mobile.map((line) => (
+              <div key={line}>
+                <AnimatedChars text={line} />
+              </div>
+            ))
+          ) : (
+            <div>
+              <AnimatedChars text={t.hero.titleLine2} />
+            </div>
+          )}
           <div className={styles.highlightRow}>
             <span className={styles.inWord}>
               <AnimatedChars text={t.hero.inWord} />

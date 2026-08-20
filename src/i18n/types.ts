@@ -1,3 +1,6 @@
+/** `titleMobile` is optional: the mobile frames break the last two steps' titles elsewhere. */
+type Step = { title: [string, string]; titleMobile?: [string, string]; description: string; badge: string }
+
 export interface Translations {
   nav: {
     sitemap: {
@@ -21,6 +24,8 @@ export interface Translations {
   hero: {
     titleLine1: string
     titleLine2: string
+    /** Optional: the mobile frame splits the second line in two. Omit to keep one line. */
+    titleLine2Mobile?: [string, string]
     inWord: string
     markerWord: string
     description: string
@@ -31,6 +36,11 @@ export interface Translations {
     tag: string
     introLine1: string
     introLine2: string
+    /** Optional: mobile runs the two intro lines together as one wrapping paragraph. */
+    introFlowsOnMobile?: boolean
+    /** Optional: mobile pulls "is still" up into the first paragraph, leaving the glass plate
+        holding only the last word. */
+    outroIsStillJoinsMobile?: boolean
     introDescription: string
     outroLine1: string
     outroIsStill: string
@@ -42,6 +52,8 @@ export interface Translations {
     tag: string
     headingLine1: string
     headingLine2: string
+    /** Optional: the mobile frame breaks the same heading into three lines. */
+    headingLinesMobile?: [string, string, string]
     description: string
     cta: string
     slides: [
@@ -57,10 +69,10 @@ export interface Translations {
     headingLine2: string
     cta: string
     steps: [
-      { title: [string, string]; description: string; badge: string },
-      { title: [string, string]; description: string; badge: string },
-      { title: [string, string]; description: string; badge: string },
-      { title: [string, string]; description: string; badge: string },
+      Step,
+      Step,
+      Step,
+      Step,
     ]
   }
   forBrands: {

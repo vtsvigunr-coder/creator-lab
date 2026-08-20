@@ -30,6 +30,8 @@ export const ru: Translations = {
   hero: {
     titleLine1: 'Операционная система',
     titleLine2: 'для коммерции через авторов',
+    // The mobile frame (node 2801:10026) breaks this line in two.
+    titleLine2Mobile: ['для коммерции', 'через авторов'],
     inWord: 'в',
     markerWord: 'Узбекистане',
     description:
@@ -43,6 +45,10 @@ export const ru: Translations = {
     // "коммерция" the way the English one does.
     introLine1: 'Социальная',
     introLine2: 'коммерция уже здесь',
+    // Mobile (node 2801:10060) is one paragraph left to wrap on its own; mobile (node
+    // 2801:10679) also pulls "по-прежнему" up out of the glass plate.
+    introFlowsOnMobile: true,
+    outroIsStillJoinsMobile: true,
     introDescription:
       'По всему Узбекистану бренды продают через Instagram, Telegram и личные сообщения. Авторы каждый день влияют на решения о покупке. Клиенты находят товары через контент, stories и рекомендации.',
     outroLine1: 'Но система, стоящая за этим',
@@ -56,6 +62,8 @@ export const ru: Translations = {
     tag: 'Что делает Creator Lab',
     headingLine1: 'Единая платформа для брендов,',
     headingLine2: 'авторов и коммерции',
+    // Mobile (node 2801:10068) breaks the same sentence into three lines.
+    headingLinesMobile: ['Единая платформа', 'для брендов, авторов', 'и коммерции'],
     description: 'Creator Lab объединяет три части современных продаж через авторов в одну систему',
     cta: 'Как это работает',
     slides: [
@@ -94,11 +102,14 @@ export const ru: Translations = {
       },
       {
         title: ['Клиенты', 'находят продукты и совершают покупки'],
+        // Mobile card is wider than the desktop one, so its frame breaks later (node 2801:10135).
+        titleMobile: ['Клиенты находят продукты', 'и совершают покупки'],
         description: 'Клиенты переходят от контента авторов к страницам продуктов, формируя трафик и покупки',
         badge: 'шаг 3',
       },
       {
         title: ['Creator Lab', 'управляет всей системой'],
+        titleMobile: ['Creator Lab управляет', 'всей системой'],
         description:
           'Атрибуция, расчёты, выплаты и показатели эффективности управляются через единую инфраструктуру',
         badge: 'шаг 4',

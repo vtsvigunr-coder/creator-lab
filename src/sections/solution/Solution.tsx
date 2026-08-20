@@ -4,12 +4,14 @@ import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
 import CircleRevealButton from '../hero/CircleRevealButton'
 import SolutionSlider from './SolutionSlider'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import arrowIcon from '../../assets/icons/arrow-right-02-sharp.svg'
 import styles from './Solution.module.css'
 
 export default function Solution() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
 
@@ -69,12 +71,14 @@ export default function Solution() {
           <div className={styles.tagAndHeading}>
             <WipeRevealTag label={t.solution.tag} />
             <h2 className={styles.heading}>
-              <div>
-                <AnimatedChars text={t.solution.headingLine1} />
-              </div>
-              <div>
-                <AnimatedChars text={t.solution.headingLine2} />
-              </div>
+              {(isMobile && t.solution.headingLinesMobile
+                ? t.solution.headingLinesMobile
+                : [t.solution.headingLine1, t.solution.headingLine2]
+              ).map((line) => (
+                <div key={line}>
+                  <AnimatedChars text={line} />
+                </div>
+              ))}
             </h2>
           </div>
           <p className={styles.description}>

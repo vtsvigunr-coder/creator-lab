@@ -3,6 +3,7 @@ import { gsap, ScrollTrigger } from '../../lib/gsap'
 import { AnimatedChars, AnimatedWords } from '../../components/AnimatedText'
 import WipeRevealTag from '../../components/WipeRevealTag'
 import { clampApexRadius, peakedEdgeClipPath } from '../../lib/peakedEdgeClipPath'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import problemImage from '../../assets/images/problem.webp'
 import styles from './Problem.module.css'
@@ -44,6 +45,8 @@ function curtainClip(p: number, w: number, h: number) {
 
 export default function Problem() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
+  const joinIsStill = isMobile && Boolean(t.problem.outroIsStillJoinsMobile)
   const rootRef = useRef<HTMLElement>(null)
   const introRef = useRef<HTMLDivElement>(null)
   const curtainRef = useRef<HTMLDivElement>(null)
@@ -199,12 +202,22 @@ export default function Problem() {
           <div className={styles.introHead}>
             <WipeRevealTag label={t.problem.tag} />
             <h2 className={styles.heading}>
-              <div>
-                <AnimatedChars text={t.problem.introLine1} />
-              </div>
-              <div>
-                <AnimatedChars text={t.problem.introLine2} />
-              </div>
+              {/* Mobile runs the two lines together and lets the box wrap them; desktop keeps
+                  the split its own frame uses. */}
+              {isMobile && t.problem.introFlowsOnMobile ? (
+                <div>
+                  <AnimatedChars text={`${t.problem.introLine1} ${t.problem.introLine2}`} />
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <AnimatedChars text={t.problem.introLine1} />
+                  </div>
+                  <div>
+                    <AnimatedChars text={t.problem.introLine2} />
+                  </div>
+                </>
+              )}
             </h2>
           </div>
           <p className={styles.description}>
@@ -221,12 +234,20 @@ export default function Problem() {
           <div className={styles.outroHead}>
             <h2 className={styles.heading}>
               <div>
-                <AnimatedChars text={t.problem.outroLine1} />
+                {/* On mobile the frame carries "is still" up into this paragraph, leaving the
+                    glass plate holding the last word alone. */}
+                <AnimatedChars
+                  text={
+                    joinIsStill ? `${t.problem.outroLine1} ${t.problem.outroIsStill}` : t.problem.outroLine1
+                  }
+                />
               </div>
               <div className={styles.glassRow}>
-                <span>
-                  <AnimatedChars text={t.problem.outroIsStill} />
-                </span>
+                {joinIsStill ? null : (
+                  <span>
+                    <AnimatedChars text={t.problem.outroIsStill} />
+                  </span>
+                )}
                 <span className={styles.glassBox} data-testid="fragmented-plate">
                   <span className={styles.glassFill} ref={glassFillRef} />
                   <span className={styles.glassText}>
