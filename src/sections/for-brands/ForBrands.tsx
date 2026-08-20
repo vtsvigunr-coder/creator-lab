@@ -8,6 +8,7 @@ import arrowUpIcon from '../../assets/icons/arrow-up-02-sharp.svg'
 import photo from '../../assets/images/for-brands.webp'
 import maskShape from '../../assets/icons/for-brands-mask.svg'
 import { STATS, type Stat } from './stats'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './ForBrands.module.css'
 
@@ -22,6 +23,7 @@ function formatDelta(value: number) {
 
 export default function ForBrands() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -156,12 +158,14 @@ export default function ForBrands() {
           <div className={styles.tagAndHeading}>
             <WipeRevealTag label={t.forBrands.tag} />
             <h2 className={styles.heading}>
-              <div>
-                <AnimatedChars text={t.forBrands.headingLine1} />
-              </div>
-              <div>
-                <AnimatedChars text={t.forBrands.headingLine2} />
-              </div>
+              {(isMobile && t.forBrands.headingLinesMobile
+                ? t.forBrands.headingLinesMobile
+                : [t.forBrands.headingLine1, t.forBrands.headingLine2]
+              ).map((line) => (
+                <div key={line}>
+                  <AnimatedChars text={line} />
+                </div>
+              ))}
             </h2>
           </div>
           <p className={styles.description}>

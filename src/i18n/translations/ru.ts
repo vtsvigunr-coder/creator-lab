@@ -120,6 +120,8 @@ export const ru: Translations = {
     tag: 'Почему бренды присоединяются',
     headingLine1: 'Превращаем авторов в',
     headingLine2: 'полноценный канал продаж',
+    // Mobile (node 2801:10153) breaks the same sentence into three lines.
+    headingLinesMobile: ['Превращаем авторов', 'в полноценный', 'канал продаж'],
     description:
       'Creator Lab предлагает брендам более эффективный способ продавать через создателей — без разрозненных сообщений, хаоса в таблицах и сотрудничества с инфлюенсерами вслепую',
     listHeading: 'С Creator Lab бренды могут:',
@@ -138,6 +140,8 @@ export const ru: Translations = {
     // The design's box (536px) breaks before the preposition, not after it.
     headingLine1: 'Превратите влияние',
     headingLine2: 'в стабильный доход',
+    // Mobile (node 2801:10212) is one paragraph left to wrap on its own.
+    headingFlowsOnMobile: true,
     description:
       'Авторам не нужно зависеть от случайных сделок, неясных условий и поздних выплат, чтобы зарабатывать онлайн',
     listHeading: 'Creator Lab даёт авторам более профессиональный путь:',
@@ -183,6 +187,8 @@ export const ru: Translations = {
     tag: 'Почему авторы присоединяются',
     headingLine1: 'Не для всех.',
     headingLine2: 'Для серьёзных игроков.',
+    // Mobile (node 2801:10357) carries "Для" up onto the first line.
+    headingLinesMobile: ['Не для всех. Для', 'серьёзных игроков.'],
     description:
       'Creator Lab создан для брендов, которым нужны реальные продажи, и авторов, которые хотят долгосрочную ценность. Мы строим отобранную экосистему для:',
     slides: [
@@ -231,6 +237,8 @@ export const ru: Translations = {
   },
   ctaFooter: {
     headingLines: ['Присоединяйтесь', 'к новому уровню', 'коммерции в Узбекистане'],
+    // Mobile (node 2801:10411) breaks once and lets the rest wrap in the full-width column.
+    headingLinesMobile: ['Присоединяйтесь', 'к новому уровню коммерции в Узбекистане'],
     description:
       'Если вы бренд и ищете масштабируемую дистрибуцию или автор, которому нужна понятная монетизация, Creator Lab — место, где строится система',
     applyAsBrand: 'Заявка бренда',

@@ -390,6 +390,12 @@
   }
   .listHeading {
     text-align: left;
+    /* The mobile frames set this in the mobile H5 token (16/20), the same as the sibling
+       For-brands list heading — this one was still carrying the desktop 20/24, which is what
+       kept the Russian on three lines where the frame has two. */
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.48px;
   }
   .listItem {
     font-size: 14px;
@@ -477,5 +483,18 @@
     font-size: 10px;
     line-height: 12px;
     letter-spacing: -0.3px;
+  }
+}
+
+/* Mobile boxes from the Russian mobile frame — description node 2801:10213, list heading
+   node 2829:10690. */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .description {
+    width: 309px;
+    max-width: calc(100vw - 32px);
+  }
+  :global(html[lang='ru']) .listHeading {
+    width: 295px;
+    max-width: calc(100vw - 32px);
   }
 }

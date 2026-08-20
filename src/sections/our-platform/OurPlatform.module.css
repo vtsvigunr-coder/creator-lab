@@ -364,3 +364,11 @@
     height: 18px;
   }
 }
+
+/* The Russian mobile frame (node 2801:10266) runs the heading the full width of the column,
+   where the English one sits in a 321px box. */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .mobileHeading {
+    width: calc(100vw - 32px);
+  }
+}

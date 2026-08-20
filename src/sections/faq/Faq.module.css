@@ -207,3 +207,11 @@
     letter-spacing: -0.48px;
   }
 }
+
+/* Mobile heading column from the Russian mobile frame (node 2801:10369). */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .heading {
+    width: 229px;
+    max-width: calc(100vw - 32px);
+  }
+}

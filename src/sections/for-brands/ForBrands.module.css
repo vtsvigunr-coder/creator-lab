@@ -361,3 +361,11 @@
     gap: 2px;
   }
 }
+
+/* Mobile boxes from the Russian mobile frame: the list heading's 155px column (node
+   2801:10158) is what puts "БРЕНДЫ МОГУТ:" on its own second line. */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .listHeading {
+    width: 155px;
+  }
+}

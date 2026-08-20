@@ -235,3 +235,11 @@
     height: 32px;
   }
 }
+
+/* Mobile caption box from the Russian mobile frame (node 2801:10360). */
+@media (max-width: 640px) {
+  :global(html[lang='ru']) .mobileTitle {
+    width: 263px;
+    max-width: calc(100vw - 32px);
+  }
+}

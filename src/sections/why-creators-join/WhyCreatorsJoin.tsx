@@ -239,12 +239,16 @@ export default function WhyCreatorsJoin() {
             <div className={styles.mobileHeadGroup}>
               <WipeRevealTag label={t.whyCreatorsJoin.tag} />
               <h2 className={styles.mobileHeading}>
-                <div>
-                  <AnimatedChars text={t.whyCreatorsJoin.headingLine1} />
-                </div>
-                <div>
-                  <AnimatedChars text={t.whyCreatorsJoin.headingLine2} />
-                </div>
+                {/* The mobile frame breaks this mid-sentence rather than between the two
+                    desktop lines. */}
+                {(t.whyCreatorsJoin.headingLinesMobile ?? [
+                  t.whyCreatorsJoin.headingLine1,
+                  t.whyCreatorsJoin.headingLine2,
+                ]).map((line) => (
+                  <div key={line}>
+                    <AnimatedChars text={line} />
+                  </div>
+                ))}
               </h2>
             </div>
             <p className={styles.mobileDescription}>

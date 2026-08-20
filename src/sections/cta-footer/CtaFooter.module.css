@@ -256,6 +256,13 @@
     justify-content: space-between;
     gap: 0;
   }
+  /* The mobile frame's pill (node 2801:10417) is 14/20 Regular, not the desktop 16 Medium. */
+  .navLink {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.42px;
+  }
   .social {
     justify-self: end;
     gap: 12px;

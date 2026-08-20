@@ -9,6 +9,7 @@ import arrowUpIcon from '../../assets/icons/arrow-up-02-sharp.svg'
 import linkIcon from '../../assets/icons/link-04.svg'
 import copyIcon from '../../assets/icons/copy-01.svg'
 import photo from '../../assets/images/for-creators.webp'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './ForCreators.module.css'
 
@@ -31,6 +32,7 @@ function formatDelta(value: number) {
 
 export default function ForCreators() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
   const rootRef = useRef<HTMLElement>(null)
   const headRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
@@ -188,12 +190,20 @@ export default function ForCreators() {
           <div className={styles.tagAndHeading}>
             <WipeRevealTag label={t.forCreators.tag} />
             <h2 className={styles.heading}>
-              <div>
-                <AnimatedChars text={t.forCreators.headingLine1} />
-              </div>
-              <div>
-                <AnimatedChars text={t.forCreators.headingLine2} />
-              </div>
+              {isMobile && t.forCreators.headingFlowsOnMobile ? (
+                <div>
+                  <AnimatedChars text={`${t.forCreators.headingLine1} ${t.forCreators.headingLine2}`} />
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <AnimatedChars text={t.forCreators.headingLine1} />
+                  </div>
+                  <div>
+                    <AnimatedChars text={t.forCreators.headingLine2} />
+                  </div>
+                </>
+              )}
             </h2>
           </div>
           <p className={styles.description}>

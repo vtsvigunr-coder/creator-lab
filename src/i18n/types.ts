@@ -79,6 +79,8 @@ export interface Translations {
     tag: string
     headingLine1: string
     headingLine2: string
+    /** Optional: the mobile frame breaks the same heading into three lines. */
+    headingLinesMobile?: [string, string, string]
     description: string
     listHeading: string
     canList: [string, string, string, string, string]
@@ -89,6 +91,8 @@ export interface Translations {
     tag: string
     headingLine1: string
     headingLine2: string
+    /** Optional: mobile runs the two lines together as one wrapping paragraph. */
+    headingFlowsOnMobile?: boolean
     description: string
     listHeading: string
     canList: [string, string, string, string, string]
@@ -119,6 +123,8 @@ export interface Translations {
     tag: string
     headingLine1: string
     headingLine2: string
+    /** Optional: the mobile frame breaks this heading mid-sentence instead of between them. */
+    headingLinesMobile?: [string, string]
     description: string
     slides: [{ caption: string }, { caption: string }, { caption: string }]
   }
@@ -138,6 +144,8 @@ export interface Translations {
   }
   ctaFooter: {
     headingLines: [string, string, string]
+    /** Optional: the mobile frame breaks after the first word and lets the rest wrap. */
+    headingLinesMobile?: [string, string]
     description: string
     applyAsBrand: string
     applyAsCreator: string

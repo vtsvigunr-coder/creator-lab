@@ -4,6 +4,7 @@ import ctaBgMobile from '../../assets/images/cta-section-mobile.webp'
 import basketIcon from '../../assets/icons/shopping-basket-favorite-03.svg'
 import videoIcon from '../../assets/icons/computer-video.svg'
 import { NAV_LINKS, SOCIAL_ICONS, scrollToSection } from '../../lib/siteLinks'
+import { useIsMobile } from '../../lib/useIsMobile'
 import { useTranslation } from '../../i18n/LanguageContext'
 import styles from './CtaFooter.module.css'
 
@@ -11,6 +12,7 @@ import styles from './CtaFooter.module.css'
 // full-bleed behind the copy.
 export default function CtaFooter() {
   const { t } = useTranslation()
+  const isMobile = useIsMobile()
 
   return (
     <section className={styles.ctaFooter} data-testid="cta-footer">
@@ -26,7 +28,11 @@ export default function CtaFooter() {
         <div className={styles.center}>
           <div className={styles.textBlock}>
             <h2 className={styles.heading}>
-              {t.ctaFooter.headingLines.map((line) => (
+              {/* Mobile breaks once and lets the rest wrap; desktop uses its own three lines. */}
+              {(isMobile && t.ctaFooter.headingLinesMobile
+                ? t.ctaFooter.headingLinesMobile
+                : t.ctaFooter.headingLines
+              ).map((line) => (
                 <div key={line}>{line}</div>
               ))}
             </h2>
